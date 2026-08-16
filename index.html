@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life Gamification RPG</title>
+    <title>AI Studio RPG - YouTube Creator System</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f0f1b;
-            --card-bg: #1f1f38;
+            --bg-color: #0d0e15;
+            --card-bg: #161824;
             --accent-purple: #8a2be2;
-            --accent-cyan: #00ffff;
+            --accent-cyan: #00f0ff;
             --accent-gold: #ffd700;
             --text-color: #ffffff;
-            --text-muted: #a0a0c0;
+            --text-muted: #8e94b2;
             --danger: #ff4757;
             --success: #2ed573;
         }
@@ -29,7 +29,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 20px;
-            max-width: 1200px;
+            max-width: 1250px;
             margin: 0 auto;
         }
 
@@ -53,7 +53,7 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 20px;
         }
 
@@ -61,12 +61,12 @@
             background-color: var(--card-bg);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
         .card h2 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--accent-gold);
             margin-bottom: 15px;
             display: flex;
@@ -83,24 +83,25 @@
         }
 
         .avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
+            width: 65px;
+            height: 65px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
+            box-shadow: 0 0 10px rgba(0,240,255,0.3);
         }
 
         .stat-bar {
-            background: #0a0a12;
+            background: #090a10;
             border-radius: 10px;
             height: 18px;
             overflow: hidden;
             margin: 8px 0;
             position: relative;
-            border: 1px solid #333;
+            border: 1px solid #2a2e45;
         }
 
         .stat-fill {
@@ -129,10 +130,36 @@
         }
 
         .attr-item {
-            background: rgba(0,0,0,0.2);
-            padding: 8px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 10px;
             border-radius: 6px;
+            font-size: 0.82rem;
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        /* Forms */
+        .add-form {
+            background: rgba(0,0,0,0.25);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .add-form input, .add-form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #0d0e15;
+            border: 1px solid #2a2e45;
+            border-radius: 6px;
+            color: white;
             font-size: 0.85rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 8px;
         }
 
         /* Quests */
@@ -149,15 +176,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s;
-        }
-
-        .quest-item:hover {
-            transform: translateY(-2px);
         }
 
         .quest-info h4 {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 4px;
         }
 
@@ -167,7 +189,7 @@
         }
 
         .quest-rewards {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--accent-gold);
             margin-top: 4px;
         }
@@ -180,6 +202,7 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 0.8rem;
             transition: opacity 0.2s;
         }
 
@@ -187,28 +210,8 @@
             opacity: 0.9;
         }
 
-        .btn-success {
-            background: linear-gradient(45deg, #10ac84, #2ed573);
-        }
-
-        .btn-danger {
-            background: linear-gradient(45deg, #ee5253, #ff4757);
-        }
-
-        .timer {
-            font-size: 0.75rem;
-            color: var(--accent-cyan);
-            margin-top: 5px;
-        }
-
-        /* Shop & Achievements */
-        .shop-item, .achieve-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+        .btn-success { background: linear-gradient(45deg, #10ac84, #2ed573); }
+        .btn-small { padding: 5px 8px; font-size: 0.75rem; }
 
         .coins-display {
             color: var(--accent-gold);
@@ -219,11 +222,10 @@
         }
 
         .completed {
-            opacity: 0.5;
+            opacity: 0.4;
             text-decoration: line-through;
         }
 
-        /* Toast Notification */
         #notification {
             position: fixed;
             bottom: 20px;
@@ -232,39 +234,40 @@
             color: white;
             padding: 12px 20px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             display: none;
             z-index: 1000;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>PROGression System</h1>
-        <p style="color: var(--text-muted); font-size: 0.8rem;">Геймификация Реальной Жизни</p>
+        <h1>AI CREATOR RPG</h1>
+        <p style="color: var(--text-muted); font-size: 0.8rem;">Система Продуктивности AI-Контента на YouTube</p>
     </header>
 
     <div class="grid-container">
         <!-- Персонаж -->
         <div class="card">
-            <h2>ПЕРСОНАЖ <span id="player-level" class="pixel-text">Ур. 1</span></h2>
+            <h2>ПРОДЮСЕР <span id="player-level" class="pixel-text">Ур. 1</span></h2>
             <div class="profile-header">
-                <div class="avatar">🧙‍♂️</div>
+                <div class="avatar">🎬</div>
                 <div>
-                    <h3 id="player-title">Новичок</h3>
+                    <h3 id="player-title">AI Content Maker</h3>
                     <div class="coins-display">💰 <span id="player-coins">0</span> монет</div>
                 </div>
             </div>
 
             <div>
-                <small>Здоровье (HP)</small>
+                <small>Здоровье / Энергия (HP)</small>
                 <div class="stat-bar">
                     <div id="hp-fill" class="stat-fill hp-fill" style="width: 100%;"></div>
                     <div id="hp-text" class="stat-text">100 / 100</div>
                 </div>
 
-                <small>Опыт (EXP)</small>
+                <small>Опыт Канала (EXP)</small>
                 <div class="stat-bar">
                     <div id="exp-fill" class="stat-fill exp-fill" style="width: 0%;"></div>
                     <div id="exp-text" class="stat-text">0 / 100</div>
@@ -272,36 +275,73 @@
             </div>
 
             <div class="attributes">
-                <div class="attr-item">💪 Сила: <span id="attr-str">1</span></div>
-                <div class="attr-item">🧠 Интеллект: <span id="attr-int">1</span></div>
-                <div class="attr-item">🏃 Дисциплина: <span id="attr-dis">1</span></div>
-                <div class="attr-item">⚡ Энергия: <span id="attr-ene">1</span></div>
+                <div class="attr-item">💡 Креатив: <span id="attr-cre">1</span></div>
+                <div class="attr-item">📝 Сценарий/Промпт: <span id="attr-scr">1</span></div>
+                <div class="attr-item">✂️ Монтаж: <span id="attr-edt">1</span></div>
+                <div class="attr-item">⚡ Дисциплина: <span id="attr-dis">1</span></div>
             </div>
         </div>
 
         <!-- Ежедневные Квесты -->
         <div class="card">
-            <h2>ЕЖЕДНЕВНЫЕ КВЕСТЫ</h2>
-            <div class="timer" id="daily-timer">Сброс через: --:--:--</div>
-            <ul class="quest-list" id="daily-quests" style="margin-top: 10px;"></ul>
+            <h2>ЕЖЕДНЕВНЫЙ ПАЙПЛАЙН</h2>
+            
+            <div class="add-form">
+                <input type="text" id="custom-daily-title" placeholder="Название задачи (например, Доделать озвучку)">
+                <input type="text" id="custom-daily-desc" placeholder="Описание">
+                <div class="form-row">
+                    <select id="custom-daily-attr">
+                        <option value="scr">📝 Сценарий/Промпт</option>
+                        <option value="edt">✂️ Монтаж</option>
+                        <option value="cre">💡 Креатив</option>
+                        <option value="dis">⚡ Дисциплина</option>
+                    </select>
+                    <button class="btn btn-small" onclick="addCustomQuest('daily')">+ Добавить</button>
+                </div>
+            </div>
+
+            <ul class="quest-list" id="daily-quests"></ul>
         </div>
 
         <!-- Еженедельные Квесты -->
         <div class="card">
-            <h2>ЕЖЕНЕДЕЛЬНЫЕ КВЕСТЫ</h2>
-            <div class="timer" id="weekly-timer">Сброс через: - дн. --:--:--</div>
-            <ul class="quest-list" id="weekly-quests" style="margin-top: 10px;"></ul>
+            <h2>ЕЖЕНЕДЕЛЬНЫЕ ЦЕЛИ</h2>
+            
+            <div class="add-form">
+                <input type="text" id="custom-weekly-title" placeholder="Название цели (например, Сделать 5 Shorts)">
+                <input type="text" id="custom-weekly-desc" placeholder="Описание">
+                <div class="form-row">
+                    <select id="custom-weekly-attr">
+                        <option value="edt">✂️ Монтаж</option>
+                        <option value="scr">📝 Сценарий/Промпт</option>
+                        <option value="cre">💡 Креатив</option>
+                        <option value="dis">⚡ Дисциплина</option>
+                    </select>
+                    <button class="btn btn-small" onclick="addCustomQuest('weekly')">+ Добавить</button>
+                </div>
+            </div>
+
+            <ul class="quest-list" id="weekly-quests"></ul>
         </div>
 
         <!-- Магазин Наград -->
         <div class="card">
             <h2>МАГАЗИН НАГРАД</h2>
+            
+            <div class="add-form">
+                <div class="form-row">
+                    <input type="text" id="custom-shop-title" placeholder="Награда (напр. Заказать пиццу)">
+                    <input type="number" id="custom-shop-cost" placeholder="Цена 💰" style="width: 100px;">
+                </div>
+                <button class="btn btn-small" onclick="addCustomShopItem()" style="width: 100%;">+ Добавить награду</button>
+            </div>
+
             <div id="shop-list"></div>
         </div>
 
         <!-- Достижения -->
         <div class="card">
-            <h2>ДОСТИЖЕНИЯ</h2>
+            <h2>ДОСТИЖЕНИЯ КАНАЛА</h2>
             <div id="achievements-list"></div>
         </div>
     </div>
@@ -309,48 +349,41 @@
     <div id="notification"></div>
 
     <script>
-        // Инициализация состояния
-        let state = JSON.parse(localStorage.getItem('rpg_state')) || {
+        let state = JSON.parse(localStorage.getItem('yt_rpg_state')) || {
             hp: 100,
             maxHp: 100,
             exp: 0,
             maxExp: 100,
             level: 1,
             coins: 0,
-            stats: { str: 1, int: 1, dis: 1, ene: 1 },
+            stats: { cre: 1, scr: 1, edt: 1, dis: 1 },
             completedQuestsCount: 0,
-            lastDailyReset: 0,
-            lastWeeklyReset: 0,
-            dailyQuests: [],
-            weeklyQuests: [],
+            dailyQuests: [
+                { id: 'd1', title: 'Утренний старт', desc: 'Завтрак, гигиена и заправка постели', attr: 'dis', exp: 15, coins: 10, completed: false },
+                { id: 'd2', title: 'Написать/доработать сценарий', desc: 'Сгенерировать и отредактировать текст в AI', attr: 'scr', exp: 30, coins: 25, completed: false },
+                { id: 'd3', title: 'Генерация медиа-ассетов', desc: 'Сгенерировать картинки/анимации и озвучку', attr: 'cre', exp: 30, coins: 25, completed: false },
+                { id: 'd4', title: 'Монтаж и сборка видео', desc: 'Собрать видео в редакторе, наложить звук и сабы', attr: 'edt', exp: 40, coins: 35, completed: false },
+                { id: 'd5', title: 'Загрузка и публикация на YouTube', desc: 'Загрузить видео, оптимизировать превью и описания', attr: 'dis', exp: 25, coins: 20, completed: false }
+            ],
+            weeklyQuests: [
+                { id: 'w1', title: 'План контента на неделю', desc: 'Спланировать темы и концепции видео', attr: 'cre', exp: 100, coins: 80, completed: false },
+                { id: 'w2', title: 'Пакетная генерация', desc: 'Подготовить материалы сразу для нескольких роликов', attr: 'scr', exp: 120, coins: 100, completed: false },
+                { id: 'w3', title: 'Анализ метрик и кликабельности', desc: 'Изучить CTR, удержание и обновить превью/заголовки', attr: 'dis', exp: 90, coins: 70, completed: false }
+            ],
+            shopItems: [
+                { id: 's1', title: '1 час отдыха / Игры', cost: 50 },
+                { id: 's2', title: 'Просмотр фильма / сериала', cost: 80 },
+                { id: 's3', title: 'Полный выходной без видео', cost: 200 }
+            ],
             achievements: [
-                { id: 1, title: 'Первый шаг', desc: 'Выполните 1 квест', reward: 50, unlocked: false },
-                { id: 2, title: 'Герой рутины', desc: 'Выполните 10 квестов', reward: 200, unlocked: false },
-                { id: 3, title: 'Богач', desc: 'Накопите 500 монет', reward: 100, unlocked: false }
+                { id: 1, title: 'Первый релиз', desc: 'Выполнить 1 задачу', reward: 50, unlocked: false },
+                { id: 2, title: 'Контент-машина', desc: 'Выполнить 10 задач', reward: 200, unlocked: false },
+                { id: 3, title: 'Магнат ютуба', desc: 'Накопите 500 монет', reward: 150, unlocked: false }
             ]
         };
 
-        const dailyPool = [
-            { id: 'd1', title: 'Утренняя зарядка', desc: '15 минут физических упражнений', attr: 'str', exp: 20, coins: 15 },
-            { id: 'd2', title: 'Чтение книги', desc: 'Прочитать 20 страниц', attr: 'int', exp: 25, coins: 20 },
-            { id: 'd3', title: 'Холодный душ', desc: 'Закалка и бодрость', attr: 'ene', exp: 15, coins: 10 },
-            { id: 'd4', title: 'Фокус-сессия', desc: '45 минут работы без отвлечений', attr: 'dis', exp: 30, coins: 25 }
-        ];
-
-        const weeklyPool = [
-            { id: 'w1', title: 'Марафон генеральной уборки', desc: 'Полностью навести порядок', attr: 'dis', exp: 100, coins: 80 },
-            { id: 'w2', title: 'Прочитать книгу', desc: 'Завершить чтение одной книги', attr: 'int', exp: 150, coins: 120 },
-            { id: 'w3', title: 'Спортивный рекорд', desc: '3 полноценные тренировки за неделю', attr: 'str', exp: 120, coins: 100 }
-        ];
-
-        const shopItems = [
-            { id: 's1', title: '1 час игры / сериала', cost: 50 },
-            { id: 's2', title: 'Вкусный десерт', cost: 80 },
-            { id: 's3', title: 'Выходной от задач', cost: 200 }
-        ];
-
         function saveState() {
-            localStorage.setItem('rpg_state', JSON.stringify(state));
+            localStorage.setItem('yt_rpg_state', JSON.stringify(state));
             updateUI();
         }
 
@@ -361,23 +394,6 @@
             setTimeout(() => { notif.style.display = 'none'; }, 3000);
         }
 
-        function checkResets() {
-            const now = Date.now();
-            const dayMs = 24 * 60 * 60 * 1000;
-            const weekMs = 7 * dayMs;
-
-            if (now - state.lastDailyReset > dayMs || state.dailyQuests.length === 0) {
-                state.dailyQuests = dailyPool.map(q => ({ ...q, completed: false }));
-                state.lastDailyReset = now;
-            }
-
-            if (now - state.lastWeeklyReset > weekMs || state.weeklyQuests.length === 0) {
-                state.weeklyQuests = weeklyPool.map(q => ({ ...q, completed: false }));
-                state.lastWeeklyReset = now;
-            }
-            saveState();
-        }
-
         function completeQuest(type, id) {
             const list = type === 'daily' ? state.dailyQuests : state.weeklyQuests;
             const quest = list.find(q => q.id === id);
@@ -386,14 +402,58 @@
                 quest.completed = true;
                 state.exp += quest.exp;
                 state.coins += quest.coins;
-                state.stats[quest.attr] += 1;
+                state.stats[quest.attr] = (state.stats[quest.attr] || 0) + 1;
                 state.completedQuestsCount += 1;
 
-                showNotification(`Квест выполнен! +${quest.exp} EXP, +${quest.coins} 💰`);
+                showNotification(`Задача выполнена! +${quest.exp} EXP, +${quest.coins} 💰`);
                 checkLevelUp();
                 checkAchievements();
                 saveState();
             }
+        }
+
+        function addCustomQuest(type) {
+            const titleInput = document.getElementById(`custom-${type}-title`);
+            const descInput = document.getElementById(`custom-${type}-desc`);
+            const attrInput = document.getElementById(`custom-${type}-attr`);
+
+            if (!titleInput.value.trim()) return;
+
+            const newQuest = {
+                id: Date.now().toString(),
+                title: titleInput.value.trim(),
+                desc: descInput.value.trim() || 'Пользовательская задача',
+                attr: attrInput.value,
+                exp: type === 'daily' ? 25 : 80,
+                coins: type === 'daily' ? 20 : 60,
+                completed: false
+            };
+
+            if (type === 'daily') state.dailyQuests.push(newQuest);
+            else state.weeklyQuests.push(newQuest);
+
+            titleInput.value = '';
+            descInput.value = '';
+            showNotification('Новая задача добавлена!');
+            saveState();
+        }
+
+        function addCustomShopItem() {
+            const titleInput = document.getElementById('custom-shop-title');
+            const costInput = document.getElementById('custom-shop-cost');
+
+            if (!titleInput.value.trim() || !costInput.value) return;
+
+            state.shopItems.push({
+                id: Date.now().toString(),
+                title: titleInput.value.trim(),
+                cost: parseInt(costInput.value)
+            });
+
+            titleInput.value = '';
+            costInput.value = '';
+            showNotification('Награда добавлена в магазин!');
+            saveState();
         }
 
         function checkLevelUp() {
@@ -402,12 +462,12 @@
                 state.exp -= state.maxExp;
                 state.maxExp = Math.floor(state.maxExp * 1.5);
                 state.hp = state.maxHp;
-                showNotification(`ПОЗДРАВЛЯЕМ! Новый уровень: ${state.level}!`);
+                showNotification(`ПОВЫШЕНИЕ! Новый уровень студии: ${state.level}!`);
             }
         }
 
         function buyShopItem(id) {
-            const item = shopItems.find(i => i.id === id);
+            const item = state.shopItems.find(i => i.id === id);
             if (item && state.coins >= item.cost) {
                 state.coins -= item.cost;
                 showNotification(`Куплено: ${item.title}`);
@@ -440,31 +500,28 @@
             document.getElementById('exp-fill').style.width = `${(state.exp / state.maxExp) * 100}%`;
             document.getElementById('exp-text').innerText = `${state.exp} / ${state.maxExp}`;
 
-            document.getElementById('attr-str').innerText = state.stats.str;
-            document.getElementById('attr-int').innerText = state.stats.int;
-            document.getElementById('attr-dis').innerText = state.stats.dis;
-            document.getElementById('attr-ene').innerText = state.stats.ene;
+            document.getElementById('attr-cre').innerText = state.stats.cre || 1;
+            document.getElementById('attr-scr').innerText = state.stats.scr || 1;
+            document.getElementById('attr-edt').innerText = state.stats.edt || 1;
+            document.getElementById('attr-dis').innerText = state.stats.dis || 1;
 
-            // Рендер квестов
             renderQuestList('daily-quests', state.dailyQuests, 'daily');
             renderQuestList('weekly-quests', state.weeklyQuests, 'weekly');
 
-            // Рендер магазина
             const shopContainer = document.getElementById('shop-list');
-            shopContainer.innerHTML = shopItems.map(item => `
-                <div class="shop-item">
+            shopContainer.innerHTML = state.shopItems.map(item => `
+                <div class="quest-item">
                     <div>
                         <strong>${item.title}</strong>
                         <div style="color: var(--accent-gold); font-size: 0.8rem;">💰 ${item.cost}</div>
                     </div>
-                    <button class="btn btn-success" onclick="buyShopItem('${item.id}')">Купить</button>
+                    <button class="btn btn-success btn-small" onclick="buyShopItem('${item.id}')">Купить</button>
                 </div>
             `).join('');
 
-            // Рендер достижений
             const achContainer = document.getElementById('achievements-list');
             achContainer.innerHTML = state.achievements.map(ach => `
-                <div class="achieve-item ${ach.unlocked ? '' : 'completed'}">
+                <div class="quest-item ${ach.unlocked ? '' : 'completed'}">
                     <div>
                         <strong>${ach.unlocked ? '🏆' : '🔒'} ${ach.title}</strong>
                         <p style="font-size: 0.75rem; color: var(--text-muted);">${ach.desc}</p>
@@ -483,13 +540,11 @@
                         <p>${q.desc}</p>
                         <div class="quest-rewards">+${q.exp} EXP | +${q.coins} 💰</div>
                     </div>
-                    ${!q.completed ? `<button class="btn" onclick="completeQuest('${type}', '${q.id}')">Готово</button>` : '<span>✅</span>'}
+                    ${!q.completed ? `<button class="btn btn-small" onclick="completeQuest('${type}', '${q.id}')">Готово</button>` : '<span>✅</span>'}
                 </li>
             `).join('');
         }
 
-        // Проверка при старте
-        checkResets();
         updateUI();
     </script>
 </body>
