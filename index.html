@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Gamification RPG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f0f1b;
+            --card-bg: #1f1f38;
+            --accent-purple: #8a2be2;
+            --accent-cyan: #00ffff;
+            --accent-gold: #ffd700;
+            --text-color: #ffffff;
+            --text-muted: #a0a0c0;
+            --danger: #ff4757;
+            --success: #2ed573;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2, h3, .pixel-text {
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--accent-purple);
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            color: var(--accent-cyan);
+            font-size: 1.5rem;
+            text-shadow: 2px 2px var(--accent-purple);
+            margin-bottom: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Profile & Stats */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-bar {
+            background: #0a0a12;
+            border-radius: 10px;
+            height: 18px;
+            overflow: hidden;
+            margin: 8px 0;
+            position: relative;
+            border: 1px solid #333;
+        }
+
+        .stat-fill {
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .stat-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 0.7rem;
+            line-height: 18px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .hp-fill { background: linear-gradient(90deg, #ff4757, #ff6b81); }
+        .exp-fill { background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan)); }
+
+        .attributes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .attr-item {
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        /* Quests */
+        .quest-list {
+            list-style: none;
+        }
+
+        .quest-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .quest-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .quest-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .quest-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .quest-rewards {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-top: 4px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--accent-purple), #5f27cd);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #10ac84, #2ed573);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #ee5253, #ff4757);
+        }
+
+        .timer {
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            margin-top: 5px;
+        }
+
+        /* Shop & Achievements */
+        .shop-item, .achieve-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .coins-display {
+            color: var(--accent-gold);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .completed {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        /* Toast Notification */
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent-purple);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PROGression System</h1>
+        <p style="color: var(--text-muted); font-size: 0.8rem;">Геймификация Реальной Жизни</p>
+    </header>
+
+    <div class="grid-container">
+        <!-- Персонаж -->
+        <div class="card">
+            <h2>ПЕРСОНАЖ <span id="player-level" class="pixel-text">Ур. 1</span></h2>
+            <div class="profile-header">
+                <div class="avatar">🧙‍♂️</div>
+                <div>
+                    <h3 id="player-title">Новичок</h3>
+                    <div class="coins-display">💰 <span id="player-coins">0</span> монет</div>
+                </div>
+            </div>
+
+            <div>
+                <small>Здоровье (HP)</small>
+                <div class="stat-bar">
+                    <div id="hp-fill" class="stat-fill hp-fill" style="width: 100%;"></div>
+                    <div id="hp-text" class="stat-text">100 / 100</div>
+                </div>
+
+                <small>Опыт (EXP)</small>
+                <div class="stat-bar">
+                    <div id="exp-fill" class="stat-fill exp-fill" style="width: 0%;"></div>
+                    <div id="exp-text" class="stat-text">0 / 100</div>
+                </div>
+            </div>
+
+            <div class="attributes">
+                <div class="attr-item">💪 Сила: <span id="attr-str">1</span></div>
+                <div class="attr-item">🧠 Интеллект: <span id="attr-int">1</span></div>
+                <div class="attr-item">🏃 Дисциплина: <span id="attr-dis">1</span></div>
+                <div class="attr-item">⚡ Энергия: <span id="attr-ene">1</span></div>
+            </div>
+        </div>
+
+        <!-- Ежедневные Квесты -->
+        <div class="card">
+            <h2>ЕЖЕДНЕВНЫЕ КВЕСТЫ</h2>
+            <div class="timer" id="daily-timer">Сброс через: --:--:--</div>
+            <ul class="quest-list" id="daily-quests" style="margin-top: 10px;"></ul>
+        </div>
+
+        <!-- Еженедельные Квесты -->
+        <div class="card">
+            <h2>ЕЖЕНЕДЕЛЬНЫЕ КВЕСТЫ</h2>
+            <div class="timer" id="weekly-timer">Сброс через: - дн. --:--:--</div>
+            <ul class="quest-list" id="weekly-quests" style="margin-top: 10px;"></ul>
+        </div>
+
+        <!-- Магазин Наград -->
+        <div class="card">
+            <h2>МАГАЗИН НАГРАД</h2>
+            <div id="shop-list"></div>
+        </div>
+
+        <!-- Достижения -->
+        <div class="card">
+            <h2>ДОСТИЖЕНИЯ</h2>
+            <div id="achievements-list"></div>
+        </div>
+    </div>
+
+    <div id="notification"></div>
+
+    <script>
+        // Инициализация состояния
+        let state = JSON.parse(localStorage.getItem('rpg_state')) || {
+            hp: 100,
+            maxHp: 100,
+            exp: 0,
+            maxExp: 100,
+            level: 1,
+            coins: 0,
+            stats: { str: 1, int: 1, dis: 1, ene: 1 },
+            completedQuestsCount: 0,
+            lastDailyReset: 0,
+            lastWeeklyReset: 0,
+            dailyQuests: [],
+            weeklyQuests: [],
+            achievements: [
+                { id: 1, title: 'Первый шаг', desc: 'Выполните 1 квест', reward: 50, unlocked: false },
+                { id: 2, title: 'Герой рутины', desc: 'Выполните 10 квестов', reward: 200, unlocked: false },
+                { id: 3, title: 'Богач', desc: 'Накопите 500 монет', reward: 100, unlocked: false }
+            ]
+        };
+
+        const dailyPool = [
+            { id: 'd1', title: 'Утренняя зарядка', desc: '15 минут физических упражнений', attr: 'str', exp: 20, coins: 15 },
+            { id: 'd2', title: 'Чтение книги', desc: 'Прочитать 20 страниц', attr: 'int', exp: 25, coins: 20 },
+            { id: 'd3', title: 'Холодный душ', desc: 'Закалка и бодрость', attr: 'ene', exp: 15, coins: 10 },
+            { id: 'd4', title: 'Фокус-сессия', desc: '45 минут работы без отвлечений', attr: 'dis', exp: 30, coins: 25 }
+        ];
+
+        const weeklyPool = [
+            { id: 'w1', title: 'Марафон генеральной уборки', desc: 'Полностью навести порядок', attr: 'dis', exp: 100, coins: 80 },
+            { id: 'w2', title: 'Прочитать книгу', desc: 'Завершить чтение одной книги', attr: 'int', exp: 150, coins: 120 },
+            { id: 'w3', title: 'Спортивный рекорд', desc: '3 полноценные тренировки за неделю', attr: 'str', exp: 120, coins: 100 }
+        ];
+
+        const shopItems = [
+            { id: 's1', title: '1 час игры / сериала', cost: 50 },
+            { id: 's2', title: 'Вкусный десерт', cost: 80 },
+            { id: 's3', title: 'Выходной от задач', cost: 200 }
+        ];
+
+        function saveState() {
+            localStorage.setItem('rpg_state', JSON.stringify(state));
+            updateUI();
+        }
+
+        function showNotification(text) {
+            const notif = document.getElementById('notification');
+            notif.innerText = text;
+            notif.style.display = 'block';
+            setTimeout(() => { notif.style.display = 'none'; }, 3000);
+        }
+
+        function checkResets() {
+            const now = Date.now();
+            const dayMs = 24 * 60 * 60 * 1000;
+            const weekMs = 7 * dayMs;
+
+            if (now - state.lastDailyReset > dayMs || state.dailyQuests.length === 0) {
+                state.dailyQuests = dailyPool.map(q => ({ ...q, completed: false }));
+                state.lastDailyReset = now;
+            }
+
+            if (now - state.lastWeeklyReset > weekMs || state.weeklyQuests.length === 0) {
+                state.weeklyQuests = weeklyPool.map(q => ({ ...q, completed: false }));
+                state.lastWeeklyReset = now;
+            }
+            saveState();
+        }
+
+        function completeQuest(type, id) {
+            const list = type === 'daily' ? state.dailyQuests : state.weeklyQuests;
+            const quest = list.find(q => q.id === id);
+
+            if (quest && !quest.completed) {
+                quest.completed = true;
+                state.exp += quest.exp;
+                state.coins += quest.coins;
+                state.stats[quest.attr] += 1;
+                state.completedQuestsCount += 1;
+
+                showNotification(`Квест выполнен! +${quest.exp} EXP, +${quest.coins} 💰`);
+                checkLevelUp();
+                checkAchievements();
+                saveState();
+            }
+        }
+
+        function checkLevelUp() {
+            if (state.exp >= state.maxExp) {
+                state.level += 1;
+                state.exp -= state.maxExp;
+                state.maxExp = Math.floor(state.maxExp * 1.5);
+                state.hp = state.maxHp;
+                showNotification(`ПОЗДРАВЛЯЕМ! Новый уровень: ${state.level}!`);
+            }
+        }
+
+        function buyShopItem(id) {
+            const item = shopItems.find(i => i.id === id);
+            if (item && state.coins >= item.cost) {
+                state.coins -= item.cost;
+                showNotification(`Куплено: ${item.title}`);
+                saveState();
+            } else {
+                showNotification('Недостаточно монет!');
+            }
+        }
+
+        function checkAchievements() {
+            state.achievements.forEach(ach => {
+                if (!ach.unlocked) {
+                    if (ach.id === 1 && state.completedQuestsCount >= 1) ach.unlocked = true;
+                    if (ach.id === 2 && state.completedQuestsCount >= 10) ach.unlocked = true;
+                    if (ach.id === 3 && state.coins >= 500) ach.unlocked = true;
+
+                    if (ach.unlocked) {
+                        state.coins += ach.reward;
+                        showNotification(`Достижение! "${ach.title}" +${ach.reward} 💰`);
+                    }
+                }
+            });
+        }
+
+        function updateUI() {
+            document.getElementById('player-level').innerText = `Ур. ${state.level}`;
+            document.getElementById('player-coins').innerText = state.coins;
+            document.getElementById('hp-fill').style.width = `${(state.hp / state.maxHp) * 100}%`;
+            document.getElementById('hp-text').innerText = `${state.hp} / ${state.maxHp}`;
+            document.getElementById('exp-fill').style.width = `${(state.exp / state.maxExp) * 100}%`;
+            document.getElementById('exp-text').innerText = `${state.exp} / ${state.maxExp}`;
+
+            document.getElementById('attr-str').innerText = state.stats.str;
+            document.getElementById('attr-int').innerText = state.stats.int;
+            document.getElementById('attr-dis').innerText = state.stats.dis;
+            document.getElementById('attr-ene').innerText = state.stats.ene;
+
+            // Рендер квестов
+            renderQuestList('daily-quests', state.dailyQuests, 'daily');
+            renderQuestList('weekly-quests', state.weeklyQuests, 'weekly');
+
+            // Рендер магазина
+            const shopContainer = document.getElementById('shop-list');
+            shopContainer.innerHTML = shopItems.map(item => `
+                <div class="shop-item">
+                    <div>
+                        <strong>${item.title}</strong>
+                        <div style="color: var(--accent-gold); font-size: 0.8rem;">💰 ${item.cost}</div>
+                    </div>
+                    <button class="btn btn-success" onclick="buyShopItem('${item.id}')">Купить</button>
+                </div>
+            `).join('');
+
+            // Рендер достижений
+            const achContainer = document.getElementById('achievements-list');
+            achContainer.innerHTML = state.achievements.map(ach => `
+                <div class="achieve-item ${ach.unlocked ? '' : 'completed'}">
+                    <div>
+                        <strong>${ach.unlocked ? '🏆' : '🔒'} ${ach.title}</strong>
+                        <p style="font-size: 0.75rem; color: var(--text-muted);">${ach.desc}</p>
+                    </div>
+                    <div style="color: var(--accent-gold); font-size: 0.8rem;">+${ach.reward} 💰</div>
+                </div>
+            `).join('');
+        }
+
+        function renderQuestList(containerId, list, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = list.map(q => `
+                <li class="quest-item ${q.completed ? 'completed' : ''}">
+                    <div class="quest-info">
+                        <h4>${q.title}</h4>
+                        <p>${q.desc}</p>
+                        <div class="quest-rewards">+${q.exp} EXP | +${q.coins} 💰</div>
+                    </div>
+                    ${!q.completed ? `<button class="btn" onclick="completeQuest('${type}', '${q.id}')">Готово</button>` : '<span>✅</span>'}
+                </li>
+            `).join('');
+        }
+
+        // Проверка при старте
+        checkResets();
+        updateUI();
+    </script>
+</body>
+</html>
