@@ -9,39 +9,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0b1220;
-    --panel:#0f172a;
-    --panel-2:#131c31;
-    --line:#1e293b;
-    --line-2:#243247;
-    --text:#e2e8f0;
-    --muted:#7c8aa3;
-    --accent:#3b82f6;
-    --accent-2:#60a5fa;
-    --good:#22c55e;
-    --warn:#f59e0b;
-    --bad:#ef4444;
-    --pink:#ec4899;
-    --yellow:#eab308;
-    --teal:#14b8a6;
-    --purple:#8b5cf6;
+    --bg:#0b1220; --panel:#0f172a; --panel-2:#131c31;
+    --line:#1e293b; --line-2:#243247;
+    --text:#e2e8f0; --muted:#7c8aa3;
+    --accent:#3b82f6; --accent-2:#60a5fa;
+    --good:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+    --pink:#ec4899; --yellow:#eab308; --teal:#14b8a6; --purple:#8b5cf6;
+  }
+  body.light{
+    --bg:#f5f7fb; --panel:#ffffff; --panel-2:#eef2f9;
+    --line:#dbe3ee; --line-2:#c6d2e3;
+    --text:#0f172a; --muted:#64748b;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
     font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-feature-settings:"tnum" 1, "cv11" 1;
-    background:var(--bg);
-    color:var(--text);
-    font-size:12px;
-    line-height:1.45;
-    padding:14px;
+    background:var(--bg); color:var(--text);
+    font-size:12px; line-height:1.45; padding:14px;
     -webkit-font-smoothing:antialiased;
+    transition:background .2s,color .2s;
   }
   .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
   .right{text-align:right}
   .center{text-align:center}
-
   .wrap{max-width:1440px;margin:0 auto}
 
   /* TOOLBAR */
@@ -63,78 +55,64 @@
   .btn.primary:hover{background:var(--accent-2);color:#fff}
   .btn.danger:hover{border-color:var(--bad);color:var(--bad)}
   .btn.mini{padding:3px 8px;font-size:11px}
+  .btn.icon{padding:6px 9px}
+
+  /* TABS */
+  .tabs{display:flex;gap:4px;background:var(--panel-2);padding:3px;border-radius:8px;border:1px solid var(--line)}
+  .tab{
+    padding:5px 12px;font-size:11px;font-weight:500;color:var(--muted);
+    cursor:pointer;border-radius:6px;transition:.15s;
+  }
+  .tab:hover{color:var(--text)}
+  .tab.active{background:var(--accent);color:#fff}
 
   /* EDITABLE */
-  [contenteditable="true"]{
-    outline:none;border-radius:3px;padding:1px 3px;
-    transition:.12s;cursor:text;
-  }
-  body.editing [contenteditable="true"]:hover{
-    background:rgba(59,130,246,.10);
-  }
+  [contenteditable="true"]{outline:none;border-radius:3px;padding:1px 3px;transition:.12s;cursor:text}
+  body.editing [contenteditable="true"]:hover{background:rgba(59,130,246,.10)}
   body.editing [contenteditable="true"]:focus{
     background:rgba(59,130,246,.20);
     box-shadow:inset 0 -1px 0 var(--accent-2);
   }
-  body:not(.editing) [contenteditable]{
-    cursor:default;
-  }
+  body:not(.editing) [contenteditable]{cursor:default}
 
   /* KPI ROW */
   .kpi-row{
     display:grid;
-    grid-template-columns:1.4fr 1fr 1fr 1fr 1fr 1fr;
-    gap:10px;
-    margin-bottom:12px;
+    grid-template-columns:1.3fr 1fr 1fr 1fr 1.2fr 1fr;
+    gap:10px; margin-bottom:12px;
   }
   .kpi{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:12px 14px;
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:12px 14px;
   }
   .kpi .lbl{font-size:10.5px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
   .kpi .val{font-size:17px;font-weight:700;line-height:1.2}
-  .kpi .sub{font-size:10.5px;color:var(--muted);margin-top:4px}
-  .kpi.accent{border-color:var(--accent)}
-  .kpi.accent .val{color:var(--accent-2)}
-  .kpi.gold{border-color:var(--yellow)}
-  .kpi.gold .val{color:var(--yellow)}
-  .kpi.green .val{color:var(--good)}
-  .kpi.pink .val{color:var(--pink)}
-
-  .date-row{display:flex;gap:6px;margin-bottom:6px;align-items:center;font-size:11px;color:var(--muted)}
-  .date-row input{
-    background:var(--panel-2);border:1px solid var(--line);color:var(--text);
-    padding:3px 6px;border-radius:5px;font-size:11px;width:100%;font-family:inherit;
-    font-variant-numeric:tabular-nums;
+  .kpi .sub{font-size:10.5px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:6px}
+  .kpi.accent{border-color:var(--accent)} .kpi.accent .val{color:var(--accent-2)}
+  .kpi.gold{border-color:var(--yellow)} .kpi.gold .val{color:var(--yellow)}
+  .kpi.green{border-color:var(--good)} .kpi.green .val{color:var(--good)}
+  .kpi.pink{border-color:var(--pink)} .kpi.pink .val{color:var(--pink)}
+  .kpi.profit{border-color:var(--good);background:linear-gradient(180deg,rgba(34,197,94,.08),transparent)}
+  .delta{font-size:11px;font-weight:600;margin-left:6px}
+  .delta.up{color:var(--good)} .delta.down{color:var(--bad)} .delta.flat{color:var(--muted)}
+  .src{
+    display:inline-block;width:14px;height:14px;border-radius:50%;
+    background:var(--panel-2);border:1px solid var(--line);
+    font-size:9px;line-height:12px;text-align:center;cursor:help;
   }
-  .date-row input:focus{outline:none;border-color:var(--accent)}
 
   /* GRID */
-  .grid-3{display:grid;grid-template-columns:1fr 1.2fr 1.2fr;gap:12px;margin-bottom:12px}
+  .grid-3{display:grid;grid-template-columns:1.2fr 1.2fr 1fr;gap:12px;margin-bottom:12px}
   .grid-3b{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
   .grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:12px}
   .grid-3c{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 
-  .panel{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:12px 14px;
-  }
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
   .panel h3{
-    font-size:11.5px;
-    font-weight:600;
-    color:var(--text);
-    margin-bottom:10px;
-    padding-bottom:8px;
-    border-bottom:1px solid var(--line);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    text-transform:uppercase;
-    letter-spacing:.4px;
+    font-size:11.5px;font-weight:600;color:var(--text);
+    margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+    text-transform:uppercase;letter-spacing:.4px;
   }
   .panel h3 .hint{font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
 
@@ -142,92 +120,42 @@
   table.data{width:100%;border-collapse:collapse;font-size:11.5px;font-variant-numeric:tabular-nums}
   table.data th{
     text-align:left;color:var(--muted);font-weight:500;font-size:10.5px;
-    padding:6px 6px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.3px;
-    white-space:nowrap;
+    padding:6px;border-bottom:1px solid var(--line);
+    text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;
   }
-  table.data td{
-    padding:5px 6px;border-bottom:1px dashed var(--line);
-    vertical-align:middle;
-  }
+  table.data td{padding:5px 6px;border-bottom:1px dashed var(--line);vertical-align:middle}
   table.data tr:last-child td{border-bottom:none}
   table.data tr.total td{
     border-top:1px solid var(--line-2);border-bottom:none;
     font-weight:700;padding-top:8px;
   }
   table.data th.right,table.data td.right{text-align:right}
-  table.data td.good{color:var(--good)}
-  table.data td.bad{color:var(--bad)}
-  table.data td.muted{color:var(--muted)}
-  table.data td .del{
-    color:var(--muted);cursor:pointer;font-size:13px;line-height:1;
-    padding:0 4px;opacity:.5;transition:.15s;
-  }
+  table.data td.good{color:var(--good)} table.data td.bad{color:var(--bad)} table.data td.muted{color:var(--muted)}
+  table.data td .del{color:var(--muted);cursor:pointer;font-size:13px;line-height:1;padding:0 4px;opacity:.5;transition:.15s}
   table.data td .del:hover{color:var(--bad);opacity:1}
   table.data td:last-child{text-align:right;width:20px}
 
-  /* DONUT */
-  .donut-wrap{display:flex;align-items:center;gap:16px;margin-bottom:12px}
-  .donut{
-    width:110px;height:110px;border-radius:50%;
-    background:conic-gradient(
-      var(--pink) 0% 19%,
-      var(--accent) 19% 35%,
-      var(--yellow) 35% 47%,
-      var(--purple) 47% 65%,
-      var(--good) 65% 87%,
-      var(--teal) 87% 100%
-    );
-    position:relative;flex-shrink:0;
-  }
-  .donut::after{
-    content:"";position:absolute;inset:16px;border-radius:50%;background:var(--panel);
-  }
-  .legend{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:5px;width:100%}
-  .legend .lrow{display:flex;align-items:center;gap:8px;padding:2px 0;border-bottom:1px dashed var(--line)}
-  .legend .lrow:last-child{border-bottom:none}
-  .legend i{width:8px;height:8px;border-radius:2px;display:inline-block;flex-shrink:0}
-  .legend .lname{flex:1;color:var(--muted)}
-  .legend .lval{color:var(--text);font-weight:500;text-align:right;min-width:52px}
-  .legend .del{color:var(--muted);cursor:pointer;font-size:13px;opacity:.5;padding:0 3px}
-  .legend .del:hover{color:var(--bad);opacity:1}
-
-  /* BAR CHART */
-  .bar-chart{display:flex;align-items:flex-end;gap:14px;height:130px;padding:8px 0}
-  .bar-group{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
-  .bar-pair{display:flex;gap:3px;align-items:flex-end;height:105px}
-  .bar{width:12px;border-radius:3px 3px 0 0;transition:.2s}
-  .bar.plan{background:var(--teal)}
-  .bar.fact{background:var(--pink)}
-  .bar-group small{font-size:10px;color:var(--muted)}
-  .bar-legend{display:flex;gap:14px;margin-top:8px;justify-content:center;font-size:11px;color:var(--muted)}
-  .bar-legend i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:5px}
+  /* GRAPH */
+  .graph-wrap{position:relative;margin-bottom:8px}
+  .graph-svg{width:100%;height:120px;display:block}
+  .graph-legend{display:flex;gap:14px;font-size:10.5px;color:var(--muted);justify-content:center;margin-top:4px}
+  .graph-legend i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:5px}
 
   /* HABITS */
-  .habit-grid{display:flex;flex-direction:column;gap:6px}
+  .habit-grid{display:flex;flex-direction:column;gap:7px}
   .habit-row{display:flex;align-items:center;gap:8px}
-  .habit-name{
-    width:160px;font-size:11px;color:var(--muted);flex-shrink:0;text-align:right;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  }
+  .habit-name{width:150px;font-size:11px;color:var(--muted);flex-shrink:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .habit-cells{display:flex;gap:3px;flex-wrap:wrap;flex:1}
-  .cell{
-    width:13px;height:13px;border-radius:3px;background:var(--panel-2);
-    border:1px solid var(--line);cursor:pointer;transition:.12s;
-  }
+  .cell{width:13px;height:13px;border-radius:3px;background:var(--panel-2);border:1px solid var(--line);cursor:pointer;transition:.12s}
   .cell:hover{border-color:var(--accent-2)}
   .cell.on{background:var(--accent);border-color:var(--accent)}
   .cell.on.pink{background:var(--pink);border-color:var(--pink)}
   .cell.on.good{background:var(--good);border-color:var(--good)}
   .cell.on.yellow{background:var(--yellow);border-color:var(--yellow)}
+  .habit-stat{font-size:10.5px;color:var(--muted);min-width:80px;text-align:right;font-variant-numeric:tabular-nums}
+  .habit-stat b{color:var(--accent-2)}
   .habit-row .del{color:var(--muted);cursor:pointer;font-size:13px;opacity:.5;padding:0 4px}
   .habit-row .del:hover{color:var(--bad);opacity:1}
-
-  /* WEEK */
-  .week-header{display:flex;gap:6px;margin-bottom:8px;font-size:10.5px;color:var(--muted)}
-  .week-header .wk{flex:1;text-align:center;padding:4px;background:var(--panel-2);border-radius:5px;border:1px solid var(--line);cursor:pointer;transition:.15s}
-  .week-header .wk:hover{border-color:var(--accent-2)}
-  .week-header .wk.active{color:var(--text);border-color:var(--accent);background:rgba(59,130,246,.15)}
-  .spark{width:100%;height:80px;display:block;margin-top:6px}
 
   /* LIST */
   .list{display:flex;flex-direction:column;gap:5px}
@@ -237,10 +165,7 @@
     border:1px solid var(--line);transition:.15s;
   }
   .list-row:hover{border-color:var(--line-2)}
-  .list-row .dot{
-    width:9px;height:9px;border-radius:50%;background:var(--muted);
-    cursor:pointer;flex-shrink:0;transition:.15s;
-  }
+  .list-row .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);cursor:pointer;flex-shrink:0;transition:.15s}
   .list-row.done .dot{background:var(--good);box-shadow:0 0 8px rgba(34,197,94,.5)}
   .list-row .name{flex:1;color:var(--text)}
   .list-row.done .name{text-decoration:line-through;color:var(--muted)}
@@ -252,7 +177,7 @@
   /* TOP5 */
   .top5{display:flex;flex-direction:column;gap:4px;font-size:11.5px}
   .top5 .row{
-    display:grid;grid-template-columns:20px 1fr 60px 20px;gap:8px;align-items:center;
+    display:grid;grid-template-columns:20px 1fr 70px 20px;gap:8px;align-items:center;
     padding:4px 6px;border-bottom:1px dashed var(--line);
   }
   .top5 .row:last-child{border-bottom:none}
@@ -272,13 +197,31 @@
   .goal-top .del:hover{color:var(--bad);opacity:1}
   .goal-bar{height:7px;background:var(--panel-2);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
   .goal-bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .3s}
+  .goal-forecast{font-size:10px;color:var(--muted);margin-top:3px}
+
+  /* STREAK */
+  .streak-box{
+    display:flex;align-items:center;gap:10px;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;padding:10px 14px;margin-bottom:12px;
+  }
+  .streak-fire{font-size:22px}
+  .streak-info{flex:1}
+  .streak-info b{font-size:16px}
+  .streak-info .lbl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+  .freeze{display:flex;gap:4px;margin-left:8px}
+  .freeze .fz{
+    width:16px;height:16px;border-radius:4px;
+    background:var(--panel-2);border:1px solid var(--line);
+    font-size:10px;text-align:center;line-height:14px;
+  }
+  .freeze .fz.on{background:var(--accent);border-color:var(--accent);color:#fff}
 
   /* ADD ROW */
   .add-row{display:flex;gap:6px;margin-top:8px;font-size:11px}
   .add-row input{
     flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
-    padding:5px 8px;border-radius:5px;font-size:11px;font-family:inherit;
-    min-width:0;
+    padding:5px 8px;border-radius:5px;font-size:11px;font-family:inherit;min-width:0;
   }
   .add-row input:focus{outline:none;border-color:var(--accent)}
   .add-row input.short{max-width:70px}
@@ -290,12 +233,28 @@
     position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
     background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;
     font-size:12px;font-weight:500;opacity:0;transition:.25s;pointer-events:none;z-index:100;
-    box-shadow:0 4px 20px rgba(0,0,0,.4);
+    box-shadow:0 4px 20px rgba(0,0,0,.4);max-width:90vw;
   }
   .toast.show{opacity:1}
 
+  /* MODAL */
+  .modal{
+    position:fixed;inset:0;background:rgba(0,0,0,.6);
+    display:none;align-items:center;justify-content:center;z-index:200;padding:20px;
+  }
+  .modal.show{display:flex}
+  .modal-inner{
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:20px;max-width:520px;width:100%;
+    max-height:80vh;overflow:auto;
+  }
+  .modal-inner h2{font-size:15px;margin-bottom:12px}
+  .modal-inner p{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5}
+  .modal-inner code{background:var(--panel-2);padding:2px 6px;border-radius:4px;font-size:11px}
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+
   @media(max-width:1100px){
-    .kpi-row{grid-template-columns:repeat(3,1fr)}
+    .kpi-row{grid-template-columns:repeat(2,1fr)}
     .grid-3,.grid-3b,.grid-3c,.grid-2{grid-template-columns:1fr}
   }
 </style>
@@ -307,75 +266,143 @@
   <div class="toolbar">
     <span class="title">Creator Ops</span>
     <button class="btn primary" id="btnEdit">✏️ Редактирование: ВКЛ</button>
-    <button class="btn" id="btnExport">⬇️ Экспорт</button>
+    <button class="btn" id="btnSnapshot" title="Сохранить точку отсчёта">📸 Зафиксировать</button>
+    <button class="btn" id="btnTheme" title="Сменить тему">🌙</button>
+    <button class="btn" id="btnExport">⬇️ JSON</button>
     <button class="btn" id="btnImport">⬆️ Импорт</button>
-    <button class="btn danger" id="btnReset">🗑️ Сбросить</button>
+    <button class="btn" id="btnCsv">📄 CSV</button>
+    <button class="btn danger" id="btnReset">🗑️</button>
     <input type="file" id="fileInput" accept=".json" style="display:none">
-    <span class="status" id="status">Автосохранение активно</span>
+    <span class="status" id="status">Автосохранение · <span id="lastUpdate">—</span></span>
+  </div>
+
+  <!-- TABS: СРЕЗЫ -->
+  <div class="toolbar" style="padding:8px 12px">
+    <span style="font-size:11px;color:var(--muted);margin-right:4px">Период дельты:</span>
+    <div class="tabs" id="tabs">
+      <div class="tab" data-tab="today">Сегодня</div>
+      <div class="tab" data-tab="week">Эта неделя</div>
+      <div class="tab active" data-tab="month">Этот месяц</div>
+      <div class="tab" data-tab="snapshot">От снимка</div>
+    </div>
+    <span class="status" id="snapshotInfo">—</span>
+    <button class="btn" id="btnUpdateYT" title="Нужен API-ключ">🔄 Обновить из YouTube</button>
+    <button class="btn" id="btnSheets" title="Требует backend">🔗 Google Sheets</button>
+    <button class="btn" id="btnTg" title="Требует backend">📨 Telegram</button>
+    <button class="btn" id="btnCal" title="Требует backend">📅 Calendar</button>
   </div>
 
   <!-- KPI ROW -->
   <div class="kpi-row">
     <div class="kpi">
-      <div class="lbl">Период</div>
-      <div class="date-row">
-        <input type="date" id="dateFrom">
-        <span>→</span>
-        <input type="date" id="dateTo">
+      <div class="lbl">Канал</div>
+      <div class="val" style="font-size:14px" data-key="channel">@YourChannel</div>
+      <div class="sub" style="margin-top:6px">
+        Обновлено: <input type="date" id="lastUpdDate" style="background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:2px 5px;border-radius:4px;font-size:10.5px;font-family:inherit">
       </div>
-      <div class="sub">Канал: <b style="color:var(--accent-2)" data-key="channel">@YourForeignChannel</b></div>
     </div>
     <div class="kpi accent">
       <div class="lbl">Просмотры</div>
-      <div class="val num" id="kVievs">0</div>
-      <div class="sub">сумма факта из «Сводки»</div>
+      <div class="val num"><span id="kVievs">0</span><span class="delta" id="kVievsD"></span></div>
+      <div class="sub"><span class="src" data-src="manual" title="Введено вручную">🖐</span> Всего за всё время</div>
     </div>
     <div class="kpi pink">
       <div class="lbl">Подписчики</div>
-      <div class="val num" id="kSubs">0</div>
-      <div class="sub" id="kSubsSub">по последней строке</div>
+      <div class="val num"><span id="kSubs">0</span><span class="delta" id="kSubsD"></span></div>
+      <div class="sub"><span class="src" data-src="manual" title="Введено вручную">🖐</span> всего</div>
     </div>
     <div class="kpi green">
-      <div class="lbl">Watch Time (ч)</div>
-      <div class="val num" id="kWatch">0</div>
-      <div class="sub">факт из сводки</div>
+      <div class="lbl">Watch Time, ч</div>
+      <div class="val num"><span id="kWatch">0</span><span class="delta" id="kWatchD"></span></div>
+      <div class="sub"><span class="src" data-src="manual" title="Введено вручную">🖐</span> за всё время</div>
     </div>
     <div class="kpi gold">
-      <div class="lbl">Заработано</div>
-      <div class="val num" id="kMoney">0 ₽</div>
-      <div class="sub">сумма дохода факт</div>
+      <div class="lbl">Заработано всего</div>
+      <div class="val num"><span id="kMoney">0</span><span class="delta" id="kMoneyD"></span></div>
+      <div class="sub">RPM: <b id="kRpm" class="num">0 ₽</b></div>
     </div>
-    <div class="kpi">
-      <div class="lbl">Уровень</div>
-      <div class="val" data-key="kLevel">Lv. 1 · Newbie</div>
-      <div class="sub">XP: <b class="num" data-key="kXp">0 / 100</b></div>
+    <div class="kpi profit">
+      <div class="lbl">Чистая прибыль</div>
+      <div class="val num" id="kProfit">0 ₽</div>
+      <div class="sub">доходы − расходы</div>
     </div>
   </div>
 
-  <!-- MAIN GRID -->
-  <div class="grid-3">
+  <!-- STREAK + XP -->
+  <div class="streak-box">
+    <div class="streak-fire">🔥</div>
+    <div class="streak-info">
+      <div class="lbl">Streak канала</div>
+      <div><b id="streakDays">0</b> <span style="color:var(--muted);font-size:11px">дней подряд</span></div>
+    </div>
+    <div class="freeze" id="freezeBox" title="Заморозки: спасают streak при пропуске"></div>
+    <div style="border-left:1px solid var(--line);padding-left:16px;margin-left:8px">
+      <div class="lbl">Уровень</div>
+      <div><b id="levelName">Newbie</b> · <span class="num" id="levelXp">0</span> XP</div>
+    </div>
+    <button class="btn mini" id="btnStreak" title="Отметить активность сегодня">+1 день</button>
+    <button class="btn mini" id="btnMiss" title="Пропустил (сработает заморозка)">Пропустил</button>
+  </div>
+
+  <!-- GRAPH + TOP5 -->
+  <div class="grid-2">
+    <div class="panel">
+      <h3>График роста <span class="hint">по месяцам</span></h3>
+      <div class="graph-wrap">
+        <svg class="graph-svg" id="graph" viewBox="0 0 600 120" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="graph-legend">
+        <span><i style="background:var(--accent)"></i>Подписчики</span>
+        <span><i style="background:var(--pink)"></i>Просмотры (÷100)</span>
+      </div>
+      <div class="add-row">
+        <input id="newMonthLbl" placeholder="Мес. (напр. Окт)" class="short">
+        <input id="newMonthSubs" placeholder="Подписчики" class="short">
+        <input id="newMonthViews" placeholder="Просмотры" class="short">
+        <button class="btn mini" id="addMonth">+</button>
+      </div>
+    </div>
 
     <div class="panel">
-      <h3>Сводка канала <span class="hint">План / Факт</span></h3>
+      <h3>Топ-5 видео <span class="hint">за всё время</span></h3>
+      <div class="top5" id="top5"></div>
+      <div class="add-row">
+        <input id="newTop" placeholder="Название видео...">
+        <input id="newTopVal" placeholder="Просмотры" class="short">
+        <button class="btn mini" id="addTop">+</button>
+      </div>
+
+      <h3 style="margin-top:16px">Достижения <span class="hint">реальные вехи</span></h3>
+      <div class="list" id="badges"></div>
+      <div class="add-row">
+        <input id="newBadge" placeholder="Достижение...">
+        <button class="btn mini" id="addBadge">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN: SUMMARY + HABITS -->
+  <div class="grid-2">
+    <div class="panel">
+      <h3>Сводка канала <span class="hint">накопительно</span></h3>
       <table class="data">
         <thead><tr>
           <th>Показатель</th>
-          <th class="right" style="width:70px">План</th>
-          <th class="right" style="width:70px">Факт</th>
+          <th class="right" style="width:110px">Значение</th>
+          <th class="right" style="width:80px">Δ</th>
           <th style="width:20px"></th>
         </tr></thead>
         <tbody id="summaryBody"></tbody>
       </table>
       <div class="add-row">
-        <input id="newSumName" placeholder="Новый показатель...">
-        <input id="newSumPlan" placeholder="План" class="short">
-        <input id="newSumFact" placeholder="Факт" class="short">
+        <input id="newSumName" placeholder="Показатель...">
+        <input id="newSumVal" placeholder="Значение" class="short">
         <button class="btn mini" id="addSum">+</button>
       </div>
     </div>
 
     <div class="panel">
-      <h3>Источники трафика <span class="hint">доли и план/факт</span></h3>
+      <h3>Источники трафика <span class="hint">накопительно</span></h3>
       <div class="donut-wrap">
         <div class="donut" id="donut"></div>
         <div class="legend" id="legendList"></div>
@@ -383,104 +410,81 @@
       <table class="data">
         <thead><tr>
           <th>Источник</th>
-          <th class="right" style="width:70px">План</th>
-          <th class="right" style="width:70px">Факт</th>
+          <th class="right" style="width:110px">Значение</th>
+          <th class="right" style="width:80px">Δ</th>
           <th style="width:20px"></th>
         </tr></thead>
         <tbody id="trafficBody"></tbody>
       </table>
       <div class="add-row">
         <input id="newTrName" placeholder="Источник...">
-        <input id="newTrPlan" placeholder="План" class="short">
-        <input id="newTrFact" placeholder="Факт" class="short">
+        <input id="newTrVal" placeholder="Значение" class="short">
         <button class="btn mini" id="addTr">+</button>
       </div>
     </div>
-
-    <div class="panel">
-      <h3>План / Факт <span class="hint">по ключевым метрикам</span></h3>
-      <div class="bar-chart" id="barChart"></div>
-      <div class="bar-legend">
-        <span><i style="background:var(--teal)"></i>План</span>
-        <span><i style="background:var(--pink)"></i>Факт</span>
-      </div>
-      <div class="add-row">
-        <input id="newBarName" placeholder="Метрика...">
-        <input id="newBarPlan" placeholder="План %" class="short">
-        <input id="newBarFact" placeholder="Факт %" class="short">
-        <button class="btn mini" id="addBar">+</button>
-      </div>
-    </div>
-
   </div>
 
-  <!-- 3 COL TABLES -->
+  <!-- 3 TABLES: Доходы / Расходы / Вовлечённость -->
   <div class="grid-3b">
     <div class="panel">
-      <h3>Доходы канала <span class="hint">план / факт / Δ</span></h3>
+      <h3>Доходы <span class="hint">накопительно</span></h3>
       <table class="data">
         <thead><tr>
           <th>Метрика</th>
-          <th class="right" style="width:80px">План</th>
-          <th class="right" style="width:80px">Факт</th>
-          <th class="right" style="width:70px">Δ</th>
+          <th class="right" style="width:100px">Значение</th>
+          <th class="right" style="width:100px">Накоплено</th>
           <th style="width:20px"></th>
         </tr></thead>
         <tbody id="incomeBody"></tbody>
       </table>
       <div class="add-row">
         <input id="newIncName" placeholder="Метрика...">
-        <input id="newIncPlan" placeholder="План" class="short">
-        <input id="newIncFact" placeholder="Факт" class="short">
+        <input id="newIncVal" placeholder="Значение" class="short">
         <button class="btn mini" id="addInc">+</button>
       </div>
     </div>
 
     <div class="panel">
-      <h3>Расходы на продакшн <span class="hint">план / факт / остаток</span></h3>
+      <h3>Расходы <span class="hint">накопительно</span></h3>
       <table class="data">
         <thead><tr>
           <th>Статья</th>
-          <th class="right" style="width:80px">План</th>
-          <th class="right" style="width:80px">Факт</th>
-          <th class="right" style="width:70px">Остаток</th>
+          <th class="right" style="width:100px">Значение</th>
+          <th class="right" style="width:100px">Накоплено</th>
           <th style="width:20px"></th>
         </tr></thead>
         <tbody id="expenseBody"></tbody>
       </table>
       <div class="add-row">
         <input id="newExpName" placeholder="Статья...">
-        <input id="newExpPlan" placeholder="План" class="short">
-        <input id="newExpFact" placeholder="Факт" class="short">
+        <input id="newExpVal" placeholder="Значение" class="short">
         <button class="btn mini" id="addExp">+</button>
       </div>
     </div>
 
     <div class="panel">
-      <h3>Вовлечённость <span class="hint">план / факт / Δ</span></h3>
+      <h3>Вовлечённость <span class="hint">позитив</span></h3>
       <table class="data">
         <thead><tr>
           <th>Метрика</th>
-          <th class="right" style="width:80px">План</th>
-          <th class="right" style="width:80px">Факт</th>
-          <th class="right" style="width:70px">Δ</th>
+          <th class="right" style="width:100px">Значение</th>
+          <th class="right" style="width:100px">Накоплено</th>
           <th style="width:20px"></th>
         </tr></thead>
         <tbody id="engageBody"></tbody>
       </table>
       <div class="add-row">
         <input id="newEngName" placeholder="Метрика...">
-        <input id="newEngPlan" placeholder="План" class="short">
-        <input id="newEngFact" placeholder="Факт" class="short">
+        <input id="newEngVal" placeholder="Значение" class="short">
         <button class="btn mini" id="addEng">+</button>
       </div>
     </div>
   </div>
 
-  <!-- HABITS + WEEK -->
+  <!-- HABITS + GOALS -->
   <div class="grid-2">
     <div class="panel">
-      <h3>Привычки AI-продюсера <span class="hint">клик по клетке = отметка</span></h3>
+      <h3>Привычки <span class="hint">месяц · клик по клетке</span></h3>
       <div class="habit-grid" id="habits"></div>
       <div class="add-row">
         <input id="newHabit" placeholder="Новая привычка...">
@@ -489,54 +493,25 @@
     </div>
 
     <div class="panel">
-      <h3>Недельный план <span class="hint">активный день</span></h3>
-      <div class="week-header" id="weekHeader"></div>
-      <svg class="spark" viewBox="0 0 300 80" preserveAspectRatio="none">
-        <polyline fill="none" stroke="#3b82f6" stroke-width="2"
-          points="0,60 20,45 40,55 60,30 80,35 100,20 120,28 140,15 160,25 180,10 200,18 220,12 240,22 260,8 280,14 300,6"/>
-        <polyline fill="rgba(59,130,246,0.15)" stroke="none"
-          points="0,60 20,45 40,55 60,30 80,35 100,20 120,28 140,15 160,25 180,10 200,18 220,12 240,22 260,8 280,14 300,6 300,80 0,80"/>
-      </svg>
-      <h3 style="margin-top:16px">Топ-5 видео <span class="hint">за период</span></h3>
-      <div class="top5" id="top5"></div>
+      <h3>Цели канала <span class="hint">прогресс и прогноз</span></h3>
+      <div id="goals"></div>
       <div class="add-row">
-        <input id="newTop" placeholder="Название видео...">
-        <input id="newTopVal" placeholder="Views" class="short">
-        <button class="btn mini" id="addTop">+</button>
+        <input id="newGoalName" placeholder="Цель...">
+        <input id="newGoalCur" placeholder="Сейчас" class="short">
+        <input id="newGoalMax" placeholder="Цель" class="short">
+        <button class="btn mini" id="addGoal">+</button>
       </div>
     </div>
   </div>
 
-  <!-- PIPELINE + ACHIEVEMENTS + GOALS -->
-  <div class="grid-3c">
-    <div class="panel">
-      <h3>Ежедневный пайплайн <span class="hint" id="pipeCount">0 / 0</span></h3>
-      <div class="list" id="pipeline"></div>
-      <div class="add-row">
-        <input id="newTask" placeholder="Новая задача...">
-        <input id="newTaskXp" placeholder="XP" class="short">
-        <button class="btn mini" id="addTask">+</button>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h3>Достижения канала <span class="hint">открыто / всего</span></h3>
-      <div class="list" id="badges"></div>
-      <div class="add-row">
-        <input id="newBadge" placeholder="Достижение...">
-        <button class="btn mini" id="addBadge">+</button>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h3>Цели канала <span class="hint">прогресс</span></h3>
-      <div id="goals"></div>
-      <div class="add-row">
-        <input id="newGoalName" placeholder="Цель...">
-        <input id="newGoalCur" placeholder="0" class="short">
-        <input id="newGoalMax" placeholder="1000" class="short">
-        <button class="btn mini" id="addGoal">+</button>
-      </div>
+  <!-- PIPELINE -->
+  <div class="panel" style="margin-bottom:12px">
+    <h3>Пайплайн задач <span class="hint" id="pipeCount">0 / 0</span></h3>
+    <div class="list" id="pipeline"></div>
+    <div class="add-row">
+      <input id="newTask" placeholder="Новая задача...">
+      <input id="newTaskXp" placeholder="XP" class="short">
+      <button class="btn mini" id="addTask">+</button>
     </div>
   </div>
 
@@ -544,128 +519,144 @@
 
 <div class="toast" id="toast">Сохранено</div>
 
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-inner">
+    <h2 id="modalTitle">Заголовок</h2>
+    <div id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="btn" id="modalClose">Закрыть</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ==============================
-   DEFAULT STATE
-   ============================== */
+/* ============ DEFAULTS ============ */
 const DEFAULTS = {
   channel: '@YourForeignChannel',
-  dateFrom: '2026-09-01',
-  dateTo: '2026-09-28',
-  kLevel: 'Lv. 8 · CTR Hunter',
-  kXp: '1240 / 2000',
+  lastUpdate: new Date().toISOString().slice(0,10),
+  theme: 'dark',
   editMode: true,
+  activeTab: 'month',
 
+  // KPI
+  kViews: 132420,
+  kSubs: 86477,
+  kWatch: 63600,
+
+  // Streak
+  streakDays: 12,
+  freezeTotal: 3,
+  freezeLeft: 2,
+  lastStreakDate: '',
+
+  // XP
+  xp: 1240,
+  xpMax: 2000,
+  levelName: 'CTR Hunter',
+
+  // Снапшоты
+  snapshots: {
+    today:    { date:'', subs:0, views:0, watch:0, income:0 },
+    week:     { date:'', subs:0, views:0, watch:0, income:0 },
+    month:    { date:'', subs:0, views:0, watch:0, income:0 },
+    custom:   { date:'', subs:0, views:0, watch:0, income:0 }
+  },
+
+  // Сводка
   summary: [
-    {name:'Видео опубликовано', plan:'12',      fact:'14'},
-    {name:'Просмотры (K)',      plan:'125000',  fact:'132420'},
-    {name:'Подписчики',         plan:'85000',   fact:'86477'},
-    {name:'Watch Time (K ч)',   plan:'61000',   fact:'63600'},
-    {name:'Комментарии',        plan:'3000',    fact:'2860'},
-    {name:'Средний CTR, %',     plan:'4.0',     fact:'4.2'}
+    {name:'Просмотры',      val:'132420'},
+    {name:'Подписчики',     val:'86477'},
+    {name:'Watch Time (ч)', val:'63600'},
+    {name:'Комментарии',    val:'2860'},
+    {name:'Средний CTR, %', val:'4.2'}
+  ],
+
+  // График
+  months: [
+    {lbl:'Июн', subs:42000, views:88000},
+    {lbl:'Июл', subs:58000, views:102000},
+    {lbl:'Авг', subs:71000, views:118000},
+    {lbl:'Сен', subs:86477, views:132420}
   ],
 
   legend: [
-    {name:'Рекомендации',     val:'19.2', color:'var(--pink)'},
-    {name:'Поиск YouTube',    val:'16.2', color:'var(--accent)'},
-    {name:'Shorts feed',      val:'12.1', color:'var(--yellow)'},
-    {name:'Внешние источники',val:'17.5', color:'var(--purple)'},
-    {name:'Подписки',         val:'21.8', color:'var(--good)'},
-    {name:'Плейлисты',        val:'13.2', color:'var(--teal)'}
+    {name:'Рекомендации',      val:19.2, color:'var(--pink)'},
+    {name:'Поиск YouTube',     val:16.2, color:'var(--accent)'},
+    {name:'Shorts feed',       val:12.1, color:'var(--yellow)'},
+    {name:'Внешние источники', val:17.5, color:'var(--purple)'},
+    {name:'Подписки',          val:21.8, color:'var(--good)'},
+    {name:'Плейлисты',         val:13.2, color:'var(--teal)'}
   ],
 
   traffic: [
-    {name:'Рекомендации', plan:'20000', fact:'19795'},
-    {name:'Поиск',        plan:'16000', fact:'16700'},
-    {name:'Shorts',       plan:'12000', fact:'12480'}
-  ],
-
-  bars: [
-    {name:'Видео', plan:70, fact:82},
-    {name:'Subs',  plan:55, fact:62},
-    {name:'CTR',   plan:40, fact:48},
-    {name:'Watch', plan:65, fact:78},
-    {name:'Доход', plan:88, fact:95}
+    {name:'Рекомендации', val:'19795'},
+    {name:'Поиск',        val:'16700'},
+    {name:'Shorts',       val:'12480'}
   ],
 
   income: [
-    {name:'AdSense',          plan:'110000', fact:'110000'},
-    {name:'Спонсорство',      plan:'165000', fact:'165000'},
-    {name:'Patreon / Boosty', plan:'3000',   fact:'2850'},
-    {name:'Affiliate (Amazon)',plan:'20000', fact:'24000'},
-    {name:'Продажа мерча',    plan:'5000',   fact:'6350'},
-    {name:'Возврат налогов',  plan:'15000',  fact:'15600'}
+    {name:'AdSense',           val:'110000'},
+    {name:'Спонсорство',       val:'165000'},
+    {name:'Patreon / Boosty',  val:'2850'},
+    {name:'Affiliate (Amazon)',val:'24000'},
+    {name:'Мерч',              val:'6350'},
+    {name:'Возврат налогов',   val:'15600'}
   ],
 
   expense: [
-    {name:'AI-подписки',      plan:'18000', fact:'18000'},
-    {name:'Монтажный софт',   plan:'9000',  fact:'9795'},
-    {name:'Музыка / SFX',     plan:'5000',  fact:'5850'},
-    {name:'Хостинг, домен',   plan:'12000', fact:'11600'},
-    {name:'Реклама (YT Ads)', plan:'12000', fact:'14000'},
-    {name:'Дизайн превью',    plan:'8000',  fact:'6850'},
-    {name:'Прочее',           plan:'3000',  fact:'3740'}
+    {name:'AI-подписки',      val:'18000'},
+    {name:'Монтажный софт',   val:'9795'},
+    {name:'Музыка / SFX',     val:'5850'},
+    {name:'Хостинг, домен',   val:'11600'},
+    {name:'Реклама (YT Ads)', val:'14000'},
+    {name:'Дизайн превью',    val:'6850'},
+    {name:'Прочее',           val:'3740'}
   ],
 
   engage: [
-    {name:'Комментарии',        plan:'3000', fact:'2860'},
-    {name:'Лайки',              plan:'1400', fact:'1400'},
-    {name:'Дизлайки',           plan:'900',  fact:'900'},
-    {name:'Подписки (прирост)', plan:'3500', fact:'3500'},
-    {name:'Отписки',            plan:'3400', fact:'3400'}
+    {name:'Комментарии', val:'2860'},
+    {name:'Лайки',       val:'1400'},
+    {name:'Шеры',        val:'420'}
   ],
 
   habits: [
-    {name:'Опубликовать видео',        color:'',       cells:Array(30).fill(false)},
-    {name:'Изучать AI (30м)',           color:'pink',   cells:Array(30).fill(false)},
-    {name:'День без нуля',              color:'good',   cells:Array(30).fill(false)},
-    {name:'Ответить на комментарии',    color:'yellow', cells:Array(30).fill(false)},
-    {name:'Анализ метрик',              color:'',       cells:Array(30).fill(false)},
-    {name:'Разбор конкурентов',         color:'pink',   cells:Array(30).fill(false)}
+    {name:'Опубликовать видео',  color:'',       cells:Array(30).fill(false)},
+    {name:'Изучать AI (30м)',    color:'pink',   cells:Array(30).fill(false)},
+    {name:'День без нуля',       color:'good',   cells:Array(30).fill(false)},
+    {name:'Анализ метрик',       color:'yellow', cells:Array(30).fill(false)},
+    {name:'Разбор конкурентов',  color:'pink',   cells:Array(30).fill(false)}
   ],
 
   tasks: [
-    {name:'Research и тренды',     xp:10, done:false},
-    {name:'Сценарий и хуки (AI)',  xp:30, done:false},
-    {name:'Озвучка (TTS)',         xp:20, done:false},
-    {name:'Визуалы (AI)',          xp:25, done:false},
-    {name:'Монтаж и субтитры',     xp:40, done:false},
-    {name:'Превью и заголовок A/B',xp:20, done:false},
-    {name:'Загрузка и SEO',        xp:25, done:false},
-    {name:'Работа с комментариями',xp:15, done:false}
+    {name:'Сценарий и хуки (AI)',   xp:30, done:false},
+    {name:'Озвучка (TTS)',          xp:20, done:false},
+    {name:'Визуалы (AI)',           xp:25, done:false},
+    {name:'Монтаж и субтитры',      xp:40, done:false},
+    {name:'Превью и заголовок A/B', xp:20, done:false},
+    {name:'Загрузка и SEO',         xp:25, done:false},
+    {name:'Публикация видео',       xp:100,done:false}
   ],
 
   badges: [
-    {name:'Первый релиз',    desc:'1 видео',       done:true},
-    {name:'Постоянство',     desc:'7 дней подряд', done:true},
-    {name:'Контент-машина',  desc:'30 видео',      done:true},
-    {name:'CTR-охотник',     desc:'CTR ≥ 5%',      done:false},
-    {name:'Монетизация',     desc:'YPP',           done:false},
-    {name:'Магнат ютуба',    desc:'100K subs',     done:false}
+    {name:'Первые 100 подписчиков', desc:'100 subs',    done:true},
+    {name:'Первые $100',            desc:'$100 доход',  done:true},
+    {name:'Видео >1k просмотров',   desc:'1k views',    done:true},
+    {name:'Первое видео >10k',      desc:'10k views',   done:false},
+    {name:'Первая 1000 подписчиков',desc:'1k subs',     done:false},
+    {name:'Монетизация (YPP)',      desc:'4000 ч + 1k', done:false}
   ],
 
   goals: [
-    {name:'100 подписчиков',       cur:68,  max:100},
-    {name:'1 000 подписчиков',     cur:68,  max:1000},
-    {name:'4 000 часов просмотра', cur:320, max:4000},
-    {name:'10 000 подписчиков',    cur:68,  max:10000}
-  ],
-
-  top5: [
-    {t:'Название видео 1', v:'0'},
-    {t:'Название видео 2', v:'0'},
-    {t:'Название видео 3', v:'0'},
-    {t:'Название видео 4', v:'0'},
-    {t:'Название видео 5', v:'0'}
-  ],
-
-  weekActive: 3
+    {name:'1 000 подписчиков',     cur:86477, max:1000,  dailyGain:3},
+    {name:'10 000 подписчиков',    cur:86477, max:10000, dailyGain:3},
+    {name:'100 000 подписчиков',   cur:86477, max:100000,dailyGain:3},
+    {name:'4 000 часов просмотра', cur:63600, max:4000,  dailyGain:5}
+  ]
 };
 
-/* ==============================
-   STORAGE
-   ============================== */
-const KEY = 'creator-ops-v5';
+/* ============ STORAGE ============ */
+const KEY = 'creator-ops-v6';
 let state = load();
 let editMode = true;
 
@@ -675,7 +666,14 @@ function load(){
     const raw = localStorage.getItem(KEY);
     if(!raw) return deepClone(DEFAULTS);
     const parsed = JSON.parse(raw);
-    return Object.assign(deepClone(DEFAULTS), parsed);
+    const base = deepClone(DEFAULTS);
+    const merged = Object.assign(base, parsed);
+    // Не теряем дефолтные поля, которых могло не быть в сохранёнке
+    ['summary','legend','traffic','income','expense','engage','habits','tasks','badges','goals','months'].forEach(k=>{
+      if(!Array.isArray(merged[k]) || merged[k].length === 0) merged[k] = base[k];
+    });
+    if(!merged.snapshots) merged.snapshots = base.snapshots;
+    return merged;
   }catch(e){ return deepClone(DEFAULTS); }
 }
 let saveTimer;
@@ -683,23 +681,17 @@ function save(showToast=true){
   localStorage.setItem(KEY, JSON.stringify(state));
   if(showToast) toast('Сохранено');
 }
-function saveSoon(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>save(false), 400);
-}
+function saveSoon(){ clearTimeout(saveTimer); saveTimer = setTimeout(()=>save(false), 400); }
 
 let toastTimer;
 function toast(msg){
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'), 1200);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 1400);
 }
 
-/* ==============================
-   HELPERS
-   ============================== */
+/* ============ HELPERS ============ */
 function parseNum(v){
   if(v === null || v === undefined) return 0;
   if(typeof v === 'number') return v;
@@ -713,30 +705,31 @@ function parseNum(v){
   else if(suf === 'B') n *= 1000000000;
   return n;
 }
-
 function fmt(n, dec=0){
   if(!isFinite(n)) n = 0;
   return n.toLocaleString('ru-RU', {minimumFractionDigits:dec, maximumFractionDigits:dec});
 }
-function fmtMoney(n){ return fmt(n, 0) + ' ₽'; }
+function fmtMoney(n){ return fmt(n,0) + ' ₽'; }
 
-function deltaClass(diff){
-  if(Math.abs(diff) < 0.001) return 'muted';
-  return diff > 0 ? 'good' : 'bad';
-}
-function deltaText(diff){
-  if(Math.abs(diff) < 0.001) return '0';
-  const sign = diff > 0 ? '+' : '';
-  return sign + fmt(diff, 0);
+function deltaHTML(current, past, suffix=''){
+  const d = current - past;
+  if(!past) return '';
+  if(Math.abs(d) < 0.5) return '<span class="delta flat">0</span>';
+  const cls = d > 0 ? 'up' : 'down';
+  const sign = d > 0 ? '+' : '';
+  return `<span class="delta ${cls}">${sign}${fmt(d)}${suffix}</span>`;
 }
 
-// Главный фикс: реально применяем editMode при создании ячейки
+/* ============ EDIT MODE ============ */
+function applyEditMode(){
+  document.querySelectorAll('[contenteditable]').forEach(el=>{
+    el.contentEditable = editMode ? 'true' : 'false';
+  });
+}
+
 function bindCell(el, getter, setter){
   el.contentEditable = editMode ? 'true' : 'false';
-  el.addEventListener('focus', ()=>{
-    if(!editMode){ el.blur(); return; }
-    el._before = el.textContent;
-  });
+  el.addEventListener('focus', ()=>{ if(!editMode){ el.blur(); return; } el._before = el.textContent; });
   el.addEventListener('keydown', (e)=>{
     if(!editMode) return;
     if(e.key === 'Enter'){ e.preventDefault(); el.blur(); }
@@ -746,55 +739,97 @@ function bindCell(el, getter, setter){
     if(!editMode) return;
     const txt = el.textContent.trim();
     if(txt === el._before) return;
-    setter(txt);
-    saveSoon();
-    render();
+    setter(txt); saveSoon(); render();
   });
   el.textContent = getter();
 }
 
-// Тот же приём для простых [data-key]
-function bindDataKey(el, key){
-  el.contentEditable = editMode ? 'true' : 'false';
-  if(state[key] !== undefined) el.textContent = state[key];
-  if(el._bound) return;
-  el._bound = true;
-  el.addEventListener('focus', ()=>{
-    if(!editMode){ el.blur(); return; }
-    el._before = el.textContent;
-  });
-  el.addEventListener('keydown', (e)=>{
-    if(!editMode) return;
-    if(e.key === 'Enter'){ e.preventDefault(); el.blur(); }
-    if(e.key === 'Escape'){ el.textContent = el._before; el.blur(); }
-  });
-  el.addEventListener('blur', ()=>{
-    if(!editMode) return;
-    state[key] = el.textContent.trim();
-    saveSoon();
-  });
-}
-
-/* ==============================
-   RENDER
-   ============================== */
+/* ============ RENDER ============ */
 function render(){
-  // data-key поля
+  document.body.classList.toggle('light', state.theme === 'light');
+  document.getElementById('btnTheme').textContent = state.theme === 'light' ? '☀️' : '🌙';
+
+  // дата последнего обновления
+  const upd = document.getElementById('lastUpdDate');
+  if(!upd._bound){
+    upd._bound = true;
+    upd.onchange = ()=>{ state.lastUpdate = upd.value; saveSoon(); };
+  }
+  upd.value = state.lastUpdate;
+  document.getElementById('lastUpdate').textContent = state.lastUpdate;
+
+  // Канал
   document.querySelectorAll('[data-key]').forEach(el=>{
-    bindDataKey(el, el.dataset.key);
+    el.contentEditable = editMode ? 'true' : 'false';
+    if(state[el.dataset.key] !== undefined) el.textContent = state[el.dataset.key];
+    if(el._bound) return;
+    el._bound = true;
+    el.addEventListener('blur', ()=>{
+      if(!editMode) return;
+      state[el.dataset.key] = el.textContent.trim();
+      saveSoon();
+    });
   });
 
-  // даты
-  const df = document.getElementById('dateFrom');
-  const dt = document.getElementById('dateTo');
-  if(!df._bound){
-    df._bound = true; dt._bound = true;
-    df.value = state.dateFrom; dt.value = state.dateTo;
-    df.onchange = ()=>{ state.dateFrom = df.value; saveSoon(); };
-    dt.onchange = ()=>{ state.dateTo   = dt.value; saveSoon(); };
+  // KPI + Delta
+  const activeSnap = getActiveSnapshot();
+  document.getElementById('kVievs').textContent = fmt(state.kViews);
+  document.getElementById('kSubs').textContent = fmt(state.kSubs);
+  document.getElementById('kWatch').textContent = fmt(state.kWatch);
+
+  // Доходы и расходы
+  let income = 0, expense = 0;
+  state.income.forEach(r => income += parseNum(r.val));
+  state.expense.forEach(r => expense += parseNum(r.val));
+  const profit = income - expense;
+  document.getElementById('kMoney').textContent = fmtMoney(income);
+  document.getElementById('kProfit').textContent = fmtMoney(profit);
+  document.getElementById('kProfit').style.color = profit >= 0 ? 'var(--good)' : 'var(--bad)';
+
+  // RPM
+  const rpm = state.kViews > 0 ? income / state.kViews * 1000 : 0;
+  document.getElementById('kRpm').textContent = fmtMoney(rpm);
+
+  // Дельты от активного снапшота
+  document.getElementById('kVievsD').outerHTML = deltaHTML(state.kViews, activeSnap.views || 0);
+  document.getElementById('kVievsD').id = 'kVievsD';
+  document.getElementById('kSubsD').outerHTML  = deltaHTML(state.kSubs,  activeSnap.subs || 0);
+  document.getElementById('kSubsD').id = 'kSubsD';
+  document.getElementById('kWatchD').outerHTML = deltaHTML(state.kWatch, activeSnap.watch || 0);
+  document.getElementById('kWatchD').id = 'kWatchD';
+  document.getElementById('kMoneyD').outerHTML = deltaHTML(income, activeSnap.income || 0);
+  document.getElementById('kMoneyD').id = 'kMoneyD';
+
+  // Streak
+  document.getElementById('streakDays').textContent = state.streakDays;
+  const fb = document.getElementById('freezeBox');
+  fb.innerHTML = '';
+  for(let i=0;i<state.freezeTotal;i++){
+    const d = document.createElement('div');
+    d.className = 'fz' + (i < state.freezeLeft ? ' on' : '');
+    d.textContent = i < state.freezeLeft ? '❄' : '';
+    fb.appendChild(d);
+  }
+  document.getElementById('levelName').textContent = state.levelName;
+  document.getElementById('levelXp').textContent = fmt(state.xp);
+
+  // Снапшот-инфо
+  const snapInfo = document.getElementById('snapshotInfo');
+  if(activeSnap.date){
+    snapInfo.textContent = `Дельта от ${activeSnap.date}`;
+  } else {
+    snapInfo.textContent = 'Нет снимка — дельта не считается';
   }
 
-  // СВОДКА
+  // Табы
+  document.querySelectorAll('#tabs .tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.tab === state.activeTab);
+  });
+
+  // График
+  renderGraph();
+
+  // Сводка
   const sb = document.getElementById('summaryBody');
   sb.innerHTML = '';
   state.summary.forEach((row, i)=>{
@@ -802,134 +837,100 @@ function render(){
     tr.innerHTML = `
       <td></td>
       <td class="right num"></td>
-      <td class="right num"></td>
-      <td><span class="del" title="Удалить">×</span></td>
+      <td class="right"></td>
+      <td><span class="del">×</span></td>
     `;
     const tds = tr.querySelectorAll('td');
     bindCell(tds[0], ()=>row.name, v=>state.summary[i].name = v);
-    bindCell(tds[1], ()=>row.plan, v=>state.summary[i].plan = v);
-    bindCell(tds[2], ()=>row.fact, v=>state.summary[i].fact = v);
+    bindCell(tds[1], ()=>row.val,  v=>{ state.summary[i].val = v; save(); render(); });
     tr.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить «' + row.name + '»?')){
-        state.summary.splice(i,1); save(); render();
-      }
+      if(confirm('Удалить «' + row.name + '»?')){ state.summary.splice(i,1); save(); render(); }
     };
     sb.appendChild(tr);
   });
 
-  // ИСТОЧНИКИ ТРАФИКА
+  // Трафик
   const tb = document.getElementById('trafficBody');
   tb.innerHTML = '';
   state.traffic.forEach((row, i)=>{
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td></td><td class="right num"></td><td class="right num"></td>
-      <td><span class="del">×</span></td>
-    `;
+    tr.innerHTML = `<td></td><td class="right num"></td><td class="right"></td><td><span class="del">×</span></td>`;
     const tds = tr.querySelectorAll('td');
     bindCell(tds[0], ()=>row.name, v=>state.traffic[i].name = v);
-    bindCell(tds[1], ()=>row.plan, v=>state.traffic[i].plan = v);
-    bindCell(tds[2], ()=>row.fact, v=>state.traffic[i].fact = v);
+    bindCell(tds[1], ()=>row.val,  v=>{ state.traffic[i].val = v; save(); render(); });
     tr.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить «' + row.name + '»?')){
-        state.traffic.splice(i,1); save(); render();
-      }
+      if(confirm('Удалить «' + row.name + '»?')){ state.traffic.splice(i,1); save(); render(); }
     };
     tb.appendChild(tr);
   });
 
-  // ЛЕГЕНДА
+  // Легенда
   const lg = document.getElementById('legendList');
   lg.innerHTML = '';
   state.legend.forEach((row, i)=>{
     const el = document.createElement('div');
     el.className = 'lrow';
-    el.innerHTML = `
-      <i style="background:${row.color}"></i>
-      <span class="lname"></span>
-      <span class="lval num right"></span>
-      <span class="del">×</span>
-    `;
+    el.innerHTML = `<i style="background:${row.color}"></i><span class="lname"></span><span class="lval num right"></span><span class="del">×</span>`;
     bindCell(el.querySelector('.lname'), ()=>row.name, v=>state.legend[i].name = v);
-    bindCell(el.querySelector('.lval'),  ()=>row.val,  v=>state.legend[i].val  = v);
+    bindCell(el.querySelector('.lval'),  ()=>String(row.val), v=>{ state.legend[i].val = parseFloat(v)||0; });
     el.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить «' + row.name + '»?')){
-        state.legend.splice(i,1); save(); render();
-      }
+      if(confirm('Удалить «' + row.name + '»?')){ state.legend.splice(i,1); save(); render(); }
     };
     lg.appendChild(el);
   });
 
-  // БАРЫ ПЛАН/ФАКТ
-  const bc = document.getElementById('barChart');
-  bc.innerHTML = '';
-  state.bars.forEach((row, i)=>{
-    const g = document.createElement('div');
-    g.className = 'bar-group';
-    g.innerHTML = `
-      <div class="bar-pair">
-        <div class="bar plan" style="height:${Math.min(100, Math.max(0, row.plan))}%" title="План: ${row.plan}%"></div>
-        <div class="bar fact" style="height:${Math.min(100, Math.max(0, row.fact))}%" title="Факт: ${row.fact}%"></div>
-      </div>
-      <small></small>
-    `;
-    const small = g.querySelector('small');
-    small.contentEditable = editMode ? 'true' : 'false';
-    small.textContent = row.name;
-    small.addEventListener('focus', ()=>{
-      if(!editMode){ small.blur(); return; }
-    });
-    small.addEventListener('blur', ()=>{
-      if(!editMode) return;
-      state.bars[i].name = small.textContent.trim();
-      saveSoon();
-    });
-    g.querySelector('.bar.plan').onclick = ()=>{
-      if(!editMode) return;
-      const v = prompt('План %:', row.plan);
-      if(v !== null){ state.bars[i].plan = Math.max(0, Math.min(100, parseFloat(v) || 0)); save(); render(); }
+  // Доходы / Расходы / Вовлечённость — накопительно
+  renderCatTable('incomeBody',  'income');
+  renderCatTable('expenseBody', 'expense');
+  renderCatTable('engageBody',  'engage');
+
+  // Топ-5
+  const t5 = document.getElementById('top5');
+  t5.innerHTML = '';
+  state.top5.forEach((v, i)=>{
+    const el = document.createElement('div');
+    el.className = 'row';
+    el.innerHTML = `<span class="rank">${i+1}</span><span class="title"></span><span class="val num"></span><span class="del">×</span>`;
+    bindCell(el.querySelector('.title'), ()=>v.t, nv=>state.top5[i].t = nv);
+    bindCell(el.querySelector('.val'),   ()=>v.v, nv=>state.top5[i].v = nv);
+    el.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + v.t + '»?')){ state.top5.splice(i,1); save(); render(); }
     };
-    g.querySelector('.bar.fact').onclick = ()=>{
-      if(!editMode) return;
-      const v = prompt('Факт %:', row.fact);
-      if(v !== null){ state.bars[i].fact = Math.max(0, Math.min(100, parseFloat(v) || 0)); save(); render(); }
-    };
-    g.addEventListener('contextmenu', (e)=>{
-      e.preventDefault();
-      if(!editMode) return;
-      if(confirm('Удалить «' + row.name + '»?')){
-        state.bars.splice(i,1); save(); render();
-      }
-    });
-    bc.appendChild(g);
+    t5.appendChild(el);
   });
 
-  // 3 ТАБЛИЦЫ
-  renderCatTable('incomeBody',  'income',  false);
-  renderCatTable('expenseBody', 'expense', true);
-  renderCatTable('engageBody',  'engage',  false);
+  // Достижения
+  const bd = document.getElementById('badges');
+  bd.innerHTML = '';
+  state.badges.forEach((b, i)=>{
+    const el = document.createElement('div');
+    el.className = 'list-row' + (b.done ? ' done' : '');
+    el.innerHTML = `<span class="dot"></span><span class="name">${b.done?'🏆 ':'🔒 '}<span class="bname"></span></span><span class="desc"></span><span class="del">×</span>`;
+    bindCell(el.querySelector('.bname'), ()=>b.name, nv=>state.badges[i].name = nv);
+    bindCell(el.querySelector('.desc'),  ()=>b.desc, nv=>state.badges[i].desc = nv);
+    el.querySelector('.dot').onclick = ()=>{ state.badges[i].done = !state.badges[i].done; save(); render(); };
+    el.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + b.name + '»?')){ state.badges.splice(i,1); save(); render(); }
+    };
+    bd.appendChild(el);
+  });
 
-  // KPI
-  recomputeKpis();
-
-  // ПРИВЫЧКИ
+  // Привычки
   const hab = document.getElementById('habits');
   hab.innerHTML = '';
   state.habits.forEach((h, hi)=>{
+    const done = h.cells.filter(Boolean).length;
+    const total = h.cells.length;
+    const pct = total ? Math.round(done/total*100) : 0;
     const row = document.createElement('div');
     row.className = 'habit-row';
-    row.innerHTML = `
-      <div class="habit-name"></div>
-      <div class="habit-cells"></div>
-      <span class="del" title="Удалить">×</span>
-    `;
+    row.innerHTML = `<div class="habit-name"></div><div class="habit-cells"></div><span class="habit-stat">${done}/${total} · <b>${pct}%</b></span><span class="del">×</span>`;
     const nameEl = row.querySelector('.habit-name');
     nameEl.contentEditable = editMode ? 'true' : 'false';
     nameEl.textContent = h.name;
     nameEl.addEventListener('blur', ()=>{
       if(!editMode) return;
-      state.habits[hi].name = nameEl.textContent.trim();
-      saveSoon();
+      state.habits[hi].name = nameEl.textContent.trim(); saveSoon();
     });
     const cells = row.querySelector('.habit-cells');
     h.cells.forEach((on, ci)=>{
@@ -939,47 +940,48 @@ function render(){
       cells.appendChild(c);
     });
     row.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить привычку «' + h.name + '»?')){
-        state.habits.splice(hi,1); save(); render();
-      }
+      if(confirm('Удалить «' + h.name + '»?')){ state.habits.splice(hi,1); save(); render(); }
     };
     hab.appendChild(row);
   });
 
-  // НЕДЕЛЯ
-  const wk = document.getElementById('weekHeader');
-  wk.innerHTML = '';
-  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach((d, i)=>{
+  // Цели + прогноз
+  const gl = document.getElementById('goals');
+  gl.innerHTML = '';
+  state.goals.forEach((g, i)=>{
+    const pct = Math.min(100, g.max > 0 ? (g.cur/g.max*100) : 0);
+    const left = Math.max(0, g.max - g.cur);
+    const days = g.dailyGain > 0 ? Math.ceil(left / g.dailyGain) : 0;
+    let forecast = '';
+    if(g.dailyGain > 0 && left > 0){
+      const months = (days/30).toFixed(1);
+      forecast = `Осталось ${fmt(left)} · ~${days} дн. (~${months} мес.) при +${g.dailyGain}/день`;
+    } else if(left === 0){
+      forecast = '✅ Цель достигнута';
+    } else {
+      forecast = 'Укажи суточный прирост для прогноза';
+    }
     const el = document.createElement('div');
-    el.className = 'wk' + (i === state.weekActive ? ' active' : '');
-    el.textContent = d;
-    el.onclick = ()=>{ state.weekActive = i; save(); render(); };
-    wk.appendChild(el);
-  });
-
-  // ТОП-5
-  const t5 = document.getElementById('top5');
-  t5.innerHTML = '';
-  state.top5.forEach((v, i)=>{
-    const el = document.createElement('div');
-    el.className = 'row';
+    el.className = 'goal';
     el.innerHTML = `
-      <span class="rank">${i+1}</span>
-      <span class="title"></span>
-      <span class="val num"></span>
-      <span class="del">×</span>
+      <div class="goal-top">
+        <span class="gname"></span>
+        <span class="gval num"><span class="cur"></span> / <span class="max"></span></span>
+        <span class="del">×</span>
+      </div>
+      <div class="goal-bar"><i style="width:${pct}%"></i></div>
+      <div class="goal-forecast">${forecast}</div>
     `;
-    bindCell(el.querySelector('.title'), ()=>v.t, nv=>state.top5[i].t = nv);
-    bindCell(el.querySelector('.val'),   ()=>v.v, nv=>state.top5[i].v = nv);
+    bindCell(el.querySelector('.gname'), ()=>g.name, nv=>state.goals[i].name = nv);
+    bindCell(el.querySelector('.cur'),   ()=>g.cur,  nv=>{ state.goals[i].cur = parseNum(nv); });
+    bindCell(el.querySelector('.max'),   ()=>g.max,  nv=>{ state.goals[i].max = parseNum(nv)||1; });
     el.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить «' + v.t + '»?')){
-        state.top5.splice(i,1); save(); render();
-      }
+      if(confirm('Удалить «' + g.name + '»?')){ state.goals.splice(i,1); save(); render(); }
     };
-    t5.appendChild(el);
+    gl.appendChild(el);
   });
 
-  // ПАЙПЛАЙН
+  // Пайплайн
   const pipe = document.getElementById('pipeline');
   pipe.innerHTML = '';
   let doneN = 0;
@@ -987,157 +989,106 @@ function render(){
     if(t.done) doneN++;
     const el = document.createElement('div');
     el.className = 'list-row' + (t.done ? ' done' : '');
-    el.innerHTML = `
-      <span class="dot"></span>
-      <span class="name"></span>
-      <span class="xp num">+${t.xp} XP</span>
-      <span class="del">×</span>
-    `;
+    el.innerHTML = `<span class="dot"></span><span class="name"></span><span class="xp num">+${t.xp} XP</span><span class="del">×</span>`;
     bindCell(el.querySelector('.name'), ()=>t.name, nv=>state.tasks[i].name = nv);
-    el.querySelector('.dot').onclick = ()=>{ state.tasks[i].done = !state.tasks[i].done; save(); render(); };
+    el.querySelector('.dot').onclick = ()=>{
+      if(!t.done){ state.xp += t.xp; }
+      else { state.xp = Math.max(0, state.xp - t.xp); }
+      state.tasks[i].done = !state.tasks[i].done;
+      save(); render();
+    };
     el.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить «' + t.name + '»?')){
-        state.tasks.splice(i,1); save(); render();
-      }
+      if(confirm('Удалить «' + t.name + '»?')){ state.tasks.splice(i,1); save(); render(); }
     };
     pipe.appendChild(el);
   });
   document.getElementById('pipeCount').textContent = `${doneN} / ${state.tasks.length}`;
 
-  // ДОСТИЖЕНИЯ
-  const bd = document.getElementById('badges');
-  bd.innerHTML = '';
-  state.badges.forEach((b, i)=>{
-    const el = document.createElement('div');
-    el.className = 'list-row' + (b.done ? ' done' : '');
-    el.innerHTML = `
-      <span class="dot"></span>
-      <span class="name">${b.done ? '🏆 ' : '🔒 '}<span class="bname"></span></span>
-      <span class="desc"></span>
-      <span class="del">×</span>
-    `;
-    bindCell(el.querySelector('.bname'), ()=>b.name, nv=>state.badges[i].name = nv);
-    bindCell(el.querySelector('.desc'),  ()=>b.desc, nv=>state.badges[i].desc = nv);
-    el.querySelector('.dot').onclick = ()=>{ state.badges[i].done = !state.badges[i].done; save(); render(); };
-    el.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить «' + b.name + '»?')){
-        state.badges.splice(i,1); save(); render();
-      }
-    };
-    bd.appendChild(el);
-  });
-
-  // ЦЕЛИ
-  const gl = document.getElementById('goals');
-  gl.innerHTML = '';
-  state.goals.forEach((g, i)=>{
-    const pct = Math.min(100, g.max > 0 ? (g.cur / g.max * 100) : 0);
-    const el = document.createElement('div');
-    el.className = 'goal';
-    el.innerHTML = `
-      <div class="goal-top">
-        <span class="gname"></span>
-        <span class="gval num">
-          <span class="cur"></span> / <span class="max"></span>
-        </span>
-        <span class="del">×</span>
-      </div>
-      <div class="goal-bar"><i style="width:${pct}%"></i></div>
-    `;
-    bindCell(el.querySelector('.gname'), ()=>g.name, nv=>state.goals[i].name = nv);
-    bindCell(el.querySelector('.cur'),   ()=>g.cur,  nv=>{ state.goals[i].cur = parseNum(nv); });
-    bindCell(el.querySelector('.max'),   ()=>g.max,  nv=>{ state.goals[i].max = parseNum(nv) || 1; });
-    el.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить цель «' + g.name + '»?')){
-        state.goals.splice(i,1); save(); render();
-      }
-    };
-    gl.appendChild(el);
-  });
-
-  // применяем editMode ко всем contenteditable в конце
   applyEditMode();
 }
 
-function applyEditMode(){
-  document.querySelectorAll('[contenteditable]').forEach(el=>{
-    el.contentEditable = editMode ? 'true' : 'false';
-  });
+/* ============ GRAPH ============ */
+function renderGraph(){
+  const g = document.getElementById('graph');
+  const data = state.months;
+  if(!data.length){ g.innerHTML = ''; return; }
+
+  const W = 600, H = 120, PAD = 8;
+  const maxSubs = Math.max(...data.map(d=>d.subs), 1);
+  const maxViews = Math.max(...data.map(d=>d.views/100), 1);
+  const maxV = Math.max(maxSubs, maxViews);
+  const step = (W - PAD*2) / Math.max(1, data.length-1);
+
+  function path(key, scale){
+    return data.map((d, i)=>{
+      const x = PAD + i*step;
+      const y = H - PAD - (d[key]/scale) * (H - PAD*2);
+      return `${x},${y}`;
+    }).join(' ');
+  }
+
+  const subsLine = path('subs', maxV);
+  const viewsLine = path('views100', maxV); // мы уже поделили
+
+  // Пересчитываем views100
+  const viewsPoints = data.map((d, i)=>{
+    const x = PAD + i*step;
+    const y = H - PAD - ((d.views/100)/maxV) * (H - PAD*2);
+    return `${x},${y}`;
+  }).join(' ');
+
+  g.innerHTML = `
+    <polyline fill="none" stroke="var(--accent)" stroke-width="2" points="${subsLine}" />
+    <polyline fill="none" stroke="var(--pink)" stroke-width="2" points="${viewsPoints}" stroke-dasharray="4,3" />
+    ${data.map((d, i)=>{
+      const x = PAD + i*step;
+      return `<circle cx="${x}" cy="${H - PAD - (d.subs/maxV)*(H-PAD*2)}" r="3" fill="var(--accent)" />`;
+    }).join('')}
+    ${data.map((d, i)=>{
+      const x = PAD + i*step;
+      return `<text x="${x}" y="${H-1}" font-size="9" fill="var(--muted)" text-anchor="middle">${d.lbl}</text>`;
+    }).join('')}
+  `;
 }
 
-/* ==============================
-   CAT TABLE
-   ============================== */
-function renderCatTable(tbodyId, key, invertDelta){
+/* ============ CAT TABLE ============ */
+function renderCatTable(tbodyId, key){
   const tb = document.getElementById(tbodyId);
   tb.innerHTML = '';
-  let sumPlan = 0, sumFact = 0;
+  let cum = 0;
   state[key].forEach((row, i)=>{
-    const plan = parseNum(row.plan);
-    const fact = parseNum(row.fact);
-    sumPlan += plan;
-    sumFact += fact;
-    const diff = fact - plan;
-    const cls = deltaClass(invertDelta ? -diff : diff);
-    const txt = deltaText(diff);
+    const v = parseNum(row.val);
+    cum += v;
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td></td>
       <td class="right num"></td>
-      <td class="right num"></td>
-      <td class="right num ${cls}">${txt}</td>
+      <td class="right num" style="color:var(--accent-2)"></td>
       <td><span class="del">×</span></td>
     `;
     const tds = tr.querySelectorAll('td');
     bindCell(tds[0], ()=>row.name, v=>state[key][i].name = v);
-    bindCell(tds[1], ()=>row.plan, v=>{ state[key][i].plan = v; save(); render(); });
-    bindCell(tds[2], ()=>row.fact, v=>{ state[key][i].fact = v; save(); render(); });
+    bindCell(tds[1], ()=>row.val,  v=>{ state[key][i].val = v; save(); render(); });
+    tds[2].textContent = fmt(cum);
     tr.querySelector('.del').onclick = ()=>{
-      if(confirm('Удалить «' + row.name + '»?')){
-        state[key].splice(i,1); save(); render();
-      }
+      if(confirm('Удалить «' + row.name + '»?')){ state[key].splice(i,1); save(); render(); }
     };
     tb.appendChild(tr);
   });
-
-  const totalDiff = sumFact - sumPlan;
-  const totalCls = deltaClass(invertDelta ? -totalDiff : totalDiff);
   const tr = document.createElement('tr');
   tr.className = 'total';
-  tr.innerHTML = `
-    <td>ИТОГО</td>
-    <td class="right num">${fmt(sumPlan)}</td>
-    <td class="right num">${fmt(sumFact)}</td>
-    <td class="right num ${totalCls}">${deltaText(totalDiff)}</td>
-    <td></td>
-  `;
+  tr.innerHTML = `<td>ИТОГО</td><td class="right num">${fmt(state[key].reduce((s,r)=>s+parseNum(r.val),0))}</td><td></td><td></td>`;
   tb.appendChild(tr);
 }
 
-/* ==============================
-   KPI ПЕРЕСЧЁТ
-   ============================== */
-function recomputeKpis(){
-  const viewsRow = state.summary.find(r => /просмотр/i.test(r.name));
-  const views = viewsRow ? parseNum(viewsRow.fact) : 0;
-  document.getElementById('kVievs').textContent = fmt(views);
-
-  const subsRow = state.summary.find(r => /подписчик/i.test(r.name));
-  const subs = subsRow ? parseNum(subsRow.fact) : 0;
-  document.getElementById('kSubs').textContent = fmt(subs);
-
-  const watchRow = state.summary.find(r => /watch/i.test(r.name));
-  const watch = watchRow ? parseNum(watchRow.fact) : 0;
-  document.getElementById('kWatch').textContent = fmt(watch);
-
-  let income = 0;
-  state.income.forEach(r => income += parseNum(r.fact));
-  document.getElementById('kMoney').textContent = fmtMoney(income);
+/* ============ SNAPSHOTS ============ */
+function getActiveSnapshot(){
+  const t = state.activeTab;
+  if(t === 'snapshot') return state.snapshots.custom || {date:'',subs:0,views:0,watch:0,income:0};
+  return state.snapshots[t] || {date:'',subs:0,views:0,watch:0,income:0};
 }
 
-/* ==============================
-   TOOLBAR
-   ============================== */
+/* ============ THEME / EDIT ============ */
 document.getElementById('btnEdit').onclick = (e)=>{
   editMode = !editMode;
   state.editMode = editMode;
@@ -1148,21 +1099,110 @@ document.getElementById('btnEdit').onclick = (e)=>{
   toast(editMode ? 'Редактирование включено' : 'Редактирование выключено');
 };
 
+document.getElementById('btnTheme').onclick = ()=>{
+  state.theme = state.theme === 'light' ? 'dark' : 'light';
+  save(false); render();
+};
+
+/* ============ SNAPSHOT ============ */
+document.getElementById('btnSnapshot').onclick = ()=>{
+  const t = state.activeTab;
+  const key = (t === 'snapshot') ? 'custom' : t;
+  let income = 0;
+  state.income.forEach(r => income += parseNum(r.val));
+  state.snapshots[key] = {
+    date: new Date().toISOString().slice(0,10),
+    subs: state.kSubs,
+    views: state.kViews,
+    watch: state.kWatch,
+    income: income
+  };
+  save(); render();
+  toast('Снимок сохранён: ' + state.snapshots[key].date);
+};
+
+/* ============ TABS ============ */
+document.querySelectorAll('#tabs .tab').forEach(t=>{
+  t.onclick = ()=>{
+    state.activeTab = t.dataset.tab;
+    save(false); render();
+  };
+});
+
+/* ============ STREAK ============ */
+document.getElementById('btnStreak').onclick = ()=>{
+  const today = new Date().toISOString().slice(0,10);
+  if(state.lastStreakDate === today){ toast('Уже отмечено сегодня'); return; }
+  const yest = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  if(state.lastStreakDate === yest || state.lastStreakDate === ''){
+    state.streakDays += 1;
+  } else {
+    // пропуск — используем заморозку
+    if(state.freezeLeft > 0){
+      state.freezeLeft -= 1;
+      state.streakDays += 1;
+      toast('Сработала заморозка ❄');
+    } else {
+      state.streakDays = 1;
+      toast('Streak сброшен');
+    }
+  }
+  state.lastStreakDate = today;
+  save(); render();
+};
+
+document.getElementById('btnMiss').onclick = ()=>{
+  if(state.freezeLeft > 0){
+    state.freezeLeft -= 1;
+    state.lastStreakDate = '';
+    toast('Заморозка использована ❄');
+  } else {
+    state.streakDays = 0;
+    toast('Streak обнулён');
+  }
+  save(); render();
+};
+
+/* ============ STUBS: API / SHEETS / TG / CAL ============ */
+function showStub(title, html){
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+document.getElementById('modalClose').onclick = ()=> document.getElementById('modal').classList.remove('show');
+document.getElementById('modal').onclick = (e)=>{ if(e.target.id === 'modal') e.target.classList.remove('show'); };
+
+document.getElementById('btnUpdateYT').onclick = ()=> showStub('Обновление из YouTube',
+  `<p>Автоматическое обновление требует <b>YouTube Data API v3</b>. На GitHub Pages это невозможно из соображений безопасности — API-ключ будет виден всем.</p>
+   <p>Что нужно:</p>
+   <p>1. Получить ключ в Google Cloud Console.<br>
+      2. Поднять небольшой backend (Google Apps Script / Cloudflare Worker).<br>
+      3. Сюда подключить запрос к своему backend.</p>
+   <p>Пока — вводи значения вручную, кнопка <code>📸 Зафиксировать</code> сохраняет снимок.</p>`);
+
+document.getElementById('btnSheets').onclick = ()=> showStub('Google Sheets',
+  `<p>Синхронизация с Google Sheets требует OAuth-доступ и backend. На статике без сервера — невозможно.</p>
+   <p>Альтернатива прямо сейчас: кнопка <b>📄 CSV</b> — выгружает текущие данные в файл, который можно открыть в Google Sheets.</p>`);
+
+document.getElementById('btnTg').onclick = ()=> showStub('Telegram-бот',
+  `<p>Для еженедельных сводок в Telegram нужен <b>бот-сервер</b> (Node/Python), который будет запускать cron и слать сообщения. GitHub Pages такое не умеет.</p>
+   <p>Если хочешь — распишу пошагово, как поднять на бесплатном хостинге.</p>`);
+
+document.getElementById('btnCal').onclick = ()=> showStub('Google Calendar',
+  `<p>Интеграция требует OAuth Google и backend. Пока — вручную вноси публикации в свой календарь, либо используй «Недельный план» внутри дашборда.</p>`);
+
+/* ============ EXPORT / IMPORT / CSV ============ */
 document.getElementById('btnExport').onclick = ()=>{
   const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'creator-ops-' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = 'creator-ops-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click(); URL.revokeObjectURL(url);
   toast('Экспортировано');
 };
-
 document.getElementById('btnImport').onclick = ()=> document.getElementById('fileInput').click();
 document.getElementById('fileInput').onchange = (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
+  const file = e.target.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = (ev)=>{
     try{
@@ -1178,9 +1218,25 @@ document.getElementById('fileInput').onchange = (e)=>{
   reader.readAsText(file);
   e.target.value = '';
 };
+document.getElementById('btnCsv').onclick = ()=>{
+  const rows = [];
+  rows.push(['Раздел','Название','Значение']);
+  state.summary.forEach(r=>rows.push(['Сводка',r.name,r.val]));
+  state.traffic.forEach(r=>rows.push(['Трафик',r.name,r.val]));
+  state.income.forEach(r=>rows.push(['Доходы',r.name,r.val]));
+  state.expense.forEach(r=>rows.push(['Расходы',r.name,r.val]));
+  state.engage.forEach(r=>rows.push(['Вовлечённость',r.name,r.val]));
+  const csv = '\uFEFF' + rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'creator-ops-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('CSV сохранён');
+};
 
 document.getElementById('btnReset').onclick = ()=>{
-  if(confirm('Сбросить всё к значениям по умолчанию? Это нельзя отменить.')){
+  if(confirm('Сбросить всё к значениям по умолчанию?')){
     state = deepClone(DEFAULTS);
     editMode = true;
     document.body.classList.add('editing');
@@ -1190,97 +1246,27 @@ document.getElementById('btnReset').onclick = ()=>{
   }
 };
 
-/* ==============================
-   ADD ROW
-   ============================== */
+/* ============ ADD ROW ============ */
 function val(id){ return document.getElementById(id).value.trim(); }
 function clear(id){ document.getElementById(id).value = ''; }
 
-document.getElementById('addSum').onclick = ()=>{
-  const n = val('newSumName');
-  if(!n) return;
-  state.summary.push({name:n, plan:val('newSumPlan')||'0', fact:val('newSumFact')||'0'});
-  clear('newSumName'); clear('newSumPlan'); clear('newSumFact');
-  save(); render();
-};
-document.getElementById('addTr').onclick = ()=>{
-  const n = val('newTrName');
-  if(!n) return;
-  state.traffic.push({name:n, plan:val('newTrPlan')||'0', fact:val('newTrFact')||'0'});
-  clear('newTrName'); clear('newTrPlan'); clear('newTrFact');
-  save(); render();
-};
-document.getElementById('addBar').onclick = ()=>{
-  const n = val('newBarName');
-  if(!n) return;
-  state.bars.push({name:n, plan: parseFloat(val('newBarPlan'))||0, fact: parseFloat(val('newBarFact'))||0});
-  clear('newBarName'); clear('newBarPlan'); clear('newBarFact');
-  save(); render();
-};
-document.getElementById('addInc').onclick = ()=>{
-  const n = val('newIncName');
-  if(!n) return;
-  state.income.push({name:n, plan:val('newIncPlan')||'0', fact:val('newIncFact')||'0'});
-  clear('newIncName'); clear('newIncPlan'); clear('newIncFact');
-  save(); render();
-};
-document.getElementById('addExp').onclick = ()=>{
-  const n = val('newExpName');
-  if(!n) return;
-  state.expense.push({name:n, plan:val('newExpPlan')||'0', fact:val('newExpFact')||'0'});
-  clear('newExpName'); clear('newExpPlan'); clear('newExpFact');
-  save(); render();
-};
-document.getElementById('addEng').onclick = ()=>{
-  const n = val('newEngName');
-  if(!n) return;
-  state.engage.push({name:n, plan:val('newEngPlan')||'0', fact:val('newEngFact')||'0'});
-  clear('newEngName'); clear('newEngPlan'); clear('newEngFact');
-  save(); render();
-};
-document.getElementById('addHabit').onclick = ()=>{
-  const n = val('newHabit');
-  if(!n) return;
-  state.habits.push({name:n, color:'', cells:Array(30).fill(false)});
-  clear('newHabit');
-  save(); render();
-};
-document.getElementById('addTask').onclick = ()=>{
-  const n = val('newTask');
-  if(!n) return;
-  state.tasks.push({name:n, xp: parseInt(val('newTaskXp'))||20, done:false});
-  clear('newTask'); clear('newTaskXp');
-  save(); render();
-};
-document.getElementById('addBadge').onclick = ()=>{
-  const n = val('newBadge');
-  if(!n) return;
-  state.badges.push({name:n, desc:'', done:false});
-  clear('newBadge');
-  save(); render();
-};
-document.getElementById('addGoal').onclick = ()=>{
-  const n = val('newGoalName');
-  if(!n) return;
-  state.goals.push({
-    name:n,
-    cur: parseNum(val('newGoalCur')) || 0,
-    max: parseNum(val('newGoalMax')) || 100
-  });
-  clear('newGoalName'); clear('newGoalCur'); clear('newGoalMax');
-  save(); render();
-};
-document.getElementById('addTop').onclick = ()=>{
-  const t = val('newTop');
-  if(!t) return;
-  state.top5.push({t:t, v:val('newTopVal')||'0'});
-  clear('newTop'); clear('newTopVal');
-  save(); render();
+document.getElementById('addSum').onclick = ()=>{ const n=val('newSumName'); if(!n) return; state.summary.push({name:n, val:val('newSumVal')||'0'}); clear('newSumName');clear('newSumVal'); save();render(); };
+document.getElementById('addTr').onclick  = ()=>{ const n=val('newTrName');  if(!n) return; state.traffic.push({name:n, val:val('newTrVal')||'0'}); clear('newTrName');clear('newTrVal'); save();render(); };
+document.getElementById('addInc').onclick = ()=>{ const n=val('newIncName'); if(!n) return; state.income.push({name:n, val:val('newIncVal')||'0'}); clear('newIncName');clear('newIncVal'); save();render(); };
+document.getElementById('addExp').onclick = ()=>{ const n=val('newExpName'); if(!n) return; state.expense.push({name:n, val:val('newExpVal')||'0'}); clear('newExpName');clear('newExpVal'); save();render(); };
+document.getElementById('addEng').onclick = ()=>{ const n=val('newEngName'); if(!n) return; state.engage.push({name:n, val:val('newEngVal')||'0'}); clear('newEngName');clear('newEngVal'); save();render(); };
+document.getElementById('addHabit').onclick = ()=>{ const n=val('newHabit'); if(!n) return; state.habits.push({name:n, color:'', cells:Array(30).fill(false)}); clear('newHabit'); save();render(); };
+document.getElementById('addTask').onclick = ()=>{ const n=val('newTask'); if(!n) return; state.tasks.push({name:n, xp:parseInt(val('newTaskXp'))||20, done:false}); clear('newTask');clear('newTaskXp'); save();render(); };
+document.getElementById('addBadge').onclick = ()=>{ const n=val('newBadge'); if(!n) return; state.badges.push({name:n, desc:'', done:false}); clear('newBadge'); save();render(); };
+document.getElementById('addGoal').onclick = ()=>{ const n=val('newGoalName'); if(!n) return; state.goals.push({name:n, cur:parseNum(val('newGoalCur'))||0, max:parseNum(val('newGoalMax'))||100, dailyGain:1}); clear('newGoalName');clear('newGoalCur');clear('newGoalMax'); save();render(); };
+document.getElementById('addTop').onclick = ()=>{ const t=val('newTop'); if(!t) return; state.top5.push({t:t, v:val('newTopVal')||'0'}); clear('newTop');clear('newTopVal'); save();render(); };
+document.getElementById('addMonth').onclick = ()=>{
+  const lbl = val('newMonthLbl'); if(!lbl) return;
+  state.months.push({lbl:lbl, subs:parseNum(val('newMonthSubs'))||0, views:parseNum(val('newMonthViews'))||0});
+  clear('newMonthLbl');clear('newMonthSubs');clear('newMonthViews'); save();render();
 };
 
-/* ==============================
-   INIT
-   ============================== */
+/* ============ INIT ============ */
 editMode = state.editMode !== false;
 document.body.classList.toggle('editing', editMode);
 document.getElementById('btnEdit').textContent = '✏️ Редактирование: ' + (editMode ? 'ВКЛ' : 'ВЫКЛ');
