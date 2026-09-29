@@ -583,4 +583,386 @@ function toast(msg){
 /* ============ HELPERS ============ */
 function makeEditable(el, path){
   el.contentEditable = 'true';
-  el.dat
+  el.dataset.path = path;
+  el.addEventListener('blur', ()=>{
+    state[path] = el.textContent.trim();
+    save();
+  });
+}
+
+/* ============ RENDER ============ */
+function render(){
+  // === SIMPLE FIELDS ===
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const key = el.dataset.key;
+    if(state[key] !== undefined) el.textContent = state[key];
+    if(el._bound) return;
+    el._bound = true;
+    el.addEventListener('blur', ()=>{
+      state[el.dataset.key] = el.textContent.trim();
+      save();
+    });
+  });
+
+  // === DATES ===
+  const df = document.getElementById('dateFrom');
+  const dt = document.getElementById('dateTo');
+  if(!df._bound){
+    df._bound = true; dt._bound = true;
+    df.value = state.dateFrom; dt.value = state.dateTo;
+    df.onchange = ()=>{ state.dateFrom = df.value; save(); };
+    dt.onchange = ()=>{ state.dateTo = dt.value; save(); };
+  }
+
+  // === SUMMARY TABLE ===
+  const sb = document.getElementById('summaryBody');
+  sb.innerHTML = '';
+  state.summary.forEach((row, i)=>{
+    const tr = document.createElement('tr');
+    if(row[3]) tr.className = 'total';
+    tr.innerHTML = `
+      <td contenteditable="true">${row[0]}</td>
+      <td contenteditable="true">${row[1]}</td>
+      <td contenteditable="true">${row[2]}</td>
+    `;
+    tr.querySelectorAll('[contenteditable]').forEach((td, j)=>{
+      td.addEventListener('blur', ()=>{
+        state.summary[i][j] = td.textContent.trim();
+        save();
+      });
+    });
+    sb.appendChild(tr);
+  });
+
+  // === LEGEND ===
+  const lg = document.getElementById('legendList');
+  lg.innerHTML = '';
+  state.legend.forEach((row, i)=>{
+    const d = document.createElement('div');
+    d.innerHTML = `
+      <i style="background:${row[2]}"></i>
+      <span contenteditable="true">${row[0]}</span>
+      <b contenteditable="true">${row[1]}</b>
+    `;
+    d.querySelectorAll('[contenteditable]').forEach((el, j)=>{
+      el.addEventListener('blur', ()=>{
+        state.legend[i][j===0?0:1] = el.textContent.trim();
+        save();
+      });
+    });
+    lg.appendChild(d);
+  });
+
+  // === TRAFFIC ===
+  const tb = document.getElementById('trafficBody');
+  tb.innerHTML = '';
+  state.traffic.forEach((row, i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td contenteditable="true">${row[0]}</td>
+      <td contenteditable="true">${row[1]}</td>
+      <td contenteditable="true">${row[2]}</td>
+    `;
+    tr.querySelectorAll('[contenteditable]').forEach((td, j)=>{
+      td.addEventListener('blur', ()=>{
+        state.traffic[i][j] = td.textContent.trim();
+        save();
+      });
+    });
+    tb.appendChild(tr);
+  });
+
+  // === BARS ===
+  const bc = document.getElementById('barChart');
+  bc.innerHTML = '';
+  state.bars.forEach((row, i)=>{
+    const g = document.createElement('div');
+    g.className = 'bar-group';
+    g.innerHTML = `
+      <div class="bar-pair">
+        <div class="bar plan" style="height:${row[1]}%"></div>
+        <div class="bar fact" style="height:${row[2]}%"></div>
+      </div>
+      <small contenteditable="true">${row[0]}</small>
+    `;
+    g.querySelector('small').addEventListener('blur', (e)=>{
+      state.bars[i][0] = e.target.textContent.trim();
+      save();
+    });
+    bc.appendChild(g);
+  });
+
+  // === 3 TABLES ===
+  renderCatTable('incomeBody', 'income');
+  renderCatTable('expenseBody', 'expense');
+  renderCatTable('engageBody', 'engage');
+
+  // === HABITS ===
+  const hab = document.getElementById('habits');
+  hab.innerHTML = '';
+  state.habits.forEach((h, hi)=>{
+    const row = document.createElement('div');
+    row.className = 'habit-row';
+    row.innerHTML = `<div class="habit-name" contenteditable="true">${h.name}</div>`;
+    row.querySelector('.habit-name').addEventListener('blur', (e)=>{
+      state.habits[hi].name = e.target.textContent.trim();
+      save();
+    });
+    const cells = document.createElement('div');
+    cells.className = 'habit-cells';
+    h.cells.forEach((on, ci)=>{
+      const c = document.createElement('div');
+      c.className = 'cell' + (on?' on '+h.color:'');
+      c.onclick = ()=>{ state.habits[hi].cells[ci] = !state.habits[hi].cells[ci]; save(); render(); };
+      cells.appendChild(c);
+    });
+    row.appendChild(cells);
+    hab.appendChild(row);
+  });
+
+  // === WEEK HEADER ===
+  const wk = document.getElementById('weekHeader');
+  wk.innerHTML = '';
+  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach((d, i)=>{
+    const el = document.createElement('div');
+    el.className = 'wk' + (i === state.weekActive ? ' active' : '');
+    el.textContent = d;
+    el.onclick = ()=>{ state.weekActive = i; save(); render(); };
+    wk.appendChild(el);
+  });
+
+  // === TOP5 ===
+  const t5 = document.getElementById('top5');
+  t5.innerHTML = '';
+  state.top5.forEach((v, i)=>{
+    const el = document.createElement('div');
+    el.className = 'row';
+    el.innerHTML = `
+      <span class="rank">${i+1}</span>
+      <span class="title" contenteditable="true">${v.t}</span>
+      <span class="val" contenteditable="true">${v.v}</span>
+      <span class="del" title="Удалить">×</span>
+    `;
+    el.querySelector('.title').addEventListener('blur', (e)=>{ state.top5[i].t = e.target.textContent.trim(); save(); });
+    el.querySelector('.val').addEventListener('blur', (e)=>{ state.top5[i].v = e.target.textContent.trim(); save(); });
+    el.querySelector('.del').onclick = ()=>{ state.top5.splice(i,1); save(); render(); };
+    t5.appendChild(el);
+  });
+
+  // === PIPELINE ===
+  const pipe = document.getElementById('pipeline');
+  pipe.innerHTML = '';
+  let doneN = 0;
+  state.tasks.forEach((t, i)=>{
+    if(t.done) doneN++;
+    const el = document.createElement('div');
+    el.className = 'badge-row' + (t.done?' done':'');
+    el.innerHTML = `
+      <span class="dot" data-act="toggle"></span>
+      <span class="name" contenteditable="true" style="${t.done?'text-decoration:line-through;color:var(--text)':''}">${t.name}</span>
+      <span style="color:var(--accent-2);font-size:10px">+${t.xp} XP</span>
+      <span class="del" data-act="del">×</span>
+    `;
+    el.querySelector('[data-act="toggle"]').onclick = ()=>{
+      t.done = !t.done;
+      state.xp = parseInt(state.xp) || 0;
+      render();
+      save();
+    };
+    el.querySelector('.name').addEventListener('blur', (e)=>{
+      state.tasks[i].name = e.target.textContent.trim();
+      save();
+    });
+    el.querySelector('[data-act="del"]').onclick = ()=>{
+      state.tasks.splice(i,1);
+      save(); render();
+    };
+    pipe.appendChild(el);
+  });
+  document.getElementById('pipeCount').textContent = `${doneN} / ${state.tasks.length}`;
+
+  // === BADGES ===
+  const bd = document.getElementById('badges');
+  bd.innerHTML = '';
+  state.badges.forEach((b, i)=>{
+    const el = document.createElement('div');
+    el.className = 'badge-row' + (b.done?' done':'');
+    el.innerHTML = `
+      <span class="dot" data-act="toggle"></span>
+      <span class="name" contenteditable="true">${b.done?'🏆':'🔒'} ${b.name}</span>
+      <span style="font-size:10px;color:var(--muted)" contenteditable="true">${b.desc}</span>
+      <span class="del" data-act="del">×</span>
+    `;
+    el.querySelector('[data-act="toggle"]').onclick = ()=>{ state.badges[i].done = !state.badges[i].done; save(); render(); };
+    el.querySelectorAll('[contenteditable]').forEach((el2, j)=>{
+      el2.addEventListener('blur', ()=>{
+        if(j===0){
+          let txt = el2.textContent.replace(/^[🏆🔒]\s*/,'').trim();
+          state.badges[i].name = txt;
+        }else{
+          state.badges[i].desc = el2.textContent.trim();
+        }
+        save();
+      });
+    });
+    el.querySelector('[data-act="del"]').onclick = ()=>{ state.badges.splice(i,1); save(); render(); };
+    bd.appendChild(el);
+  });
+
+  // === GOALS ===
+  const gl = document.getElementById('goals');
+  gl.innerHTML = '';
+  state.goals.forEach((g, i)=>{
+    const pct = Math.min(100, g.cur/g.max*100).toFixed(1);
+    const el = document.createElement('div');
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;gap:6px">
+        <span contenteditable="true" style="flex:1">${g.name}</span>
+        <b style="color:var(--accent-2)">
+          <span contenteditable="true">${g.cur}</span> / <span contenteditable="true">${g.max}</span>
+        </b>
+        <span class="del" style="cursor:pointer;color:var(--muted)">×</span>
+      </div>
+      <div style="height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden">
+        <i style="display:block;height:100%;width:${pct}%;background:linear-gradient(90deg,var(--accent),var(--accent-2))"></i>
+      </div>
+    `;
+    const spans = el.querySelectorAll('[contenteditable]');
+    spans[0].addEventListener('blur', (e)=>{ state.goals[i].name = e.target.textContent.trim(); save(); });
+    spans[1].addEventListener('blur', (e)=>{ state.goals[i].cur = parseInt(e.target.textContent) || 0; save(); render(); });
+    spans[2].addEventListener('blur', (e)=>{ state.goals[i].max = parseInt(e.target.textContent) || 1; save(); render(); });
+    el.querySelector('.del').onclick = ()=>{ state.goals.splice(i,1); save(); render(); };
+    gl.appendChild(el);
+  });
+}
+
+function renderCatTable(tbodyId, key){
+  const tb = document.getElementById(tbodyId);
+  tb.innerHTML = '';
+  state[key].forEach((row, i)=>{
+    const tr = document.createElement('tr');
+    if(row[5]) tr.className = 'total';
+    tr.innerHTML = `
+      <td contenteditable="true">${row[0]}</td>
+      <td contenteditable="true">${row[1]}</td>
+      <td contenteditable="true">${row[2]}</td>
+      <td contenteditable="true" class="${row[4]||''}">${row[3]}</td>
+    `;
+    tr.querySelectorAll('[contenteditable]').forEach((td, j)=>{
+      td.addEventListener('blur', ()=>{
+        state[key][i][j] = td.textContent.trim();
+        save();
+      });
+    });
+    tb.appendChild(tr);
+  });
+}
+
+/* ============ BUTTONS ============ */
+document.getElementById('btnEdit').onclick = (e)=>{
+  document.body.classList.toggle('editing');
+  const on = document.body.classList.contains('editing');
+  e.target.textContent = `✏️ Режим редактирования: ${on?'ВКЛ':'ВЫКЛ'}`;
+  toast(on?'Редактирование включено':'Редактирование выключено');
+};
+
+document.getElementById('btnSnapshot').onclick = ()=>{
+  const snap = {
+    date: new Date().toISOString().slice(0,10),
+    kViews: state.kViews, kSubs: state.kSubs, kWatch: state.kWatch, kMoney: state.kMoney
+  };
+  state.lastSnapshot = snap;
+  save();
+  toast('Снимок сохранён: ' + snap.date);
+};
+
+document.getElementById('btnExport').onclick = ()=>{
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'creator-ops-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Экспортировано');
+};
+
+document.getElementById('btnImport').onclick = ()=>{
+  document.getElementById('fileInput').click();
+};
+document.getElementById('fileInput').onchange = (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    try{
+      const imported = JSON.parse(ev.target.result);
+      state = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), imported);
+      save();
+      render();
+      toast('Импортировано');
+    }catch(err){
+      toast('Ошибка: неверный JSON');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+};
+
+document.getElementById('btnReset').onclick = ()=>{
+  if(confirm('Сбросить всё к значениям по умолчанию? Это нельзя отменить.')){
+    state = JSON.parse(JSON.stringify(DEFAULTS));
+    save();
+    render();
+    toast('Сброшено');
+  }
+};
+
+/* ============ ADD ROWS ============ */
+document.getElementById('addHabit').onclick = ()=>{
+  const v = document.getElementById('newHabit').value.trim();
+  if(!v) return;
+  state.habits.push({name:v, color:'', cells:Array(30).fill(false)});
+  document.getElementById('newHabit').value = '';
+  save(); render();
+};
+document.getElementById('addTask').onclick = ()=>{
+  const v = document.getElementById('newTask').value.trim();
+  if(!v) return;
+  state.tasks.push({id:'t'+Date.now(), name:v, xp:20, done:false});
+  document.getElementById('newTask').value = '';
+  save(); render();
+};
+document.getElementById('addBadge').onclick = ()=>{
+  const v = document.getElementById('newBadge').value.trim();
+  if(!v) return;
+  state.badges.push({name:v, desc:'', done:false});
+  document.getElementById('newBadge').value = '';
+  save(); render();
+};
+document.getElementById('addGoal').onclick = ()=>{
+  const n = document.getElementById('newGoalName').value.trim();
+  const c = parseInt(document.getElementById('newGoalCur').value) || 0;
+  const m = parseInt(document.getElementById('newGoalMax').value) || 100;
+  if(!n) return;
+  state.goals.push({name:n, cur:c, max:m});
+  document.getElementById('newGoalName').value = '';
+  document.getElementById('newGoalCur').value = '';
+  document.getElementById('newGoalMax').value = '';
+  save(); render();
+};
+document.getElementById('addTop').onclick = ()=>{
+  const t = document.getElementById('newTop').value.trim();
+  const v = document.getElementById('newTopVal').value.trim();
+  if(!t) return;
+  state.top5.push({t:t, v:v||'0'});
+  document.getElementById('newTop').value = '';
+  document.getElementById('newTopVal').value = '';
+  save(); render();
+};
+
+/* ============ INIT ============ */
+render();
+</script>
+</body>
+</html>
