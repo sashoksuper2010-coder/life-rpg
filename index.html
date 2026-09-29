@@ -1,419 +1,595 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creator Ops — AI YouTube Dashboard</title>
+<title>Creator Ops — Дашборд зарубежного YouTube-канала</title>
 <style>
   :root{
-    --bg:#0e1116;
-    --card:#161b22;
-    --card2:#1c232c;
-    --line:#232b36;
-    --text:#e6edf3;
-    --muted:#8b949e;
-    --accent:#7c5cff;
-    --accent2:#22d3ee;
-    --good:#3fb950;
-    --warn:#f0883e;
-    --bad:#f85149;
-    --radius:14px;
+    --bg:#0b1220;
+    --panel:#0f172a;
+    --panel-2:#131c31;
+    --line:#1e293b;
+    --line-2:#243247;
+    --text:#e2e8f0;
+    --muted:#7c8aa3;
+    --accent:#3b82f6;
+    --accent-2:#60a5fa;
+    --good:#22c55e;
+    --warn:#f59e0b;
+    --bad:#ef4444;
+    --pink:#ec4899;
+    --yellow:#eab308;
+    --teal:#14b8a6;
+    --purple:#8b5cf6;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+    font-family:'Inter','Segoe UI',Roboto,sans-serif;
     background:var(--bg);
     color:var(--text);
-    line-height:1.5;
-    padding:24px 16px 80px;
+    font-size:13px;
+    line-height:1.4;
+    padding:16px;
   }
-  .wrap{max-width:1180px;margin:0 auto}
+  .wrap{max-width:1400px;margin:0 auto}
 
-  /* HEADER */
-  header.top{
-    display:flex;justify-content:space-between;align-items:center;
-    margin-bottom:24px;flex-wrap:wrap;gap:16px;
-  }
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{
-    width:40px;height:40px;border-radius:10px;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    display:grid;place-items:center;font-weight:800;font-size:18px;color:#0e1116;
-  }
-  .brand h1{font-size:18px;font-weight:700}
-  .brand p{font-size:12px;color:var(--muted)}
-  .streak{
-    background:var(--card);border:1px solid var(--line);
-    padding:10px 16px;border-radius:12px;display:flex;align-items:center;gap:10px;
-  }
-  .streak .fire{font-size:20px}
-  .streak b{font-size:20px}
-  .streak span{font-size:12px;color:var(--muted);display:block}
-
-  /* SECTIONS */
-  section{margin-bottom:28px}
-  .sec-head{
-    display:flex;justify-content:space-between;align-items:baseline;
+  /* ===== TOP KPI ROW ===== */
+  .kpi-row{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr 1fr 1fr;
+    gap:10px;
     margin-bottom:14px;
   }
-  .sec-head h2{font-size:15px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--muted)}
-  .sec-head .hint{font-size:12px;color:var(--muted)}
-
-  /* METRIC CARDS */
-  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-  .metric{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    padding:18px;
+  .kpi{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
   }
-  .metric .label{font-size:12px;color:var(--muted);margin-bottom:6px}
-  .metric .value{font-size:26px;font-weight:700}
-  .metric .delta{font-size:12px;margin-top:4px}
-  .up{color:var(--good)} .down{color:var(--bad)} .flat{color:var(--muted)}
+  .kpi .lbl{font-size:11px;color:var(--muted);margin-bottom:6px}
+  .kpi .val{font-size:17px;font-weight:700}
+  .kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+  .kpi.accent{border-color:var(--accent)}
+  .kpi.accent .val{color:var(--accent-2)}
+  .kpi.gold{border-color:var(--yellow)}
+  .kpi.gold .val{color:var(--yellow)}
+  .kpi.green .val{color:var(--good)}
+  .kpi.pink .val{color:var(--pink)}
 
-  /* CARDS GRID */
-  .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
-  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
-
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    padding:20px;
+  .date-row{display:flex;gap:8px;margin-bottom:6px;align-items:center;font-size:11px;color:var(--muted)}
+  .date-row input{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    padding:3px 6px;border-radius:5px;font-size:11px;width:90px;font-family:inherit;
   }
-  .card h3{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;justify-content:space-between}
-  .card h3 span{font-size:12px;color:var(--muted);font-weight:400}
 
-  /* LEVEL BAR */
-  .level-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
-  .bar{height:10px;background:var(--card2);border-radius:6px;overflow:hidden}
-  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px}
-
-  /* PIPELINE */
-  .task{
-    display:flex;align-items:center;gap:12px;
-    padding:12px;border-radius:10px;background:var(--card2);
-    margin-bottom:8px;cursor:pointer;transition:.15s;
-    border:1px solid transparent;
+  /* ===== GRID LAYOUT ===== */
+  .grid-main{
+    display:grid;
+    grid-template-columns:1.1fr 1.5fr 1.5fr;
+    gap:14px;
+    margin-bottom:14px;
   }
-  .task:hover{border-color:var(--line)}
-  .task.done{opacity:.55;text-decoration:line-through}
-  .task .chk{
-    width:20px;height:20px;border-radius:6px;border:2px solid var(--line);
-    display:grid;place-items:center;flex-shrink:0;font-size:12px;
+  .grid-bottom{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:14px;
   }
-  .task.done .chk{background:var(--good);border-color:var(--good);color:#0e1116}
-  .task .name{flex:1;font-size:14px}
-  .task .xp{font-size:12px;color:var(--accent2);font-weight:600}
 
-  /* HABITS GRID */
-  .habits{display:flex;flex-direction:column;gap:10px}
-  .habit-row{display:flex;align-items:center;gap:10px}
-  .habit-name{width:170px;font-size:13px;color:var(--muted);flex-shrink:0}
-  .cells{display:flex;gap:4px;flex-wrap:wrap}
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px;
+  }
+  .panel h3{
+    font-size:12px;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:10px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .panel h3 .hint{font-size:10px;color:var(--muted);font-weight:400}
+
+  /* ===== SUMMARY TABLE ===== */
+  .sum-table{width:100%;border-collapse:collapse;font-size:12px}
+  .sum-table th{
+    text-align:left;color:var(--muted);font-weight:500;font-size:11px;
+    padding:5px 8px;border-bottom:1px solid var(--line);
+  }
+  .sum-table th:nth-child(2),.sum-table th:nth-child(3){text-align:right}
+  .sum-table td{
+    padding:6px 8px;border-bottom:1px dashed var(--line);
+  }
+  .sum-table td:nth-child(2),.sum-table td:nth-child(3){text-align:right;font-variant-numeric:tabular-nums}
+  .sum-table tr.total td{
+    border-top:1px solid var(--line-2);border-bottom:none;font-weight:700;
+    padding-top:8px;
+  }
+  .sum-table tr.total td:nth-child(2){color:var(--accent-2)}
+  .sum-table tr.total td:nth-child(3){color:var(--pink)}
+
+  /* ===== CHART DONUT ===== */
+  .donut-wrap{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+  .donut{
+    width:120px;height:120px;border-radius:50%;
+    background:conic-gradient(
+      var(--pink) 0% 19%,
+      var(--accent) 19% 35%,
+      var(--yellow) 35% 47%,
+      var(--purple) 47% 65%,
+      var(--good) 65% 87%,
+      var(--teal) 87% 100%
+    );
+    position:relative;flex-shrink:0;
+  }
+  .donut::after{
+    content:"";position:absolute;inset:18px;border-radius:50%;background:var(--panel);
+  }
+  .legend{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:5px}
+  .legend div{display:flex;align-items:center;gap:6px}
+  .legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+  .legend b{color:var(--text);font-weight:500;margin-left:auto;font-variant-numeric:tabular-nums}
+
+  /* ===== BAR CHART PLAN/FAKT ===== */
+  .bar-chart{display:flex;align-items:flex-end;gap:14px;height:120px;padding:8px 0}
+  .bar-group{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+  .bar-pair{display:flex;gap:3px;align-items:flex-end;height:100px}
+  .bar{width:12px;border-radius:3px 3px 0 0}
+  .bar.plan{background:var(--teal)}
+  .bar.fact{background:var(--pink)}
+  .bar-group small{font-size:10px;color:var(--muted)}
+
+  /* ===== 3-COL TABLES (доходы/расходы/счета) ===== */
+  .cat-table{width:100%;border-collapse:collapse;font-size:12px}
+  .cat-table th{
+    text-align:left;color:var(--muted);font-weight:500;font-size:11px;
+    padding:5px 6px;border-bottom:1px solid var(--line);
+  }
+  .cat-table th:nth-child(2),.cat-table th:nth-child(3),.cat-table th:nth-child(4){text-align:right}
+  .cat-table td{
+    padding:5px 6px;border-bottom:1px dashed var(--line);
+    font-variant-numeric:tabular-nums;
+  }
+  .cat-table td:nth-child(2),.cat-table td:nth-child(3),.cat-table td:nth-child(4){text-align:right}
+  .cat-table tr.total td{
+    border-top:1px solid var(--line-2);border-bottom:none;font-weight:700;padding-top:8px;
+  }
+  .cat-table td.good{color:var(--good)}
+  .cat-table td.bad{color:var(--bad)}
+  .cat-table td.muted{color:var(--muted)}
+
+  /* ===== HABITS GRID ===== */
+  .habit-grid{display:flex;flex-direction:column;gap:6px}
+  .habit-row{display:flex;align-items:center;gap:8px}
+  .habit-name{width:150px;font-size:11px;color:var(--muted);flex-shrink:0;text-align:right}
+  .habit-cells{display:flex;gap:3px;flex-wrap:wrap;flex:1}
   .cell{
-    width:18px;height:18px;border-radius:5px;background:var(--card2);
-    cursor:pointer;transition:.15s;border:1px solid var(--line);
+    width:14px;height:14px;border-radius:3px;background:var(--panel-2);
+    border:1px solid var(--line);cursor:pointer;transition:.12s;
   }
-  .cell.on{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}
+  .cell.on{background:var(--accent);border-color:var(--accent)}
+  .cell.on.pink{background:var(--pink);border-color:var(--pink)}
+  .cell.on.good{background:var(--good);border-color:var(--good)}
+  .cell.on.yellow{background:var(--yellow);border-color:var(--yellow)}
 
-  /* GOALS */
-  .goal{margin-bottom:14px}
-  .goal .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
-  .goal .top b{color:var(--accent2)}
+  /* ===== WEEK CALENDAR ===== */
+  .week-header{display:flex;gap:6px;margin-bottom:8px;font-size:10px;color:var(--muted)}
+  .week-header .wk{flex:1;text-align:center;padding:4px;background:var(--panel-2);border-radius:5px;border:1px solid var(--line)}
+  .week-header .wk.active{color:var(--text);border-color:var(--accent)}
 
-  /* REWARDS */
-  .rewards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-  .reward{
-    background:var(--card2);border:1px solid var(--line);border-radius:10px;
-    padding:14px;text-align:center;font-size:13px;
+  /* ===== PROGRESS LINE (упрощённый SVG) ===== */
+  .spark{width:100%;height:80px;display:block;margin-top:6px}
+
+  /* ===== BADGES (достижения справа) ===== */
+  .badges{display:flex;flex-direction:column;gap:6px}
+  .badge-row{display:flex;align-items:center;gap:8px;font-size:11px;padding:6px 8px;background:var(--panel-2);border-radius:6px;border:1px solid var(--line)}
+  .badge-row .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .badge-row.done .dot{background:var(--good)}
+  .badge-row .name{flex:1;color:var(--muted)}
+  .badge-row.done .name{color:var(--text)}
+
+  /* ===== TOP-5 ===== */
+  .top5{display:flex;flex-direction:column;gap:5px;font-size:11px}
+  .top5 .row{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;padding:4px 0;border-bottom:1px dashed var(--line)}
+  .top5 .rank{color:var(--muted);text-align:center}
+  .top5 .title{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .top5 .val{color:var(--accent-2);font-variant-numeric:tabular-nums}
+
+  @media(max-width:1100px){
+    .kpi-row{grid-template-columns:repeat(3,1fr)}
+    .grid-main{grid-template-columns:1fr}
+    .grid-bottom{grid-template-columns:1fr}
   }
-  .reward .price{color:var(--accent2);font-weight:700;margin-top:6px;font-size:14px}
-
-  /* ACHIEVEMENTS */
-  .ach{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
-  .badge{
-    background:var(--card2);border:1px solid var(--line);border-radius:10px;
-    padding:14px;font-size:13px;
-  }
-  .badge.locked{opacity:.45}
-  .badge b{display:block;margin-bottom:4px}
-  .badge small{color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- HEADER -->
-  <header class="top">
-    <div class="brand">
-      <div class="logo">AI</div>
-      <div>
-        <h1>Creator Ops</h1>
-        <p>Foreign YouTube Channel · AI Pipeline</p>
+  <!-- ===== TOP KPI ===== -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="lbl">Дата начала отчётного периода</div>
+      <div class="date-row">
+        <input type="date" value="2026-09-01">
+        <span>→</span>
+        <input type="date" value="2026-09-28">
       </div>
+      <div class="sub">Канал: <b style="color:var(--accent-2)">@YourForeignChannel</b></div>
     </div>
-    <div class="streak">
-      <div class="fire">🔥</div>
-      <div>
-        <b id="streakDays">0</b>
-        <span>day posting streak</span>
-      </div>
+    <div class="kpi accent">
+      <div class="lbl">Просмотры за период</div>
+      <div class="val" id="kVievs">103 100</div>
+      <div class="sub">за 28 дней</div>
     </div>
-  </header>
+    <div class="kpi pink">
+      <div class="lbl">Подписчики</div>
+      <div class="val" id="kSubs">342 400</div>
+      <div class="sub">+1 240 за период</div>
+    </div>
+    <div class="kpi green">
+      <div class="lbl">Watch Time (ч)</div>
+      <div class="val" id="kWatch">98 753</div>
+      <div class="sub">за 28 дней</div>
+    </div>
+    <div class="kpi gold">
+      <div class="lbl">Заработано (оценка)</div>
+      <div class="val" id="kMoney">352 497,00 ₽</div>
+      <div class="sub">при CTR <b style="color:var(--warn)">4.2%</b></div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Уровень создателя</div>
+      <div class="val" id="kLevel">Lv. 8 · CTR Hunter</div>
+      <div class="sub">XP: <b id="kXp">1 240 / 2 000</b></div>
+    </div>
+  </div>
 
-  <!-- METRICS -->
-  <section>
-    <div class="sec-head">
-      <h2>Channel Snapshot</h2>
-      <span class="hint">Last 28 days</span>
-    </div>
-    <div class="metrics">
-      <div class="metric">
-        <div class="label">Views</div>
-        <div class="value" id="mViews">0</div>
-        <div class="delta up" id="mViewsD">+0%</div>
-      </div>
-      <div class="metric">
-        <div class="label">Subscribers</div>
-        <div class="value" id="mSubs">0</div>
-        <div class="delta up" id="mSubsD">+0</div>
-      </div>
-      <div class="metric">
-        <div class="label">Watch Time (h)</div>
-        <div class="value" id="mWatch">0</div>
-        <div class="delta flat">—</div>
-      </div>
-      <div class="metric">
-        <div class="label">Avg CTR</div>
-        <div class="value" id="mCtr">0%</div>
-        <div class="delta flat">—</div>
-      </div>
-    </div>
-  </section>
+  <!-- ===== MAIN GRID ===== -->
+  <div class="grid-main">
 
-  <!-- LEVEL + PIPELINE -->
-  <section>
-    <div class="grid2">
-      <!-- LEVEL -->
-      <div class="card">
-        <h3>Creator Level <span id="xpText">0 / 100 XP</span></h3>
-        <div class="level-row">
-          <b id="levelName">Algorithm Newbie</b>
-          <span>Lv. <b id="levelNum">1</b></span>
+    <!-- СВОДКА -->
+    <div class="panel">
+      <h3>Сводка канала <span class="hint">Показатели к отчёту</span></h3>
+      <table class="sum-table">
+        <thead>
+          <tr><th>Категория</th><th>План</th><th>Факт</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Видео опубликовано</td><td>12</td><td>14</td></tr>
+          <tr><td>Просмотры (K)</td><td>125 000</td><td>132 420</td></tr>
+          <tr><td>Подписчики</td><td>85 000</td><td>86 477</td></tr>
+          <tr><td>Watch Time (K ч)</td><td>61 000</td><td>63 600</td></tr>
+          <tr><td>Комментарии</td><td>3 000</td><td>2 860</td></tr>
+          <tr><td>Средний CTR</td><td>4.0%</td><td>4.2%</td></tr>
+          <tr class="total"><td>ИТОГО (в баллах)</td><td>278 000</td><td>323 758</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- КРУГОВАЯ ДИАГРАММА -->
+    <div class="panel">
+      <h3>Сводка по источникам трафика <span class="hint">/ по типам видео</span></h3>
+      <div class="donut-wrap">
+        <div class="donut"></div>
+        <div class="legend">
+          <div><i style="background:var(--pink)"></i> Рекомендации <b>19,2%</b></div>
+          <div><i style="background:var(--accent)"></i> Поиск YouTube <b>16,2%</b></div>
+          <div><i style="background:var(--yellow)"></i> Shorts feed <b>12,1%</b></div>
+          <div><i style="background:var(--purple)"></i> Внешние источники <b>17,5%</b></div>
+          <div><i style="background:var(--good)"></i> Подписки <b>21,8%</b></div>
+          <div><i style="background:var(--teal)"></i> Плейлисты <b>13,2%</b></div>
         </div>
-        <div class="bar"><i id="xpBar" style="width:0%"></i></div>
-        <p style="font-size:12px;color:var(--muted);margin-top:12px">
-          Earn XP by completing pipeline tasks. Level up to unlock rewards.
-        </p>
-
-        <h3 style="margin-top:24px">Weekly Upload Goal <span id="uploadText">0 / 3</span></h3>
-        <div class="bar"><i id="uploadBar" style="width:0%"></i></div>
       </div>
+      <table class="sum-table" style="font-size:11px">
+        <thead><tr><th>Источник</th><th>План</th><th>Факт</th></tr></thead>
+        <tbody>
+          <tr><td>Рекомендации</td><td>20 000</td><td>19 795</td></tr>
+          <tr><td>Поиск</td><td>16 000</td><td>16 700</td></tr>
+          <tr><td>Shorts</td><td>12 000</td><td>12 480</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-      <!-- REWARDS -->
-      <div class="card">
-        <h3>Reward Shop <span>Creative Energy</span></h3>
-        <div class="metrics" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-          <div class="metric" style="padding:12px">
-            <div class="label">Energy</div>
-            <div class="value" id="energy" style="font-size:20px">0</div>
+    <!-- ПЛАН / ФАКТ -->
+    <div class="panel">
+      <h3>План / Факт <span class="hint">по ключевым метрикам</span></h3>
+      <div class="bar-chart">
+        <div class="bar-group">
+          <div class="bar-pair">
+            <div class="bar plan" style="height:70%"></div>
+            <div class="bar fact" style="height:82%"></div>
           </div>
-          <div class="metric" style="padding:12px">
-            <div class="label">Coins</div>
-            <div class="value" id="coins" style="font-size:20px">0</div>
-          </div>
+          <small>Видео</small>
         </div>
-        <div class="rewards">
-          <div class="reward">1h rest<div class="price">50 ⚡</div></div>
-          <div class="reward">Movie night<div class="price">80 ⚡</div></div>
-          <div class="reward">Full day off<div class="price">200 ⚡</div></div>
+        <div class="bar-group">
+          <div class="bar-pair">
+            <div class="bar plan" style="height:55%"></div>
+            <div class="bar fact" style="height:62%"></div>
+          </div>
+          <small>Subs</small>
+        </div>
+        <div class="bar-group">
+          <div class="bar-pair">
+            <div class="bar plan" style="height:40%"></div>
+            <div class="bar fact" style="height:48%"></div>
+          </div>
+          <small>CTR</small>
+        </div>
+        <div class="bar-group">
+          <div class="bar-pair">
+            <div class="bar plan" style="height:65%"></div>
+            <div class="bar fact" style="height:78%"></div>
+          </div>
+          <small>Watch</small>
+        </div>
+        <div class="bar-group">
+          <div class="bar-pair">
+            <div class="bar plan" style="height:88%"></div>
+            <div class="bar fact" style="height:95%"></div>
+          </div>
+          <small>Доход</small>
         </div>
       </div>
+      <div class="legend" style="flex-direction:row;gap:14px;margin-top:8px;justify-content:center">
+        <div><i style="background:var(--teal)"></i> План</div>
+        <div><i style="background:var(--pink)"></i> Факт</div>
+      </div>
     </div>
-  </section>
 
-  <!-- PIPELINE -->
-  <section>
-    <div class="sec-head">
-      <h2>Daily Pipeline</h2>
-      <span class="hint" id="pipelineProgress">0 / 8 done</span>
-    </div>
-    <div class="card">
-      <div id="tasks"></div>
-    </div>
-  </section>
+  </div>
 
-  <!-- HABITS -->
-  <section>
-    <div class="sec-head">
-      <h2>Habits — This Month</h2>
-      <span class="hint">Click to mark</span>
-    </div>
-    <div class="card">
-      <div class="habits" id="habits"></div>
-    </div>
-  </section>
+  <!-- ===== 3-COL: ДОХОДЫ / РАСХОДЫ / ВОВЛЕЧЁННОСТЬ ===== -->
+  <div class="grid-main" style="grid-template-columns:1fr 1fr 1fr">
 
-  <!-- GOALS -->
-  <section>
-    <div class="sec-head">
-      <h2>Channel Goals</h2>
+    <!-- ДОХОДЫ -->
+    <div class="panel">
+      <h3>Доходы канала <span class="hint">и регистрируйте в таблице</span></h3>
+      <table class="cat-table">
+        <thead><tr><th>Метрика</th><th>План</th><th>Факт</th><th>Δ</th></tr></thead>
+        <tbody>
+          <tr><td>AdSense</td><td>110 000,00</td><td>110 000,00</td><td class="muted">0</td></tr>
+          <tr><td>Спонсорство</td><td>165 000,00</td><td>165 000,00</td><td class="muted">0</td></tr>
+          <tr><td>Patreon / Boosty</td><td>3 000,00</td><td>2 850,00</td><td class="bad">-150</td></tr>
+          <tr><td>Affiliate (Amazon)</td><td>20 000,00</td><td>24 000,00</td><td class="good">+4 000</td></tr>
+          <tr><td>Продажа мерча</td><td>5 000,00</td><td>6 350,00</td><td class="good">+1 350</td></tr>
+          <tr><td>Возврат налогов</td><td>15 000,00</td><td>15 600,00</td><td class="good">+600</td></tr>
+          <tr class="total"><td>ИТОГО</td><td>318 000,00</td><td>323 800,00</td><td class="good">+5 800</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="card">
-      <div id="goals"></div>
-    </div>
-  </section>
 
-  <!-- ACHIEVEMENTS -->
-  <section>
-    <div class="sec-head">
-      <h2>Achievements</h2>
+    <!-- РАСХОДЫ -->
+    <div class="panel">
+      <h3>Расходы на продакшн <span class="hint">и подписки</span></h3>
+      <table class="cat-table">
+        <thead><tr><th>Статья</th><th>План</th><th>Факт</th><th>Остаток</th></tr></thead>
+        <tbody>
+          <tr><td>AI-подписки (ChatGPT, ElevenLabs)</td><td>18 000,00</td><td>18 000,00</td><td class="muted">0</td></tr>
+          <tr><td>Монтажный софт</td><td>9 000,00</td><td>9 795,00</td><td class="bad">-795</td></tr>
+          <tr><td>Музыка / SFX</td><td>5 000,00</td><td>5 850,00</td><td class="bad">-850</td></tr>
+          <tr><td>Хостинг, домен, CDN</td><td>12 000,00</td><td>11 600,00</td><td class="good">+400</td></tr>
+          <tr><td>Реклама (YouTube Ads)</td><td>12 000,00</td><td>14 000,00</td><td class="bad">-2 000</td></tr>
+          <tr><td>Дизайн превью</td><td>8 000,00</td><td>6 850,00</td><td class="good">+1 150</td></tr>
+          <tr><td>Прочее / непредвиденное</td><td>3 000,00</td><td>3 740,00</td><td class="bad">-740</td></tr>
+          <tr class="total"><td>ИТОГО</td><td>122 000,00</td><td>125 420,00</td><td class="bad">-7 410</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="ach" id="achievements"></div>
-  </section>
+
+    <!-- ВОВЛЕЧЁННОСТЬ / СЧЕТА -->
+    <div class="panel">
+      <h3>Вовлечённость и ачивки <span class="hint">СЧЕТА / ДОСТИЖЕНИЯ</span></h3>
+      <table class="cat-table">
+        <thead><tr><th>Метрика</th><th>План</th><th>Факт</th><th>Δ</th></tr></thead>
+        <tbody>
+          <tr><td>Комментарии</td><td>3 000,00</td><td>2 860,00</td><td class="bad">-140</td></tr>
+          <tr><td>Лайки</td><td>1 400,00</td><td>1 400,00</td><td class="muted">0</td></tr>
+          <tr><td>Дизлайки</td><td>900,00</td><td>900,00</td><td class="muted">0</td></tr>
+          <tr><td>Подписки (прирост)</td><td>3 500,00</td><td>3 500,00</td><td class="muted">0</td></tr>
+          <tr><td>Отписки</td><td>3 400,00</td><td>3 400,00</td><td class="muted">0</td></tr>
+          <tr class="total"><td>ИТОГО (энергия)</td><td>88 800,00</td><td>88 477,00</td><td class="bad">-320</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ===== HABITS + WEEK ===== -->
+  <div class="grid-main" style="grid-template-columns:1.4fr 1fr">
+
+    <!-- ПРИВЫЧКИ -->
+    <div class="panel">
+      <h3>Привычки AI-продюсера <span class="hint">клик по клетке = отметка</span></h3>
+      <div class="habit-grid" id="habits"></div>
+    </div>
+
+    <!-- НЕДЕЛЬНЫЙ ПЛАН + ТОП-5 -->
+    <div class="panel">
+      <h3>Недельный план <span class="hint">Публикации и метрики</span></h3>
+      <div class="week-header">
+        <div class="wk">Пн</div>
+        <div class="wk">Вт</div>
+        <div class="wk">Ср</div>
+        <div class="wk active">Чт</div>
+        <div class="wk">Пт</div>
+        <div class="wk">Сб</div>
+        <div class="wk">Вс</div>
+      </div>
+      <svg class="spark" viewBox="0 0 300 80" preserveAspectRatio="none">
+        <polyline fill="none" stroke="#3b82f6" stroke-width="2"
+          points="0,60 20,45 40,55 60,30 80,35 100,20 120,28 140,15 160,25 180,10 200,18 220,12 240,22 260,8 280,14 300,6"/>
+        <polyline fill="rgba(59,130,246,0.15)" stroke="none"
+          points="0,60 20,45 40,55 60,30 80,35 100,20 120,28 140,15 160,25 180,10 200,18 220,12 240,22 260,8 280,14 300,6 300,80 0,80"/>
+      </svg>
+      <h3 style="margin-top:16px">Топ-5 видео <span class="hint">за период</span></h3>
+      <div class="top5" id="top5"></div>
+    </div>
+
+  </div>
+
+  <!-- ===== PIPELINE + ACHIEVEMENTS ===== -->
+  <div class="grid-bottom">
+
+    <!-- PIPELINE -->
+    <div class="panel">
+      <h3>Ежедневный пайплайн <span class="hint" id="pipeCount">0 / 8</span></h3>
+      <div id="pipeline" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="panel">
+      <h3>Достижения канала <span class="hint">заблокировано / открыто</span></h3>
+      <div class="badges" id="badges"></div>
+    </div>
+
+    <!-- ЦЕЛИ -->
+    <div class="panel">
+      <h3>Цели канала <span class="hint">прогресс</span></h3>
+      <div id="goals" style="display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+
+  </div>
 
 </div>
 
 <script>
 /* ============ STATE ============ */
 const state = {
-  xp: 0,
-  coins: 0,
-  energy: 0,
-  streak: 0,
-  uploadsThisWeek: 2,
-  weeklyGoal: 3,
+  xp: 1240, xpMax: 2000,
+  energy: 88,
   tasks: [
-    {id:'research', name:'Research & Trend Check', xp:10},
-    {id:'script',   name:'Script & Hook Writing (AI)', xp:30},
-    {id:'voice',    name:'Voiceover Generation (TTS)', xp:20},
-    {id:'visuals',  name:'Visual Assets (AI)', xp:25},
-    {id:'edit',     name:'Edit & Subtitles', xp:40},
-    {id:'thumb',    name:'Thumbnail & Title A/B', xp:20},
-    {id:'upload',   name:'Upload & SEO', xp:25},
-    {id:'engage',   name:'Community Engagement', xp:15},
+    {id:'t1', name:'Research и тренды', xp:10, done:false},
+    {id:'t2', name:'Сценарий и хуки (AI)', xp:30, done:false},
+    {id:'t3', name:'Озвучка (TTS)', xp:20, done:false},
+    {id:'t4', name:'Визуалы (AI)', xp:25, done:false},
+    {id:'t5', name:'Монтаж и субтитры', xp:40, done:false},
+    {id:'t6', name:'Превью и заголовок A/B', xp:20, done:false},
+    {id:'t7', name:'Загрузка и SEO', xp:25, done:false},
+    {id:'t8', name:'Работа с комментариями', xp:15, done:false},
   ],
-  done:{},
-  habits:[
-    {name:'Post a video', cells:Array(30).fill(false)},
-    {name:'Study AI tools (30m)', cells:Array(30).fill(false)},
-    {name:'No-zero day', cells:Array(30).fill(false)},
-    {name:'Reply to comments', cells:Array(30).fill(false)},
+  habits: [
+    {name:'Опубликовать видео', color:'',  cells:Array(30).fill(false)},
+    {name:'Изучать AI-инструменты (30м)', color:'pink', cells:Array(30).fill(false)},
+    {name:'День без нуля', color:'good', cells:Array(30).fill(false)},
+    {name:'Ответить на комментарии', color:'yellow', cells:Array(30).fill(false)},
+    {name:'Анализ метрик (CTR, удерж.)', color:'', cells:Array(30).fill(false)},
+    {name:'Разбор конкурентов', color:'pink', cells:Array(30).fill(false)},
   ],
-  goals:[
-    {name:'100 Subscribers', cur:68, max:100},
-    {name:'1,000 Subscribers', cur:68, max:1000},
-    {name:'4,000 Watch Hours', cur:320, max:4000},
+  badges: [
+    {name:'Первый релиз', desc:'Опубликовать 1 видео', done:true},
+    {name:'Постоянство', desc:'7 дней подряд', done:true},
+    {name:'Контент-машина', desc:'30 видео опубликовано', done:true},
+    {name:'CTR-охотник', desc:'Средний CTR ≥ 5%', done:false},
+    {name:'Монетизация', desc:'Достичь требований YPP', done:false},
+    {name:'Магнат ютуба', desc:'100 000 подписчиков', done:false},
   ],
-  achievements:[
-    {name:'First Upload', desc:'Publish 1 video', done:true},
-    {name:'Consistency', desc:'7-day streak', done:false},
-    {name:'Content Machine', desc:'30 videos published', done:false},
-    {name:'Monetized', desc:'Reach YPP requirements', done:false},
-  ]
+  goals: [
+    {name:'100 подписчиков', cur:68, max:100},
+    {name:'1 000 подписчиков', cur:68, max:1000},
+    {name:'4 000 часов просмотра', cur:320, max:4000},
+    {name:'10 000 подписчиков', cur:68, max:10000},
+  ],
+  top5: [
+    {t:'How I make AI videos in 2026', v:'12.4K'},
+    {t:'Best prompts for viral hooks', v:'9.8K'},
+    {t:'ElevenLabs vs PlayHT', v:'7.1K'},
+    {t:'My $0 AI video pipeline', v:'5.6K'},
+    {t:'YouTube algorithm explained', v:'4.2K'},
+  ],
 };
 
 /* ============ RENDER ============ */
-const LEVELS = ['Algorithm Newbie','CTR Hunter','Retention Master','Hook Wizard','Viral Architect','Channel Mogul'];
-
 function render(){
-  // XP / Level
-  const xpPerLevel = 100;
-  const lvl = Math.floor(state.xp / xpPerLevel) + 1;
-  const cur = state.xp % xpPerLevel;
-  document.getElementById('levelNum').textContent = lvl;
-  document.getElementById('levelName').textContent = LEVELS[Math.min(lvl-1, LEVELS.length-1)];
-  document.getElementById('xpText').textContent = `${cur} / ${xpPerLevel} XP`;
-  document.getElementById('xpBar').style.width = (cur/xpPerLevel*100)+'%';
+  // XP
+  document.getElementById('kXp').textContent = `${state.xp} / ${state.xpMax}`;
 
-  // Uploads
-  const up = Math.min(state.uploadsThisWeek, state.weeklyGoal);
-  document.getElementById('uploadText').textContent = `${up} / ${state.weeklyGoal}`;
-  document.getElementById('uploadBar').style.width = (up/state.weeklyGoal*100)+'%';
-
-  // Energy / Coins
-  document.getElementById('energy').textContent = state.energy;
-  document.getElementById('coins').textContent = state.coins;
-  document.getElementById('streakDays').textContent = state.streak;
-
-  // Metrics
-  document.getElementById('mViews').textContent = '12.4K';
-  document.getElementById('mSubs').textContent = '68';
-  document.getElementById('mWatch').textContent = '320';
-  document.getElementById('mCtr').textContent = '4.2%';
-
-  // Tasks
-  const tasksEl = document.getElementById('tasks');
-  tasksEl.innerHTML = '';
-  let doneCount = 0;
+  // Pipeline
+  const pipe = document.getElementById('pipeline');
+  pipe.innerHTML = '';
+  let doneN = 0;
   state.tasks.forEach(t=>{
-    const done = !!state.done[t.id];
-    if(done) doneCount++;
+    if(t.done) doneN++;
     const el = document.createElement('div');
-    el.className = 'task' + (done?' done':'');
+    el.className = 'badge-row' + (t.done?' done':'');
+    el.style.cursor = 'pointer';
     el.innerHTML = `
-      <div class="chk">${done?'✓':''}</div>
-      <div class="name">${t.name}</div>
-      <div class="xp">+${t.xp} XP</div>
+      <span class="dot"></span>
+      <span class="name" style="${t.done?'text-decoration:line-through;color:var(--text)':''}">${t.name}</span>
+      <span style="color:var(--accent-2);font-size:10px">+${t.xp} XP</span>
     `;
     el.onclick = ()=>{
-      if(state.done[t.id]){
-        delete state.done[t.id];
-        state.xp -= t.xp; state.energy -= Math.round(t.xp/2);
-      }else{
-        state.done[t.id] = true;
-        state.xp += t.xp; state.energy += Math.round(t.xp/2);
-      }
+      t.done = !t.done;
+      state.xp += t.done ? t.xp : -t.xp;
       if(state.xp < 0) state.xp = 0;
-      if(state.energy < 0) state.energy = 0;
       render();
     };
-    tasksEl.appendChild(el);
+    pipe.appendChild(el);
   });
-  document.getElementById('pipelineProgress').textContent = `${doneCount} / ${state.tasks.length} done`;
+  document.getElementById('pipeCount').textContent = `${doneN} / ${state.tasks.length}`;
 
   // Habits
-  const habEl = document.getElementById('habits');
-  habEl.innerHTML = '';
+  const hab = document.getElementById('habits');
+  hab.innerHTML = '';
   state.habits.forEach((h,hi)=>{
     const row = document.createElement('div');
     row.className = 'habit-row';
-    const nameEl = document.createElement('div');
-    nameEl.className = 'habit-name';
-    nameEl.textContent = h.name;
-    row.appendChild(nameEl);
-    const cellsEl = document.createElement('div');
-    cellsEl.className = 'cells';
+    row.innerHTML = `<div class="habit-name">${h.name}</div>`;
+    const cells = document.createElement('div');
+    cells.className = 'habit-cells';
     h.cells.forEach((on,ci)=>{
       const c = document.createElement('div');
-      c.className = 'cell' + (on?' on':'');
+      c.className = 'cell' + (on?' on '+h.color:'');
       c.onclick = ()=>{ h.cells[ci] = !h.cells[ci]; render(); };
-      cellsEl.appendChild(c);
+      cells.appendChild(c);
     });
-    row.appendChild(cellsEl);
-    habEl.appendChild(row);
+    row.appendChild(cells);
+    hab.appendChild(row);
+  });
+
+  // Badges
+  const bd = document.getElementById('badges');
+  bd.innerHTML = '';
+  state.badges.forEach(b=>{
+    const el = document.createElement('div');
+    el.className = 'badge-row' + (b.done?' done':'');
+    el.innerHTML = `
+      <span class="dot"></span>
+      <span class="name">${b.done?'🏆':'🔒'} ${b.name}</span>
+      <span style="font-size:10px;color:var(--muted)">${b.desc}</span>
+    `;
+    bd.appendChild(el);
   });
 
   // Goals
-  const goalsEl = document.getElementById('goals');
-  goalsEl.innerHTML = '';
+  const gl = document.getElementById('goals');
+  gl.innerHTML = '';
   state.goals.forEach(g=>{
-    const pct = Math.min(100, (g.cur/g.max*100)).toFixed(1);
+    const pct = Math.min(100, g.cur/g.max*100).toFixed(1);
     const el = document.createElement('div');
-    el.className = 'goal';
     el.innerHTML = `
-      <div class="top"><span>${g.name}</span><b>${g.cur} / ${g.max}</b></div>
-      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+        <span>${g.name}</span>
+        <b style="color:var(--accent-2)">${g.cur} / ${g.max}</b>
+      </div>
+      <div style="height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden">
+        <i style="display:block;height:100%;width:${pct}%;background:linear-gradient(90deg,var(--accent),var(--accent-2))"></i>
+      </div>
     `;
-    goalsEl.appendChild(el);
+    gl.appendChild(el);
   });
 
-  // Achievements
-  const achEl = document.getElementById('achievements');
-  achEl.innerHTML = '';
-  state.achievements.forEach(a=>{
+  // Top5
+  const t5 = document.getElementById('top5');
+  t5.innerHTML = '';
+  state.top5.forEach((v,i)=>{
     const el = document.createElement('div');
-    el.className = 'badge' + (a.done?'':' locked');
-    el.innerHTML = `<b>${a.done?'🏆':'🔒'} ${a.name}</b><small>${a.desc}</small>`;
-    achEl.appendChild(el);
+    el.className = 'row';
+    el.innerHTML = `<span class="rank">${i+1}</span><span class="title">${v.t}</span><span class="val">${v.v}</span>`;
+    t5.appendChild(el);
   });
 }
 
