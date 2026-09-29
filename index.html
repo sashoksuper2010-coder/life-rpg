@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creator Ops — Дашборд зарубежного YouTube-канала</title>
+<title>Creator Ops — Дашборд канала</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0b1220;
@@ -24,55 +27,65 @@
     --purple:#8b5cf6;
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
   body{
-    font-family:'Inter','Segoe UI',Roboto,sans-serif;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-feature-settings:"tnum" 1, "cv11" 1;
     background:var(--bg);
     color:var(--text);
-    font-size:13px;
-    line-height:1.4;
-    padding:16px;
+    font-size:12px;
+    line-height:1.45;
+    padding:14px;
+    -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1400px;margin:0 auto}
+  .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+  .right{text-align:right}
+  .center{text-align:center}
 
-  /* ===== TOOLBAR ===== */
+  .wrap{max-width:1440px;margin:0 auto}
+
+  /* TOOLBAR */
   .toolbar{
     display:flex;gap:8px;align-items:center;flex-wrap:wrap;
     background:var(--panel);border:1px solid var(--line);
-    border-radius:10px;padding:10px 14px;margin-bottom:14px;
+    border-radius:10px;padding:10px 14px;margin-bottom:12px;
   }
-  .toolbar .title{font-weight:600;margin-right:8px}
+  .toolbar .title{font-weight:600;font-size:14px;margin-right:8px}
   .toolbar .status{font-size:11px;color:var(--muted);margin-left:auto}
   .btn{
     background:var(--panel-2);border:1px solid var(--line);
     color:var(--text);padding:6px 12px;border-radius:6px;
-    font-size:12px;cursor:pointer;font-family:inherit;transition:.15s;
+    font-size:11.5px;font-weight:500;cursor:pointer;font-family:inherit;
+    transition:.15s;
   }
   .btn:hover{border-color:var(--accent);color:var(--accent-2)}
   .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-  .btn.primary:hover{background:var(--accent-2)}
+  .btn.primary:hover{background:var(--accent-2);color:#fff}
   .btn.danger:hover{border-color:var(--bad);color:var(--bad)}
+  .btn.mini{padding:3px 8px;font-size:11px}
 
-  /* ===== EDITABLE ===== */
+  /* EDITABLE */
   [contenteditable="true"]{
-    outline:none;border-radius:4px;padding:2px 4px;transition:.15s;
-    min-width:20px;display:inline-block;
+    outline:none;border-radius:3px;padding:1px 3px;
+    transition:.12s;cursor:text;
   }
-  body.editing [contenteditable="true"]{
-    background:rgba(59,130,246,.08);
-    border-bottom:1px dashed var(--accent);
-    cursor:text;
+  body.editing [contenteditable="true"]:hover{
+    background:rgba(59,130,246,.10);
   }
   body.editing [contenteditable="true"]:focus{
-    background:rgba(59,130,246,.18);
-    border-bottom:1px solid var(--accent-2);
+    background:rgba(59,130,246,.20);
+    box-shadow:inset 0 -1px 0 var(--accent-2);
+  }
+  body:not(.editing) [contenteditable]{
+    cursor:default;
   }
 
-  /* ===== TOP KPI ROW ===== */
+  /* KPI ROW */
   .kpi-row{
     display:grid;
     grid-template-columns:1.4fr 1fr 1fr 1fr 1fr 1fr;
     gap:10px;
-    margin-bottom:14px;
+    margin-bottom:12px;
   }
   .kpi{
     background:var(--panel);
@@ -80,9 +93,9 @@
     border-radius:10px;
     padding:12px 14px;
   }
-  .kpi .lbl{font-size:11px;color:var(--muted);margin-bottom:6px}
-  .kpi .val{font-size:17px;font-weight:700}
-  .kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+  .kpi .lbl{font-size:10.5px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+  .kpi .val{font-size:17px;font-weight:700;line-height:1.2}
+  .kpi .sub{font-size:10.5px;color:var(--muted);margin-top:4px}
   .kpi.accent{border-color:var(--accent)}
   .kpi.accent .val{color:var(--accent-2)}
   .kpi.gold{border-color:var(--yellow)}
@@ -94,29 +107,24 @@
   .date-row input{
     background:var(--panel-2);border:1px solid var(--line);color:var(--text);
     padding:3px 6px;border-radius:5px;font-size:11px;width:100%;font-family:inherit;
+    font-variant-numeric:tabular-nums;
   }
+  .date-row input:focus{outline:none;border-color:var(--accent)}
 
-  /* ===== GRID LAYOUT ===== */
-  .grid-main{
-    display:grid;
-    grid-template-columns:1.1fr 1.5fr 1.5fr;
-    gap:14px;
-    margin-bottom:14px;
-  }
-  .grid-bottom{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:14px;
-  }
+  /* GRID */
+  .grid-3{display:grid;grid-template-columns:1fr 1.2fr 1.2fr;gap:12px;margin-bottom:12px}
+  .grid-3b{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+  .grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:12px}
+  .grid-3c{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 
   .panel{
     background:var(--panel);
     border:1px solid var(--line);
     border-radius:10px;
-    padding:14px;
+    padding:12px 14px;
   }
   .panel h3{
-    font-size:12px;
+    font-size:11.5px;
     font-weight:600;
     color:var(--text);
     margin-bottom:10px;
@@ -125,31 +133,42 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
+    text-transform:uppercase;
+    letter-spacing:.4px;
   }
-  .panel h3 .hint{font-size:10px;color:var(--muted);font-weight:400}
+  .panel h3 .hint{font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
 
-  /* ===== SUMMARY TABLE ===== */
-  .sum-table{width:100%;border-collapse:collapse;font-size:12px}
-  .sum-table th{
-    text-align:left;color:var(--muted);font-weight:500;font-size:11px;
-    padding:5px 8px;border-bottom:1px solid var(--line);
+  /* TABLES */
+  table.data{width:100%;border-collapse:collapse;font-size:11.5px;font-variant-numeric:tabular-nums}
+  table.data th{
+    text-align:left;color:var(--muted);font-weight:500;font-size:10.5px;
+    padding:6px 6px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.3px;
+    white-space:nowrap;
   }
-  .sum-table th:nth-child(2),.sum-table th:nth-child(3){text-align:right}
-  .sum-table td{
-    padding:6px 8px;border-bottom:1px dashed var(--line);
+  table.data td{
+    padding:5px 6px;border-bottom:1px dashed var(--line);
+    vertical-align:middle;
   }
-  .sum-table td:nth-child(2),.sum-table td:nth-child(3){text-align:right;font-variant-numeric:tabular-nums}
-  .sum-table tr.total td{
-    border-top:1px solid var(--line-2);border-bottom:none;font-weight:700;
-    padding-top:8px;
+  table.data tr:last-child td{border-bottom:none}
+  table.data tr.total td{
+    border-top:1px solid var(--line-2);border-bottom:none;
+    font-weight:700;padding-top:8px;
   }
-  .sum-table tr.total td:nth-child(2){color:var(--accent-2)}
-  .sum-table tr.total td:nth-child(3){color:var(--pink)}
+  table.data th.right,table.data td.right{text-align:right}
+  table.data td.good{color:var(--good)}
+  table.data td.bad{color:var(--bad)}
+  table.data td.muted{color:var(--muted)}
+  table.data td .del{
+    color:var(--muted);cursor:pointer;font-size:13px;line-height:1;
+    padding:0 4px;opacity:.5;transition:.15s;
+  }
+  table.data td .del:hover{color:var(--bad);opacity:1}
+  table.data td:last-child{text-align:right;width:20px}
 
-  /* ===== CHART DONUT ===== */
+  /* DONUT */
   .donut-wrap{display:flex;align-items:center;gap:16px;margin-bottom:12px}
   .donut{
-    width:120px;height:120px;border-radius:50%;
+    width:110px;height:110px;border-radius:50%;
     background:conic-gradient(
       var(--pink) 0% 19%,
       var(--accent) 19% 35%,
@@ -161,231 +180,316 @@
     position:relative;flex-shrink:0;
   }
   .donut::after{
-    content:"";position:absolute;inset:18px;border-radius:50%;background:var(--panel);
+    content:"";position:absolute;inset:16px;border-radius:50%;background:var(--panel);
   }
   .legend{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:5px;width:100%}
-  .legend div{display:flex;align-items:center;gap:6px}
-  .legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
-  .legend b{color:var(--text);font-weight:500;margin-left:auto;font-variant-numeric:tabular-nums}
+  .legend .lrow{display:flex;align-items:center;gap:8px;padding:2px 0;border-bottom:1px dashed var(--line)}
+  .legend .lrow:last-child{border-bottom:none}
+  .legend i{width:8px;height:8px;border-radius:2px;display:inline-block;flex-shrink:0}
+  .legend .lname{flex:1;color:var(--muted)}
+  .legend .lval{color:var(--text);font-weight:500;text-align:right;min-width:52px}
+  .legend .del{color:var(--muted);cursor:pointer;font-size:13px;opacity:.5;padding:0 3px}
+  .legend .del:hover{color:var(--bad);opacity:1}
 
-  /* ===== BAR CHART ===== */
-  .bar-chart{display:flex;align-items:flex-end;gap:14px;height:120px;padding:8px 0}
-  .bar-group{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-  .bar-pair{display:flex;gap:3px;align-items:flex-end;height:100px}
-  .bar{width:12px;border-radius:3px 3px 0 0}
+  /* BAR CHART */
+  .bar-chart{display:flex;align-items:flex-end;gap:14px;height:130px;padding:8px 0}
+  .bar-group{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+  .bar-pair{display:flex;gap:3px;align-items:flex-end;height:105px}
+  .bar{width:12px;border-radius:3px 3px 0 0;transition:.2s}
   .bar.plan{background:var(--teal)}
   .bar.fact{background:var(--pink)}
   .bar-group small{font-size:10px;color:var(--muted)}
+  .bar-legend{display:flex;gap:14px;margin-top:8px;justify-content:center;font-size:11px;color:var(--muted)}
+  .bar-legend i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:5px}
 
-  /* ===== CAT TABLE ===== */
-  .cat-table{width:100%;border-collapse:collapse;font-size:12px}
-  .cat-table th{
-    text-align:left;color:var(--muted);font-weight:500;font-size:11px;
-    padding:5px 6px;border-bottom:1px solid var(--line);
-  }
-  .cat-table th:nth-child(2),.cat-table th:nth-child(3),.cat-table th:nth-child(4){text-align:right}
-  .cat-table td{
-    padding:5px 6px;border-bottom:1px dashed var(--line);
-    font-variant-numeric:tabular-nums;
-  }
-  .cat-table td:nth-child(2),.cat-table td:nth-child(3),.cat-table td:nth-child(4){text-align:right}
-  .cat-table tr.total td{
-    border-top:1px solid var(--line-2);border-bottom:none;font-weight:700;padding-top:8px;
-  }
-  .cat-table td.good{color:var(--good)}
-  .cat-table td.bad{color:var(--bad)}
-  .cat-table td.muted{color:var(--muted)}
-
-  /* ===== HABITS GRID ===== */
+  /* HABITS */
   .habit-grid{display:flex;flex-direction:column;gap:6px}
   .habit-row{display:flex;align-items:center;gap:8px}
-  .habit-name{width:150px;font-size:11px;color:var(--muted);flex-shrink:0;text-align:right}
+  .habit-name{
+    width:160px;font-size:11px;color:var(--muted);flex-shrink:0;text-align:right;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
   .habit-cells{display:flex;gap:3px;flex-wrap:wrap;flex:1}
   .cell{
-    width:14px;height:14px;border-radius:3px;background:var(--panel-2);
+    width:13px;height:13px;border-radius:3px;background:var(--panel-2);
     border:1px solid var(--line);cursor:pointer;transition:.12s;
   }
+  .cell:hover{border-color:var(--accent-2)}
   .cell.on{background:var(--accent);border-color:var(--accent)}
   .cell.on.pink{background:var(--pink);border-color:var(--pink)}
   .cell.on.good{background:var(--good);border-color:var(--good)}
   .cell.on.yellow{background:var(--yellow);border-color:var(--yellow)}
+  .habit-row .del{color:var(--muted);cursor:pointer;font-size:13px;opacity:.5;padding:0 4px}
+  .habit-row .del:hover{color:var(--bad);opacity:1}
 
-  /* ===== WEEK ===== */
-  .week-header{display:flex;gap:6px;margin-bottom:8px;font-size:10px;color:var(--muted)}
-  .week-header .wk{flex:1;text-align:center;padding:4px;background:var(--panel-2);border-radius:5px;border:1px solid var(--line);cursor:pointer}
-  .week-header .wk.active{color:var(--text);border-color:var(--accent)}
-
+  /* WEEK */
+  .week-header{display:flex;gap:6px;margin-bottom:8px;font-size:10.5px;color:var(--muted)}
+  .week-header .wk{flex:1;text-align:center;padding:4px;background:var(--panel-2);border-radius:5px;border:1px solid var(--line);cursor:pointer;transition:.15s}
+  .week-header .wk:hover{border-color:var(--accent-2)}
+  .week-header .wk.active{color:var(--text);border-color:var(--accent);background:rgba(59,130,246,.15)}
   .spark{width:100%;height:80px;display:block;margin-top:6px}
 
-  /* ===== BADGES ===== */
-  .badges{display:flex;flex-direction:column;gap:6px}
-  .badge-row{display:flex;align-items:center;gap:8px;font-size:11px;padding:6px 8px;background:var(--panel-2);border-radius:6px;border:1px solid var(--line)}
-  .badge-row .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);cursor:pointer}
-  .badge-row.done .dot{background:var(--good)}
-  .badge-row .name{flex:1;color:var(--muted)}
-  .badge-row.done .name{color:var(--text)}
-  .badge-row .del{color:var(--muted);cursor:pointer;font-size:14px;padding:0 4px}
-  .badge-row .del:hover{color:var(--bad)}
+  /* LIST */
+  .list{display:flex;flex-direction:column;gap:5px}
+  .list-row{
+    display:flex;align-items:center;gap:8px;font-size:11.5px;
+    padding:6px 8px;background:var(--panel-2);border-radius:6px;
+    border:1px solid var(--line);transition:.15s;
+  }
+  .list-row:hover{border-color:var(--line-2)}
+  .list-row .dot{
+    width:9px;height:9px;border-radius:50%;background:var(--muted);
+    cursor:pointer;flex-shrink:0;transition:.15s;
+  }
+  .list-row.done .dot{background:var(--good);box-shadow:0 0 8px rgba(34,197,94,.5)}
+  .list-row .name{flex:1;color:var(--text)}
+  .list-row.done .name{text-decoration:line-through;color:var(--muted)}
+  .list-row .xp{font-size:10px;color:var(--accent-2);font-weight:600;white-space:nowrap}
+  .list-row .desc{font-size:10px;color:var(--muted);white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis}
+  .list-row .del{color:var(--muted);cursor:pointer;font-size:13px;opacity:.5;padding:0 4px;line-height:1}
+  .list-row .del:hover{color:var(--bad);opacity:1}
 
-  /* ===== TOP5 ===== */
-  .top5{display:flex;flex-direction:column;gap:5px;font-size:11px}
-  .top5 .row{display:grid;grid-template-columns:16px 1fr auto 16px;gap:8px;align-items:center;padding:4px 0;border-bottom:1px dashed var(--line)}
+  /* TOP5 */
+  .top5{display:flex;flex-direction:column;gap:4px;font-size:11.5px}
+  .top5 .row{
+    display:grid;grid-template-columns:20px 1fr 60px 20px;gap:8px;align-items:center;
+    padding:4px 6px;border-bottom:1px dashed var(--line);
+  }
+  .top5 .row:last-child{border-bottom:none}
   .top5 .rank{color:var(--muted);text-align:center}
   .top5 .title{color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .top5 .val{color:var(--accent-2);font-variant-numeric:tabular-nums;text-align:right}
-  .top5 .del{color:var(--muted);cursor:pointer;font-size:14px}
-  .top5 .del:hover{color:var(--bad)}
+  .top5 .val{color:var(--accent-2);text-align:right;font-weight:600}
+  .top5 .del{color:var(--muted);cursor:pointer;font-size:13px;text-align:center;opacity:.5}
+  .top5 .del:hover{color:var(--bad);opacity:1}
 
-  /* ===== ADD ROW ===== */
-  .add-row{
-    display:flex;gap:6px;margin-top:8px;font-size:11px;
-  }
+  /* GOALS */
+  .goal{margin-bottom:10px}
+  .goal:last-child{margin-bottom:0}
+  .goal-top{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;gap:8px;align-items:center}
+  .goal-top .gname{flex:1;color:var(--text)}
+  .goal-top .gval{color:var(--accent-2);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .goal-top .del{color:var(--muted);cursor:pointer;font-size:13px;opacity:.5;padding:0 4px;line-height:1}
+  .goal-top .del:hover{color:var(--bad);opacity:1}
+  .goal-bar{height:7px;background:var(--panel-2);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+  .goal-bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .3s}
+
+  /* ADD ROW */
+  .add-row{display:flex;gap:6px;margin-top:8px;font-size:11px}
   .add-row input{
     flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
     padding:5px 8px;border-radius:5px;font-size:11px;font-family:inherit;
+    min-width:0;
   }
+  .add-row input:focus{outline:none;border-color:var(--accent)}
+  .add-row input.short{max-width:70px}
+  body:not(.editing) .add-row{display:none}
+  body:not(.editing) .del{display:none !important}
 
   /* TOAST */
   .toast{
     position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
     background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;
-    font-size:12px;opacity:0;transition:.3s;pointer-events:none;z-index:100;
+    font-size:12px;font-weight:500;opacity:0;transition:.25s;pointer-events:none;z-index:100;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);
   }
   .toast.show{opacity:1}
 
   @media(max-width:1100px){
     .kpi-row{grid-template-columns:repeat(3,1fr)}
-    .grid-main{grid-template-columns:1fr}
-    .grid-bottom{grid-template-columns:1fr}
+    .grid-3,.grid-3b,.grid-3c,.grid-2{grid-template-columns:1fr}
   }
 </style>
 </head>
 <body class="editing">
 <div class="wrap">
 
-  <!-- ===== TOOLBAR ===== -->
+  <!-- TOOLBAR -->
   <div class="toolbar">
     <span class="title">Creator Ops</span>
-    <button class="btn primary" id="btnEdit">✏️ Режим редактирования: ВКЛ</button>
-    <button class="btn" id="btnSnapshot">📸 Сохранить снимок месяца</button>
-    <button class="btn" id="btnExport">⬇️ Экспорт JSON</button>
-    <button class="btn" id="btnImport">⬆️ Импорт JSON</button>
-    <button class="btn danger" id="btnReset">🗑️ Сбросить всё</button>
+    <button class="btn primary" id="btnEdit">✏️ Редактирование: ВКЛ</button>
+    <button class="btn" id="btnExport">⬇️ Экспорт</button>
+    <button class="btn" id="btnImport">⬆️ Импорт</button>
+    <button class="btn danger" id="btnReset">🗑️ Сбросить</button>
     <input type="file" id="fileInput" accept=".json" style="display:none">
-    <span class="status" id="status">Все изменения сохраняются автоматически</span>
+    <span class="status" id="status">Автосохранение активно</span>
   </div>
 
-  <!-- ===== TOP KPI ===== -->
+  <!-- KPI ROW -->
   <div class="kpi-row">
     <div class="kpi">
-      <div class="lbl">Дата начала отчётного периода</div>
+      <div class="lbl">Период</div>
       <div class="date-row">
         <input type="date" id="dateFrom">
         <span>→</span>
         <input type="date" id="dateTo">
       </div>
-      <div class="sub">Канал: <b style="color:var(--accent-2)" contenteditable="true" data-key="channel">@YourForeignChannel</b></div>
+      <div class="sub">Канал: <b style="color:var(--accent-2)" data-key="channel">@YourForeignChannel</b></div>
     </div>
     <div class="kpi accent">
-      <div class="lbl">Просмотры за период</div>
-      <div class="val" contenteditable="true" data-key="kViews">103 100</div>
-      <div class="sub" contenteditable="true" data-key="kViewsSub">за 28 дней</div>
+      <div class="lbl">Просмотры</div>
+      <div class="val num" id="kVievs">0</div>
+      <div class="sub">сумма факта из «Сводки»</div>
     </div>
     <div class="kpi pink">
       <div class="lbl">Подписчики</div>
-      <div class="val" contenteditable="true" data-key="kSubs">342 400</div>
-      <div class="sub" contenteditable="true" data-key="kSubsSub">+1 240 за период</div>
+      <div class="val num" id="kSubs">0</div>
+      <div class="sub" id="kSubsSub">по последней строке</div>
     </div>
     <div class="kpi green">
       <div class="lbl">Watch Time (ч)</div>
-      <div class="val" contenteditable="true" data-key="kWatch">98 753</div>
-      <div class="sub" contenteditable="true" data-key="kWatchSub">за 28 дней</div>
+      <div class="val num" id="kWatch">0</div>
+      <div class="sub">факт из сводки</div>
     </div>
     <div class="kpi gold">
-      <div class="lbl">Заработано (оценка)</div>
-      <div class="val" contenteditable="true" data-key="kMoney">352 497,00 ₽</div>
-      <div class="sub">при CTR <b style="color:var(--warn)" contenteditable="true" data-key="kCtr">4.2%</b></div>
+      <div class="lbl">Заработано</div>
+      <div class="val num" id="kMoney">0 ₽</div>
+      <div class="sub">сумма дохода факт</div>
     </div>
     <div class="kpi">
-      <div class="lbl">Уровень создателя</div>
-      <div class="val" contenteditable="true" data-key="kLevel">Lv. 8 · CTR Hunter</div>
-      <div class="sub">XP: <b contenteditable="true" data-key="kXp">1 240 / 2 000</b></div>
+      <div class="lbl">Уровень</div>
+      <div class="val" data-key="kLevel">Lv. 1 · Newbie</div>
+      <div class="sub">XP: <b class="num" data-key="kXp">0 / 100</b></div>
     </div>
   </div>
 
-  <!-- ===== MAIN GRID ===== -->
-  <div class="grid-main">
+  <!-- MAIN GRID -->
+  <div class="grid-3">
 
     <div class="panel">
-      <h3>Сводка канала <span class="hint">Показатели к отчёту</span></h3>
-      <table class="sum-table">
-        <thead><tr><th>Категория</th><th>План</th><th>Факт</th></tr></thead>
+      <h3>Сводка канала <span class="hint">План / Факт</span></h3>
+      <table class="data">
+        <thead><tr>
+          <th>Показатель</th>
+          <th class="right" style="width:70px">План</th>
+          <th class="right" style="width:70px">Факт</th>
+          <th style="width:20px"></th>
+        </tr></thead>
         <tbody id="summaryBody"></tbody>
       </table>
+      <div class="add-row">
+        <input id="newSumName" placeholder="Новый показатель...">
+        <input id="newSumPlan" placeholder="План" class="short">
+        <input id="newSumFact" placeholder="Факт" class="short">
+        <button class="btn mini" id="addSum">+</button>
+      </div>
     </div>
 
     <div class="panel">
-      <h3>Сводка по источникам трафика <span class="hint">/ по типам видео</span></h3>
+      <h3>Источники трафика <span class="hint">доли и план/факт</span></h3>
       <div class="donut-wrap">
-        <div class="donut"></div>
+        <div class="donut" id="donut"></div>
         <div class="legend" id="legendList"></div>
       </div>
-      <table class="sum-table" style="font-size:11px">
-        <thead><tr><th>Источник</th><th>План</th><th>Факт</th></tr></thead>
+      <table class="data">
+        <thead><tr>
+          <th>Источник</th>
+          <th class="right" style="width:70px">План</th>
+          <th class="right" style="width:70px">Факт</th>
+          <th style="width:20px"></th>
+        </tr></thead>
         <tbody id="trafficBody"></tbody>
       </table>
+      <div class="add-row">
+        <input id="newTrName" placeholder="Источник...">
+        <input id="newTrPlan" placeholder="План" class="short">
+        <input id="newTrFact" placeholder="Факт" class="short">
+        <button class="btn mini" id="addTr">+</button>
+      </div>
     </div>
 
     <div class="panel">
       <h3>План / Факт <span class="hint">по ключевым метрикам</span></h3>
       <div class="bar-chart" id="barChart"></div>
-      <div class="legend" style="flex-direction:row;gap:14px;margin-top:8px;justify-content:center">
-        <div><i style="background:var(--teal)"></i> План</div>
-        <div><i style="background:var(--pink)"></i> Факт</div>
+      <div class="bar-legend">
+        <span><i style="background:var(--teal)"></i>План</span>
+        <span><i style="background:var(--pink)"></i>Факт</span>
+      </div>
+      <div class="add-row">
+        <input id="newBarName" placeholder="Метрика...">
+        <input id="newBarPlan" placeholder="План %" class="short">
+        <input id="newBarFact" placeholder="Факт %" class="short">
+        <button class="btn mini" id="addBar">+</button>
       </div>
     </div>
 
   </div>
 
-  <!-- ===== 3-COL ===== -->
-  <div class="grid-main" style="grid-template-columns:1fr 1fr 1fr">
+  <!-- 3 COL TABLES -->
+  <div class="grid-3b">
     <div class="panel">
-      <h3>Доходы канала <span class="hint">и регистрируйте в таблице</span></h3>
-      <table class="cat-table">
-        <thead><tr><th>Метрика</th><th>План</th><th>Факт</th><th>Δ</th></tr></thead>
+      <h3>Доходы канала <span class="hint">план / факт / Δ</span></h3>
+      <table class="data">
+        <thead><tr>
+          <th>Метрика</th>
+          <th class="right" style="width:80px">План</th>
+          <th class="right" style="width:80px">Факт</th>
+          <th class="right" style="width:70px">Δ</th>
+          <th style="width:20px"></th>
+        </tr></thead>
         <tbody id="incomeBody"></tbody>
       </table>
+      <div class="add-row">
+        <input id="newIncName" placeholder="Метрика...">
+        <input id="newIncPlan" placeholder="План" class="short">
+        <input id="newIncFact" placeholder="Факт" class="short">
+        <button class="btn mini" id="addInc">+</button>
+      </div>
     </div>
+
     <div class="panel">
-      <h3>Расходы на продакшн <span class="hint">и подписки</span></h3>
-      <table class="cat-table">
-        <thead><tr><th>Статья</th><th>План</th><th>Факт</th><th>Остаток</th></tr></thead>
+      <h3>Расходы на продакшн <span class="hint">план / факт / остаток</span></h3>
+      <table class="data">
+        <thead><tr>
+          <th>Статья</th>
+          <th class="right" style="width:80px">План</th>
+          <th class="right" style="width:80px">Факт</th>
+          <th class="right" style="width:70px">Остаток</th>
+          <th style="width:20px"></th>
+        </tr></thead>
         <tbody id="expenseBody"></tbody>
       </table>
+      <div class="add-row">
+        <input id="newExpName" placeholder="Статья...">
+        <input id="newExpPlan" placeholder="План" class="short">
+        <input id="newExpFact" placeholder="Факт" class="short">
+        <button class="btn mini" id="addExp">+</button>
+      </div>
     </div>
+
     <div class="panel">
-      <h3>Вовлечённость и ачивки <span class="hint">СЧЕТА / ДОСТИЖЕНИЯ</span></h3>
-      <table class="cat-table">
-        <thead><tr><th>Метрика</th><th>План</th><th>Факт</th><th>Δ</th></tr></thead>
+      <h3>Вовлечённость <span class="hint">план / факт / Δ</span></h3>
+      <table class="data">
+        <thead><tr>
+          <th>Метрика</th>
+          <th class="right" style="width:80px">План</th>
+          <th class="right" style="width:80px">Факт</th>
+          <th class="right" style="width:70px">Δ</th>
+          <th style="width:20px"></th>
+        </tr></thead>
         <tbody id="engageBody"></tbody>
       </table>
+      <div class="add-row">
+        <input id="newEngName" placeholder="Метрика...">
+        <input id="newEngPlan" placeholder="План" class="short">
+        <input id="newEngFact" placeholder="Факт" class="short">
+        <button class="btn mini" id="addEng">+</button>
+      </div>
     </div>
   </div>
 
-  <!-- ===== HABITS + WEEK ===== -->
-  <div class="grid-main" style="grid-template-columns:1.4fr 1fr">
-
+  <!-- HABITS + WEEK -->
+  <div class="grid-2">
     <div class="panel">
       <h3>Привычки AI-продюсера <span class="hint">клик по клетке = отметка</span></h3>
       <div class="habit-grid" id="habits"></div>
       <div class="add-row">
         <input id="newHabit" placeholder="Новая привычка...">
-        <button class="btn" id="addHabit">+ Добавить</button>
+        <button class="btn mini" id="addHabit">+</button>
       </div>
     </div>
 
     <div class="panel">
-      <h3>Недельный план <span class="hint">Публикации и метрики</span></h3>
+      <h3>Недельный план <span class="hint">активный день</span></h3>
       <div class="week-header" id="weekHeader"></div>
       <svg class="spark" viewBox="0 0 300 80" preserveAspectRatio="none">
         <polyline fill="none" stroke="#3b82f6" stroke-width="2"
@@ -397,45 +501,43 @@
       <div class="top5" id="top5"></div>
       <div class="add-row">
         <input id="newTop" placeholder="Название видео...">
-        <input id="newTopVal" placeholder="Views" style="max-width:70px">
-        <button class="btn" id="addTop">+</button>
+        <input id="newTopVal" placeholder="Views" class="short">
+        <button class="btn mini" id="addTop">+</button>
       </div>
     </div>
-
   </div>
 
-  <!-- ===== PIPELINE + ACHIEVEMENTS + GOALS ===== -->
-  <div class="grid-bottom">
-
+  <!-- PIPELINE + ACHIEVEMENTS + GOALS -->
+  <div class="grid-3c">
     <div class="panel">
-      <h3>Ежедневный пайплайн <span class="hint" id="pipeCount">0 / 8</span></h3>
-      <div id="pipeline" style="display:flex;flex-direction:column;gap:6px"></div>
+      <h3>Ежедневный пайплайн <span class="hint" id="pipeCount">0 / 0</span></h3>
+      <div class="list" id="pipeline"></div>
       <div class="add-row">
         <input id="newTask" placeholder="Новая задача...">
-        <button class="btn" id="addTask">+ Добавить</button>
+        <input id="newTaskXp" placeholder="XP" class="short">
+        <button class="btn mini" id="addTask">+</button>
       </div>
     </div>
 
     <div class="panel">
-      <h3>Достижения канала <span class="hint">заблокировано / открыто</span></h3>
-      <div class="badges" id="badges"></div>
+      <h3>Достижения канала <span class="hint">открыто / всего</span></h3>
+      <div class="list" id="badges"></div>
       <div class="add-row">
-        <input id="newBadge" placeholder="Новое достижение...">
-        <button class="btn" id="addBadge">+ Добавить</button>
+        <input id="newBadge" placeholder="Достижение...">
+        <button class="btn mini" id="addBadge">+</button>
       </div>
     </div>
 
     <div class="panel">
       <h3>Цели канала <span class="hint">прогресс</span></h3>
-      <div id="goals" style="display:flex;flex-direction:column;gap:12px"></div>
+      <div id="goals"></div>
       <div class="add-row">
         <input id="newGoalName" placeholder="Цель...">
-        <input id="newGoalCur" placeholder="0" style="max-width:60px">
-        <input id="newGoalMax" placeholder="1000" style="max-width:70px">
-        <button class="btn" id="addGoal">+</button>
+        <input id="newGoalCur" placeholder="0" class="short">
+        <input id="newGoalMax" placeholder="1000" class="short">
+        <button class="btn mini" id="addGoal">+</button>
       </div>
     </div>
-
   </div>
 
 </div>
@@ -443,132 +545,147 @@
 <div class="toast" id="toast">Сохранено</div>
 
 <script>
-/* ============ DEFAULT STATE ============ */
+/* ==============================
+   DEFAULT STATE
+   ============================== */
 const DEFAULTS = {
   channel: '@YourForeignChannel',
   dateFrom: '2026-09-01',
   dateTo: '2026-09-28',
-  kViews: '103 100', kViewsSub: 'за 28 дней',
-  kSubs: '342 400', kSubsSub: '+1 240 за период',
-  kWatch: '98 753', kWatchSub: 'за 28 дней',
-  kMoney: '352 497,00 ₽', kCtr: '4.2%',
-  kLevel: 'Lv. 8 · CTR Hunter', kXp: '1 240 / 2 000',
+  kLevel: 'Lv. 8 · CTR Hunter',
+  kXp: '1240 / 2000',
+  editMode: true,
+
   summary: [
-    ['Видео опубликовано','12','14'],
-    ['Просмотры (K)','125 000','132 420'],
-    ['Подписчики','85 000','86 477'],
-    ['Watch Time (K ч)','61 000','63 600'],
-    ['Комментарии','3 000','2 860'],
-    ['Средний CTR','4.0%','4.2%'],
-    ['ИТОГО (в баллах)','278 000','323 758', true]
+    {name:'Видео опубликовано', plan:'12',      fact:'14'},
+    {name:'Просмотры (K)',      plan:'125000',  fact:'132420'},
+    {name:'Подписчики',         plan:'85000',   fact:'86477'},
+    {name:'Watch Time (K ч)',   plan:'61000',   fact:'63600'},
+    {name:'Комментарии',        plan:'3000',    fact:'2860'},
+    {name:'Средний CTR, %',     plan:'4.0',     fact:'4.2'}
   ],
+
   legend: [
-    ['Рекомендации','19,2%','var(--pink)'],
-    ['Поиск YouTube','16,2%','var(--accent)'],
-    ['Shorts feed','12,1%','var(--yellow)'],
-    ['Внешние источники','17,5%','var(--purple)'],
-    ['Подписки','21,8%','var(--good)'],
-    ['Плейлисты','13,2%','var(--teal)']
+    {name:'Рекомендации',     val:'19.2', color:'var(--pink)'},
+    {name:'Поиск YouTube',    val:'16.2', color:'var(--accent)'},
+    {name:'Shorts feed',      val:'12.1', color:'var(--yellow)'},
+    {name:'Внешние источники',val:'17.5', color:'var(--purple)'},
+    {name:'Подписки',         val:'21.8', color:'var(--good)'},
+    {name:'Плейлисты',        val:'13.2', color:'var(--teal)'}
   ],
+
   traffic: [
-    ['Рекомендации','20 000','19 795'],
-    ['Поиск','16 000','16 700'],
-    ['Shorts','12 000','12 480']
+    {name:'Рекомендации', plan:'20000', fact:'19795'},
+    {name:'Поиск',        plan:'16000', fact:'16700'},
+    {name:'Shorts',       plan:'12000', fact:'12480'}
   ],
+
   bars: [
-    ['Видео',70,82],
-    ['Subs',55,62],
-    ['CTR',40,48],
-    ['Watch',65,78],
-    ['Доход',88,95]
+    {name:'Видео', plan:70, fact:82},
+    {name:'Subs',  plan:55, fact:62},
+    {name:'CTR',   plan:40, fact:48},
+    {name:'Watch', plan:65, fact:78},
+    {name:'Доход', plan:88, fact:95}
   ],
+
   income: [
-    ['AdSense','110 000,00','110 000,00','0','muted'],
-    ['Спонсорство','165 000,00','165 000,00','0','muted'],
-    ['Patreon / Boosty','3 000,00','2 850,00','-150','bad'],
-    ['Affiliate (Amazon)','20 000,00','24 000,00','+4 000','good'],
-    ['Продажа мерча','5 000,00','6 350,00','+1 350','good'],
-    ['Возврат налогов','15 000,00','15 600,00','+600','good'],
-    ['ИТОГО','318 000,00','323 800,00','+5 800','good', true]
+    {name:'AdSense',          plan:'110000', fact:'110000'},
+    {name:'Спонсорство',      plan:'165000', fact:'165000'},
+    {name:'Patreon / Boosty', plan:'3000',   fact:'2850'},
+    {name:'Affiliate (Amazon)',plan:'20000', fact:'24000'},
+    {name:'Продажа мерча',    plan:'5000',   fact:'6350'},
+    {name:'Возврат налогов',  plan:'15000',  fact:'15600'}
   ],
+
   expense: [
-    ['AI-подписки (ChatGPT, ElevenLabs)','18 000,00','18 000,00','0','muted'],
-    ['Монтажный софт','9 000,00','9 795,00','-795','bad'],
-    ['Музыка / SFX','5 000,00','5 850,00','-850','bad'],
-    ['Хостинг, домен, CDN','12 000,00','11 600,00','+400','good'],
-    ['Реклама (YouTube Ads)','12 000,00','14 000,00','-2 000','bad'],
-    ['Дизайн превью','8 000,00','6 850,00','+1 150','good'],
-    ['Прочее / непредвиденное','3 000,00','3 740,00','-740','bad'],
-    ['ИТОГО','122 000,00','125 420,00','-7 410','bad', true]
+    {name:'AI-подписки',      plan:'18000', fact:'18000'},
+    {name:'Монтажный софт',   plan:'9000',  fact:'9795'},
+    {name:'Музыка / SFX',     plan:'5000',  fact:'5850'},
+    {name:'Хостинг, домен',   plan:'12000', fact:'11600'},
+    {name:'Реклама (YT Ads)', plan:'12000', fact:'14000'},
+    {name:'Дизайн превью',    plan:'8000',  fact:'6850'},
+    {name:'Прочее',           plan:'3000',  fact:'3740'}
   ],
+
   engage: [
-    ['Комментарии','3 000,00','2 860,00','-140','bad'],
-    ['Лайки','1 400,00','1 400,00','0','muted'],
-    ['Дизлайки','900,00','900,00','0','muted'],
-    ['Подписки (прирост)','3 500,00','3 500,00','0','muted'],
-    ['Отписки','3 400,00','3 400,00','0','muted'],
-    ['ИТОГО (энергия)','88 800,00','88 477,00','-320','bad', true]
+    {name:'Комментарии',        plan:'3000', fact:'2860'},
+    {name:'Лайки',              plan:'1400', fact:'1400'},
+    {name:'Дизлайки',           plan:'900',  fact:'900'},
+    {name:'Подписки (прирост)', plan:'3500', fact:'3500'},
+    {name:'Отписки',            plan:'3400', fact:'3400'}
   ],
+
   habits: [
-    {name:'Опубликовать видео', color:'', cells:Array(30).fill(false)},
-    {name:'Изучать AI-инструменты (30м)', color:'pink', cells:Array(30).fill(false)},
-    {name:'День без нуля', color:'good', cells:Array(30).fill(false)},
-    {name:'Ответить на комментарии', color:'yellow', cells:Array(30).fill(false)},
-    {name:'Анализ метрик (CTR, удерж.)', color:'', cells:Array(30).fill(false)},
-    {name:'Разбор конкурентов', color:'pink', cells:Array(30).fill(false)}
+    {name:'Опубликовать видео',        color:'',       cells:Array(30).fill(false)},
+    {name:'Изучать AI (30м)',           color:'pink',   cells:Array(30).fill(false)},
+    {name:'День без нуля',              color:'good',   cells:Array(30).fill(false)},
+    {name:'Ответить на комментарии',    color:'yellow', cells:Array(30).fill(false)},
+    {name:'Анализ метрик',              color:'',       cells:Array(30).fill(false)},
+    {name:'Разбор конкурентов',         color:'pink',   cells:Array(30).fill(false)}
   ],
+
   tasks: [
-    {id:'t1', name:'Research и тренды', xp:10, done:false},
-    {id:'t2', name:'Сценарий и хуки (AI)', xp:30, done:false},
-    {id:'t3', name:'Озвучка (TTS)', xp:20, done:false},
-    {id:'t4', name:'Визуалы (AI)', xp:25, done:false},
-    {id:'t5', name:'Монтаж и субтитры', xp:40, done:false},
-    {id:'t6', name:'Превью и заголовок A/B', xp:20, done:false},
-    {id:'t7', name:'Загрузка и SEO', xp:25, done:false},
-    {id:'t8', name:'Работа с комментариями', xp:15, done:false}
+    {name:'Research и тренды',     xp:10, done:false},
+    {name:'Сценарий и хуки (AI)',  xp:30, done:false},
+    {name:'Озвучка (TTS)',         xp:20, done:false},
+    {name:'Визуалы (AI)',          xp:25, done:false},
+    {name:'Монтаж и субтитры',     xp:40, done:false},
+    {name:'Превью и заголовок A/B',xp:20, done:false},
+    {name:'Загрузка и SEO',        xp:25, done:false},
+    {name:'Работа с комментариями',xp:15, done:false}
   ],
+
   badges: [
-    {name:'Первый релиз', desc:'Опубликовать 1 видео', done:true},
-    {name:'Постоянство', desc:'7 дней подряд', done:true},
-    {name:'Контент-машина', desc:'30 видео опубликовано', done:true},
-    {name:'CTR-охотник', desc:'Средний CTR ≥ 5%', done:false},
-    {name:'Монетизация', desc:'Достичь требований YPP', done:false},
-    {name:'Магнат ютуба', desc:'100 000 подписчиков', done:false}
+    {name:'Первый релиз',    desc:'1 видео',       done:true},
+    {name:'Постоянство',     desc:'7 дней подряд', done:true},
+    {name:'Контент-машина',  desc:'30 видео',      done:true},
+    {name:'CTR-охотник',     desc:'CTR ≥ 5%',      done:false},
+    {name:'Монетизация',     desc:'YPP',           done:false},
+    {name:'Магнат ютуба',    desc:'100K subs',     done:false}
   ],
+
   goals: [
-    {name:'100 подписчиков', cur:68, max:100},
-    {name:'1 000 подписчиков', cur:68, max:1000},
+    {name:'100 подписчиков',       cur:68,  max:100},
+    {name:'1 000 подписчиков',     cur:68,  max:1000},
     {name:'4 000 часов просмотра', cur:320, max:4000},
-    {name:'10 000 подписчиков', cur:68, max:10000}
+    {name:'10 000 подписчиков',    cur:68,  max:10000}
   ],
+
   top5: [
-    {t:'How I make AI videos in 2026', v:'12.4K'},
-    {t:'Best prompts for viral hooks', v:'9.8K'},
-    {t:'ElevenLabs vs PlayHT', v:'7.1K'},
-    {t:'My $0 AI video pipeline', v:'5.6K'},
-    {t:'YouTube algorithm explained', v:'4.2K'}
+    {t:'Название видео 1', v:'0'},
+    {t:'Название видео 2', v:'0'},
+    {t:'Название видео 3', v:'0'},
+    {t:'Название видео 4', v:'0'},
+    {t:'Название видео 5', v:'0'}
   ],
+
   weekActive: 3
 };
 
-/* ============ STORAGE ============ */
-const STORAGE_KEY = 'creator-ops-v1';
+/* ==============================
+   STORAGE
+   ============================== */
+const KEY = 'creator-ops-v5';
 let state = load();
+let editMode = true;
 
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
 function load(){
   try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return JSON.parse(JSON.stringify(DEFAULTS));
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return deepClone(DEFAULTS);
     const parsed = JSON.parse(raw);
-    // merge defaults чтобы не потерять новые поля
-    return Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), parsed);
-  }catch(e){
-    return JSON.parse(JSON.stringify(DEFAULTS));
-  }
+    return Object.assign(deepClone(DEFAULTS), parsed);
+  }catch(e){ return deepClone(DEFAULTS); }
 }
-function save(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  toast('Сохранено');
+let saveTimer;
+function save(showToast=true){
+  localStorage.setItem(KEY, JSON.stringify(state));
+  if(showToast) toast('Сохранено');
+}
+function saveSoon(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>save(false), 400);
 }
 
 let toastTimer;
@@ -580,99 +697,170 @@ function toast(msg){
   toastTimer = setTimeout(()=>t.classList.remove('show'), 1200);
 }
 
-/* ============ HELPERS ============ */
-function makeEditable(el, path){
-  el.contentEditable = 'true';
-  el.dataset.path = path;
+/* ==============================
+   HELPERS
+   ============================== */
+function parseNum(v){
+  if(v === null || v === undefined) return 0;
+  if(typeof v === 'number') return v;
+  let s = String(v).trim().replace(/\s/g,'').replace(/,/g,'.');
+  const m = s.match(/^([\d.]+)([KMBкмлн]?)/i);
+  if(!m) return 0;
+  let n = parseFloat(m[1]) || 0;
+  const suf = (m[2]||'').toUpperCase();
+  if(suf === 'K' || suf === 'К') n *= 1000;
+  else if(suf === 'M' || suf === 'М') n *= 1000000;
+  else if(suf === 'B') n *= 1000000000;
+  return n;
+}
+
+function fmt(n, dec=0){
+  if(!isFinite(n)) n = 0;
+  return n.toLocaleString('ru-RU', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+}
+function fmtMoney(n){ return fmt(n, 0) + ' ₽'; }
+
+function deltaClass(diff){
+  if(Math.abs(diff) < 0.001) return 'muted';
+  return diff > 0 ? 'good' : 'bad';
+}
+function deltaText(diff){
+  if(Math.abs(diff) < 0.001) return '0';
+  const sign = diff > 0 ? '+' : '';
+  return sign + fmt(diff, 0);
+}
+
+// Главный фикс: реально применяем editMode при создании ячейки
+function bindCell(el, getter, setter){
+  el.contentEditable = editMode ? 'true' : 'false';
+  el.addEventListener('focus', ()=>{
+    if(!editMode){ el.blur(); return; }
+    el._before = el.textContent;
+  });
+  el.addEventListener('keydown', (e)=>{
+    if(!editMode) return;
+    if(e.key === 'Enter'){ e.preventDefault(); el.blur(); }
+    if(e.key === 'Escape'){ el.textContent = el._before; el.blur(); }
+  });
   el.addEventListener('blur', ()=>{
-    state[path] = el.textContent.trim();
-    save();
+    if(!editMode) return;
+    const txt = el.textContent.trim();
+    if(txt === el._before) return;
+    setter(txt);
+    saveSoon();
+    render();
+  });
+  el.textContent = getter();
+}
+
+// Тот же приём для простых [data-key]
+function bindDataKey(el, key){
+  el.contentEditable = editMode ? 'true' : 'false';
+  if(state[key] !== undefined) el.textContent = state[key];
+  if(el._bound) return;
+  el._bound = true;
+  el.addEventListener('focus', ()=>{
+    if(!editMode){ el.blur(); return; }
+    el._before = el.textContent;
+  });
+  el.addEventListener('keydown', (e)=>{
+    if(!editMode) return;
+    if(e.key === 'Enter'){ e.preventDefault(); el.blur(); }
+    if(e.key === 'Escape'){ el.textContent = el._before; el.blur(); }
+  });
+  el.addEventListener('blur', ()=>{
+    if(!editMode) return;
+    state[key] = el.textContent.trim();
+    saveSoon();
   });
 }
 
-/* ============ RENDER ============ */
+/* ==============================
+   RENDER
+   ============================== */
 function render(){
-  // === SIMPLE FIELDS ===
+  // data-key поля
   document.querySelectorAll('[data-key]').forEach(el=>{
-    const key = el.dataset.key;
-    if(state[key] !== undefined) el.textContent = state[key];
-    if(el._bound) return;
-    el._bound = true;
-    el.addEventListener('blur', ()=>{
-      state[el.dataset.key] = el.textContent.trim();
-      save();
-    });
+    bindDataKey(el, el.dataset.key);
   });
 
-  // === DATES ===
+  // даты
   const df = document.getElementById('dateFrom');
   const dt = document.getElementById('dateTo');
   if(!df._bound){
     df._bound = true; dt._bound = true;
     df.value = state.dateFrom; dt.value = state.dateTo;
-    df.onchange = ()=>{ state.dateFrom = df.value; save(); };
-    dt.onchange = ()=>{ state.dateTo = dt.value; save(); };
+    df.onchange = ()=>{ state.dateFrom = df.value; saveSoon(); };
+    dt.onchange = ()=>{ state.dateTo   = dt.value; saveSoon(); };
   }
 
-  // === SUMMARY TABLE ===
+  // СВОДКА
   const sb = document.getElementById('summaryBody');
   sb.innerHTML = '';
   state.summary.forEach((row, i)=>{
     const tr = document.createElement('tr');
-    if(row[3]) tr.className = 'total';
     tr.innerHTML = `
-      <td contenteditable="true">${row[0]}</td>
-      <td contenteditable="true">${row[1]}</td>
-      <td contenteditable="true">${row[2]}</td>
+      <td></td>
+      <td class="right num"></td>
+      <td class="right num"></td>
+      <td><span class="del" title="Удалить">×</span></td>
     `;
-    tr.querySelectorAll('[contenteditable]').forEach((td, j)=>{
-      td.addEventListener('blur', ()=>{
-        state.summary[i][j] = td.textContent.trim();
-        save();
-      });
-    });
+    const tds = tr.querySelectorAll('td');
+    bindCell(tds[0], ()=>row.name, v=>state.summary[i].name = v);
+    bindCell(tds[1], ()=>row.plan, v=>state.summary[i].plan = v);
+    bindCell(tds[2], ()=>row.fact, v=>state.summary[i].fact = v);
+    tr.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + row.name + '»?')){
+        state.summary.splice(i,1); save(); render();
+      }
+    };
     sb.appendChild(tr);
   });
 
-  // === LEGEND ===
-  const lg = document.getElementById('legendList');
-  lg.innerHTML = '';
-  state.legend.forEach((row, i)=>{
-    const d = document.createElement('div');
-    d.innerHTML = `
-      <i style="background:${row[2]}"></i>
-      <span contenteditable="true">${row[0]}</span>
-      <b contenteditable="true">${row[1]}</b>
-    `;
-    d.querySelectorAll('[contenteditable]').forEach((el, j)=>{
-      el.addEventListener('blur', ()=>{
-        state.legend[i][j===0?0:1] = el.textContent.trim();
-        save();
-      });
-    });
-    lg.appendChild(d);
-  });
-
-  // === TRAFFIC ===
+  // ИСТОЧНИКИ ТРАФИКА
   const tb = document.getElementById('trafficBody');
   tb.innerHTML = '';
   state.traffic.forEach((row, i)=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td contenteditable="true">${row[0]}</td>
-      <td contenteditable="true">${row[1]}</td>
-      <td contenteditable="true">${row[2]}</td>
+      <td></td><td class="right num"></td><td class="right num"></td>
+      <td><span class="del">×</span></td>
     `;
-    tr.querySelectorAll('[contenteditable]').forEach((td, j)=>{
-      td.addEventListener('blur', ()=>{
-        state.traffic[i][j] = td.textContent.trim();
-        save();
-      });
-    });
+    const tds = tr.querySelectorAll('td');
+    bindCell(tds[0], ()=>row.name, v=>state.traffic[i].name = v);
+    bindCell(tds[1], ()=>row.plan, v=>state.traffic[i].plan = v);
+    bindCell(tds[2], ()=>row.fact, v=>state.traffic[i].fact = v);
+    tr.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + row.name + '»?')){
+        state.traffic.splice(i,1); save(); render();
+      }
+    };
     tb.appendChild(tr);
   });
 
-  // === BARS ===
+  // ЛЕГЕНДА
+  const lg = document.getElementById('legendList');
+  lg.innerHTML = '';
+  state.legend.forEach((row, i)=>{
+    const el = document.createElement('div');
+    el.className = 'lrow';
+    el.innerHTML = `
+      <i style="background:${row.color}"></i>
+      <span class="lname"></span>
+      <span class="lval num right"></span>
+      <span class="del">×</span>
+    `;
+    bindCell(el.querySelector('.lname'), ()=>row.name, v=>state.legend[i].name = v);
+    bindCell(el.querySelector('.lval'),  ()=>row.val,  v=>state.legend[i].val  = v);
+    el.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + row.name + '»?')){
+        state.legend.splice(i,1); save(); render();
+      }
+    };
+    lg.appendChild(el);
+  });
+
+  // БАРЫ ПЛАН/ФАКТ
   const bc = document.getElementById('barChart');
   bc.innerHTML = '';
   state.bars.forEach((row, i)=>{
@@ -680,47 +868,85 @@ function render(){
     g.className = 'bar-group';
     g.innerHTML = `
       <div class="bar-pair">
-        <div class="bar plan" style="height:${row[1]}%"></div>
-        <div class="bar fact" style="height:${row[2]}%"></div>
+        <div class="bar plan" style="height:${Math.min(100, Math.max(0, row.plan))}%" title="План: ${row.plan}%"></div>
+        <div class="bar fact" style="height:${Math.min(100, Math.max(0, row.fact))}%" title="Факт: ${row.fact}%"></div>
       </div>
-      <small contenteditable="true">${row[0]}</small>
+      <small></small>
     `;
-    g.querySelector('small').addEventListener('blur', (e)=>{
-      state.bars[i][0] = e.target.textContent.trim();
-      save();
+    const small = g.querySelector('small');
+    small.contentEditable = editMode ? 'true' : 'false';
+    small.textContent = row.name;
+    small.addEventListener('focus', ()=>{
+      if(!editMode){ small.blur(); return; }
+    });
+    small.addEventListener('blur', ()=>{
+      if(!editMode) return;
+      state.bars[i].name = small.textContent.trim();
+      saveSoon();
+    });
+    g.querySelector('.bar.plan').onclick = ()=>{
+      if(!editMode) return;
+      const v = prompt('План %:', row.plan);
+      if(v !== null){ state.bars[i].plan = Math.max(0, Math.min(100, parseFloat(v) || 0)); save(); render(); }
+    };
+    g.querySelector('.bar.fact').onclick = ()=>{
+      if(!editMode) return;
+      const v = prompt('Факт %:', row.fact);
+      if(v !== null){ state.bars[i].fact = Math.max(0, Math.min(100, parseFloat(v) || 0)); save(); render(); }
+    };
+    g.addEventListener('contextmenu', (e)=>{
+      e.preventDefault();
+      if(!editMode) return;
+      if(confirm('Удалить «' + row.name + '»?')){
+        state.bars.splice(i,1); save(); render();
+      }
     });
     bc.appendChild(g);
   });
 
-  // === 3 TABLES ===
-  renderCatTable('incomeBody', 'income');
-  renderCatTable('expenseBody', 'expense');
-  renderCatTable('engageBody', 'engage');
+  // 3 ТАБЛИЦЫ
+  renderCatTable('incomeBody',  'income',  false);
+  renderCatTable('expenseBody', 'expense', true);
+  renderCatTable('engageBody',  'engage',  false);
 
-  // === HABITS ===
+  // KPI
+  recomputeKpis();
+
+  // ПРИВЫЧКИ
   const hab = document.getElementById('habits');
   hab.innerHTML = '';
   state.habits.forEach((h, hi)=>{
     const row = document.createElement('div');
     row.className = 'habit-row';
-    row.innerHTML = `<div class="habit-name" contenteditable="true">${h.name}</div>`;
-    row.querySelector('.habit-name').addEventListener('blur', (e)=>{
-      state.habits[hi].name = e.target.textContent.trim();
-      save();
+    row.innerHTML = `
+      <div class="habit-name"></div>
+      <div class="habit-cells"></div>
+      <span class="del" title="Удалить">×</span>
+    `;
+    const nameEl = row.querySelector('.habit-name');
+    nameEl.contentEditable = editMode ? 'true' : 'false';
+    nameEl.textContent = h.name;
+    nameEl.addEventListener('blur', ()=>{
+      if(!editMode) return;
+      state.habits[hi].name = nameEl.textContent.trim();
+      saveSoon();
     });
-    const cells = document.createElement('div');
-    cells.className = 'habit-cells';
+    const cells = row.querySelector('.habit-cells');
     h.cells.forEach((on, ci)=>{
       const c = document.createElement('div');
-      c.className = 'cell' + (on?' on '+h.color:'');
+      c.className = 'cell' + (on ? ' on ' + (h.color||'') : '');
       c.onclick = ()=>{ state.habits[hi].cells[ci] = !state.habits[hi].cells[ci]; save(); render(); };
       cells.appendChild(c);
     });
-    row.appendChild(cells);
+    row.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить привычку «' + h.name + '»?')){
+        state.habits.splice(hi,1); save(); render();
+      }
+    };
     hab.appendChild(row);
   });
 
-  // === WEEK HEADER ===
+  // НЕДЕЛЯ
   const wk = document.getElementById('weekHeader');
   wk.innerHTML = '';
   ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach((d, i)=>{
@@ -731,7 +957,7 @@ function render(){
     wk.appendChild(el);
   });
 
-  // === TOP5 ===
+  // ТОП-5
   const t5 = document.getElementById('top5');
   t5.innerHTML = '';
   state.top5.forEach((v, i)=>{
@@ -739,141 +965,187 @@ function render(){
     el.className = 'row';
     el.innerHTML = `
       <span class="rank">${i+1}</span>
-      <span class="title" contenteditable="true">${v.t}</span>
-      <span class="val" contenteditable="true">${v.v}</span>
-      <span class="del" title="Удалить">×</span>
+      <span class="title"></span>
+      <span class="val num"></span>
+      <span class="del">×</span>
     `;
-    el.querySelector('.title').addEventListener('blur', (e)=>{ state.top5[i].t = e.target.textContent.trim(); save(); });
-    el.querySelector('.val').addEventListener('blur', (e)=>{ state.top5[i].v = e.target.textContent.trim(); save(); });
-    el.querySelector('.del').onclick = ()=>{ state.top5.splice(i,1); save(); render(); };
+    bindCell(el.querySelector('.title'), ()=>v.t, nv=>state.top5[i].t = nv);
+    bindCell(el.querySelector('.val'),   ()=>v.v, nv=>state.top5[i].v = nv);
+    el.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + v.t + '»?')){
+        state.top5.splice(i,1); save(); render();
+      }
+    };
     t5.appendChild(el);
   });
 
-  // === PIPELINE ===
+  // ПАЙПЛАЙН
   const pipe = document.getElementById('pipeline');
   pipe.innerHTML = '';
   let doneN = 0;
   state.tasks.forEach((t, i)=>{
     if(t.done) doneN++;
     const el = document.createElement('div');
-    el.className = 'badge-row' + (t.done?' done':'');
+    el.className = 'list-row' + (t.done ? ' done' : '');
     el.innerHTML = `
-      <span class="dot" data-act="toggle"></span>
-      <span class="name" contenteditable="true" style="${t.done?'text-decoration:line-through;color:var(--text)':''}">${t.name}</span>
-      <span style="color:var(--accent-2);font-size:10px">+${t.xp} XP</span>
-      <span class="del" data-act="del">×</span>
+      <span class="dot"></span>
+      <span class="name"></span>
+      <span class="xp num">+${t.xp} XP</span>
+      <span class="del">×</span>
     `;
-    el.querySelector('[data-act="toggle"]').onclick = ()=>{
-      t.done = !t.done;
-      state.xp = parseInt(state.xp) || 0;
-      render();
-      save();
-    };
-    el.querySelector('.name').addEventListener('blur', (e)=>{
-      state.tasks[i].name = e.target.textContent.trim();
-      save();
-    });
-    el.querySelector('[data-act="del"]').onclick = ()=>{
-      state.tasks.splice(i,1);
-      save(); render();
+    bindCell(el.querySelector('.name'), ()=>t.name, nv=>state.tasks[i].name = nv);
+    el.querySelector('.dot').onclick = ()=>{ state.tasks[i].done = !state.tasks[i].done; save(); render(); };
+    el.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + t.name + '»?')){
+        state.tasks.splice(i,1); save(); render();
+      }
     };
     pipe.appendChild(el);
   });
   document.getElementById('pipeCount').textContent = `${doneN} / ${state.tasks.length}`;
 
-  // === BADGES ===
+  // ДОСТИЖЕНИЯ
   const bd = document.getElementById('badges');
   bd.innerHTML = '';
   state.badges.forEach((b, i)=>{
     const el = document.createElement('div');
-    el.className = 'badge-row' + (b.done?' done':'');
+    el.className = 'list-row' + (b.done ? ' done' : '');
     el.innerHTML = `
-      <span class="dot" data-act="toggle"></span>
-      <span class="name" contenteditable="true">${b.done?'🏆':'🔒'} ${b.name}</span>
-      <span style="font-size:10px;color:var(--muted)" contenteditable="true">${b.desc}</span>
-      <span class="del" data-act="del">×</span>
+      <span class="dot"></span>
+      <span class="name">${b.done ? '🏆 ' : '🔒 '}<span class="bname"></span></span>
+      <span class="desc"></span>
+      <span class="del">×</span>
     `;
-    el.querySelector('[data-act="toggle"]').onclick = ()=>{ state.badges[i].done = !state.badges[i].done; save(); render(); };
-    el.querySelectorAll('[contenteditable]').forEach((el2, j)=>{
-      el2.addEventListener('blur', ()=>{
-        if(j===0){
-          let txt = el2.textContent.replace(/^[🏆🔒]\s*/,'').trim();
-          state.badges[i].name = txt;
-        }else{
-          state.badges[i].desc = el2.textContent.trim();
-        }
-        save();
-      });
-    });
-    el.querySelector('[data-act="del"]').onclick = ()=>{ state.badges.splice(i,1); save(); render(); };
+    bindCell(el.querySelector('.bname'), ()=>b.name, nv=>state.badges[i].name = nv);
+    bindCell(el.querySelector('.desc'),  ()=>b.desc, nv=>state.badges[i].desc = nv);
+    el.querySelector('.dot').onclick = ()=>{ state.badges[i].done = !state.badges[i].done; save(); render(); };
+    el.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + b.name + '»?')){
+        state.badges.splice(i,1); save(); render();
+      }
+    };
     bd.appendChild(el);
   });
 
-  // === GOALS ===
+  // ЦЕЛИ
   const gl = document.getElementById('goals');
   gl.innerHTML = '';
   state.goals.forEach((g, i)=>{
-    const pct = Math.min(100, g.cur/g.max*100).toFixed(1);
+    const pct = Math.min(100, g.max > 0 ? (g.cur / g.max * 100) : 0);
     const el = document.createElement('div');
+    el.className = 'goal';
     el.innerHTML = `
-      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;gap:6px">
-        <span contenteditable="true" style="flex:1">${g.name}</span>
-        <b style="color:var(--accent-2)">
-          <span contenteditable="true">${g.cur}</span> / <span contenteditable="true">${g.max}</span>
-        </b>
-        <span class="del" style="cursor:pointer;color:var(--muted)">×</span>
+      <div class="goal-top">
+        <span class="gname"></span>
+        <span class="gval num">
+          <span class="cur"></span> / <span class="max"></span>
+        </span>
+        <span class="del">×</span>
       </div>
-      <div style="height:8px;background:var(--panel-2);border-radius:4px;overflow:hidden">
-        <i style="display:block;height:100%;width:${pct}%;background:linear-gradient(90deg,var(--accent),var(--accent-2))"></i>
-      </div>
+      <div class="goal-bar"><i style="width:${pct}%"></i></div>
     `;
-    const spans = el.querySelectorAll('[contenteditable]');
-    spans[0].addEventListener('blur', (e)=>{ state.goals[i].name = e.target.textContent.trim(); save(); });
-    spans[1].addEventListener('blur', (e)=>{ state.goals[i].cur = parseInt(e.target.textContent) || 0; save(); render(); });
-    spans[2].addEventListener('blur', (e)=>{ state.goals[i].max = parseInt(e.target.textContent) || 1; save(); render(); });
-    el.querySelector('.del').onclick = ()=>{ state.goals.splice(i,1); save(); render(); };
+    bindCell(el.querySelector('.gname'), ()=>g.name, nv=>state.goals[i].name = nv);
+    bindCell(el.querySelector('.cur'),   ()=>g.cur,  nv=>{ state.goals[i].cur = parseNum(nv); });
+    bindCell(el.querySelector('.max'),   ()=>g.max,  nv=>{ state.goals[i].max = parseNum(nv) || 1; });
+    el.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить цель «' + g.name + '»?')){
+        state.goals.splice(i,1); save(); render();
+      }
+    };
     gl.appendChild(el);
   });
+
+  // применяем editMode ко всем contenteditable в конце
+  applyEditMode();
 }
 
-function renderCatTable(tbodyId, key){
-  const tb = document.getElementById(tbodyId);
-  tb.innerHTML = '';
-  state[key].forEach((row, i)=>{
-    const tr = document.createElement('tr');
-    if(row[5]) tr.className = 'total';
-    tr.innerHTML = `
-      <td contenteditable="true">${row[0]}</td>
-      <td contenteditable="true">${row[1]}</td>
-      <td contenteditable="true">${row[2]}</td>
-      <td contenteditable="true" class="${row[4]||''}">${row[3]}</td>
-    `;
-    tr.querySelectorAll('[contenteditable]').forEach((td, j)=>{
-      td.addEventListener('blur', ()=>{
-        state[key][i][j] = td.textContent.trim();
-        save();
-      });
-    });
-    tb.appendChild(tr);
+function applyEditMode(){
+  document.querySelectorAll('[contenteditable]').forEach(el=>{
+    el.contentEditable = editMode ? 'true' : 'false';
   });
 }
 
-/* ============ BUTTONS ============ */
-document.getElementById('btnEdit').onclick = (e)=>{
-  document.body.classList.toggle('editing');
-  const on = document.body.classList.contains('editing');
-  e.target.textContent = `✏️ Режим редактирования: ${on?'ВКЛ':'ВЫКЛ'}`;
-  toast(on?'Редактирование включено':'Редактирование выключено');
-};
+/* ==============================
+   CAT TABLE
+   ============================== */
+function renderCatTable(tbodyId, key, invertDelta){
+  const tb = document.getElementById(tbodyId);
+  tb.innerHTML = '';
+  let sumPlan = 0, sumFact = 0;
+  state[key].forEach((row, i)=>{
+    const plan = parseNum(row.plan);
+    const fact = parseNum(row.fact);
+    sumPlan += plan;
+    sumFact += fact;
+    const diff = fact - plan;
+    const cls = deltaClass(invertDelta ? -diff : diff);
+    const txt = deltaText(diff);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td></td>
+      <td class="right num"></td>
+      <td class="right num"></td>
+      <td class="right num ${cls}">${txt}</td>
+      <td><span class="del">×</span></td>
+    `;
+    const tds = tr.querySelectorAll('td');
+    bindCell(tds[0], ()=>row.name, v=>state[key][i].name = v);
+    bindCell(tds[1], ()=>row.plan, v=>{ state[key][i].plan = v; save(); render(); });
+    bindCell(tds[2], ()=>row.fact, v=>{ state[key][i].fact = v; save(); render(); });
+    tr.querySelector('.del').onclick = ()=>{
+      if(confirm('Удалить «' + row.name + '»?')){
+        state[key].splice(i,1); save(); render();
+      }
+    };
+    tb.appendChild(tr);
+  });
 
-document.getElementById('btnSnapshot').onclick = ()=>{
-  const snap = {
-    date: new Date().toISOString().slice(0,10),
-    kViews: state.kViews, kSubs: state.kSubs, kWatch: state.kWatch, kMoney: state.kMoney
-  };
-  state.lastSnapshot = snap;
-  save();
-  toast('Снимок сохранён: ' + snap.date);
+  const totalDiff = sumFact - sumPlan;
+  const totalCls = deltaClass(invertDelta ? -totalDiff : totalDiff);
+  const tr = document.createElement('tr');
+  tr.className = 'total';
+  tr.innerHTML = `
+    <td>ИТОГО</td>
+    <td class="right num">${fmt(sumPlan)}</td>
+    <td class="right num">${fmt(sumFact)}</td>
+    <td class="right num ${totalCls}">${deltaText(totalDiff)}</td>
+    <td></td>
+  `;
+  tb.appendChild(tr);
+}
+
+/* ==============================
+   KPI ПЕРЕСЧЁТ
+   ============================== */
+function recomputeKpis(){
+  const viewsRow = state.summary.find(r => /просмотр/i.test(r.name));
+  const views = viewsRow ? parseNum(viewsRow.fact) : 0;
+  document.getElementById('kVievs').textContent = fmt(views);
+
+  const subsRow = state.summary.find(r => /подписчик/i.test(r.name));
+  const subs = subsRow ? parseNum(subsRow.fact) : 0;
+  document.getElementById('kSubs').textContent = fmt(subs);
+
+  const watchRow = state.summary.find(r => /watch/i.test(r.name));
+  const watch = watchRow ? parseNum(watchRow.fact) : 0;
+  document.getElementById('kWatch').textContent = fmt(watch);
+
+  let income = 0;
+  state.income.forEach(r => income += parseNum(r.fact));
+  document.getElementById('kMoney').textContent = fmtMoney(income);
+}
+
+/* ==============================
+   TOOLBAR
+   ============================== */
+document.getElementById('btnEdit').onclick = (e)=>{
+  editMode = !editMode;
+  state.editMode = editMode;
+  document.body.classList.toggle('editing', editMode);
+  e.target.textContent = '✏️ Редактирование: ' + (editMode ? 'ВКЛ' : 'ВЫКЛ');
+  applyEditMode();
+  save(false);
+  toast(editMode ? 'Редактирование включено' : 'Редактирование выключено');
 };
 
 document.getElementById('btnExport').onclick = ()=>{
@@ -887,9 +1159,7 @@ document.getElementById('btnExport').onclick = ()=>{
   toast('Экспортировано');
 };
 
-document.getElementById('btnImport').onclick = ()=>{
-  document.getElementById('fileInput').click();
-};
+document.getElementById('btnImport').onclick = ()=> document.getElementById('fileInput').click();
 document.getElementById('fileInput').onchange = (e)=>{
   const file = e.target.files[0];
   if(!file) return;
@@ -897,13 +1167,13 @@ document.getElementById('fileInput').onchange = (e)=>{
   reader.onload = (ev)=>{
     try{
       const imported = JSON.parse(ev.target.result);
-      state = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), imported);
-      save();
-      render();
+      state = Object.assign(deepClone(DEFAULTS), imported);
+      editMode = state.editMode !== false;
+      document.body.classList.toggle('editing', editMode);
+      document.getElementById('btnEdit').textContent = '✏️ Редактирование: ' + (editMode ? 'ВКЛ' : 'ВЫКЛ');
+      save(); render();
       toast('Импортировано');
-    }catch(err){
-      toast('Ошибка: неверный JSON');
-    }
+    }catch(err){ toast('Ошибка: неверный JSON'); }
   };
   reader.readAsText(file);
   e.target.value = '';
@@ -911,57 +1181,109 @@ document.getElementById('fileInput').onchange = (e)=>{
 
 document.getElementById('btnReset').onclick = ()=>{
   if(confirm('Сбросить всё к значениям по умолчанию? Это нельзя отменить.')){
-    state = JSON.parse(JSON.stringify(DEFAULTS));
-    save();
-    render();
+    state = deepClone(DEFAULTS);
+    editMode = true;
+    document.body.classList.add('editing');
+    document.getElementById('btnEdit').textContent = '✏️ Редактирование: ВКЛ';
+    save(); render();
     toast('Сброшено');
   }
 };
 
-/* ============ ADD ROWS ============ */
+/* ==============================
+   ADD ROW
+   ============================== */
+function val(id){ return document.getElementById(id).value.trim(); }
+function clear(id){ document.getElementById(id).value = ''; }
+
+document.getElementById('addSum').onclick = ()=>{
+  const n = val('newSumName');
+  if(!n) return;
+  state.summary.push({name:n, plan:val('newSumPlan')||'0', fact:val('newSumFact')||'0'});
+  clear('newSumName'); clear('newSumPlan'); clear('newSumFact');
+  save(); render();
+};
+document.getElementById('addTr').onclick = ()=>{
+  const n = val('newTrName');
+  if(!n) return;
+  state.traffic.push({name:n, plan:val('newTrPlan')||'0', fact:val('newTrFact')||'0'});
+  clear('newTrName'); clear('newTrPlan'); clear('newTrFact');
+  save(); render();
+};
+document.getElementById('addBar').onclick = ()=>{
+  const n = val('newBarName');
+  if(!n) return;
+  state.bars.push({name:n, plan: parseFloat(val('newBarPlan'))||0, fact: parseFloat(val('newBarFact'))||0});
+  clear('newBarName'); clear('newBarPlan'); clear('newBarFact');
+  save(); render();
+};
+document.getElementById('addInc').onclick = ()=>{
+  const n = val('newIncName');
+  if(!n) return;
+  state.income.push({name:n, plan:val('newIncPlan')||'0', fact:val('newIncFact')||'0'});
+  clear('newIncName'); clear('newIncPlan'); clear('newIncFact');
+  save(); render();
+};
+document.getElementById('addExp').onclick = ()=>{
+  const n = val('newExpName');
+  if(!n) return;
+  state.expense.push({name:n, plan:val('newExpPlan')||'0', fact:val('newExpFact')||'0'});
+  clear('newExpName'); clear('newExpPlan'); clear('newExpFact');
+  save(); render();
+};
+document.getElementById('addEng').onclick = ()=>{
+  const n = val('newEngName');
+  if(!n) return;
+  state.engage.push({name:n, plan:val('newEngPlan')||'0', fact:val('newEngFact')||'0'});
+  clear('newEngName'); clear('newEngPlan'); clear('newEngFact');
+  save(); render();
+};
 document.getElementById('addHabit').onclick = ()=>{
-  const v = document.getElementById('newHabit').value.trim();
-  if(!v) return;
-  state.habits.push({name:v, color:'', cells:Array(30).fill(false)});
-  document.getElementById('newHabit').value = '';
+  const n = val('newHabit');
+  if(!n) return;
+  state.habits.push({name:n, color:'', cells:Array(30).fill(false)});
+  clear('newHabit');
   save(); render();
 };
 document.getElementById('addTask').onclick = ()=>{
-  const v = document.getElementById('newTask').value.trim();
-  if(!v) return;
-  state.tasks.push({id:'t'+Date.now(), name:v, xp:20, done:false});
-  document.getElementById('newTask').value = '';
+  const n = val('newTask');
+  if(!n) return;
+  state.tasks.push({name:n, xp: parseInt(val('newTaskXp'))||20, done:false});
+  clear('newTask'); clear('newTaskXp');
   save(); render();
 };
 document.getElementById('addBadge').onclick = ()=>{
-  const v = document.getElementById('newBadge').value.trim();
-  if(!v) return;
-  state.badges.push({name:v, desc:'', done:false});
-  document.getElementById('newBadge').value = '';
+  const n = val('newBadge');
+  if(!n) return;
+  state.badges.push({name:n, desc:'', done:false});
+  clear('newBadge');
   save(); render();
 };
 document.getElementById('addGoal').onclick = ()=>{
-  const n = document.getElementById('newGoalName').value.trim();
-  const c = parseInt(document.getElementById('newGoalCur').value) || 0;
-  const m = parseInt(document.getElementById('newGoalMax').value) || 100;
+  const n = val('newGoalName');
   if(!n) return;
-  state.goals.push({name:n, cur:c, max:m});
-  document.getElementById('newGoalName').value = '';
-  document.getElementById('newGoalCur').value = '';
-  document.getElementById('newGoalMax').value = '';
+  state.goals.push({
+    name:n,
+    cur: parseNum(val('newGoalCur')) || 0,
+    max: parseNum(val('newGoalMax')) || 100
+  });
+  clear('newGoalName'); clear('newGoalCur'); clear('newGoalMax');
   save(); render();
 };
 document.getElementById('addTop').onclick = ()=>{
-  const t = document.getElementById('newTop').value.trim();
-  const v = document.getElementById('newTopVal').value.trim();
+  const t = val('newTop');
   if(!t) return;
-  state.top5.push({t:t, v:v||'0'});
-  document.getElementById('newTop').value = '';
-  document.getElementById('newTopVal').value = '';
+  state.top5.push({t:t, v:val('newTopVal')||'0'});
+  clear('newTop'); clear('newTopVal');
   save(); render();
 };
 
-/* ============ INIT ============ */
+/* ==============================
+   INIT
+   ============================== */
+editMode = state.editMode !== false;
+document.body.classList.toggle('editing', editMode);
+document.getElementById('btnEdit').textContent = '✏️ Редактирование: ' + (editMode ? 'ВКЛ' : 'ВЫКЛ');
 render();
 </script>
 </body>
